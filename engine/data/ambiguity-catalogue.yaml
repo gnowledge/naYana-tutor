@@ -369,3 +369,128 @@ phases:
       Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
 
       The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+  - number: 7
+    name: "the o-family — o/ow → ou, ow/ou → au, silent a/u/h dropped"
+    description: "Mark both o-diphthongs: /oʊ/ becomes 'ou' (go → gou, boat → bout, snow → snou) and /aʊ/ becomes 'au' (cow → kau, about → abaut). Silent a, u, and h are dropped along the way."
+    rationale: >
+      The two o-diphthongs share spellings in English: 'ow' is /oʊ/ in
+      'snow' but /aʊ/ in 'cow'; 'ou' is /aʊ/ in 'about' but appears in
+      many other guises. Phase 7 makes them visually distinct: /oʊ/ →
+      ou and /aʊ/ → au, so 'boat' becomes 'bout' and 'bout' becomes
+      'baut' — no collision. We do both in the same phase because doing
+      /oʊ/ alone would land 'boat' on 'bout', colliding with the
+      unrelated /aʊ/ word. Mirror of the bundling pattern from phases
+      5 and 6.
+
+      Silent-a, silent-u, and silent-h rules ride along because the
+      alignment reveals them as the cleanup needed to make the vowel
+      rules read cleanly: 'boat' aligns as o}OW1 a}∅ t}T, so dropping
+      silent a is what gets us from 'bouat' to 'bout'. Silent-u handles
+      soul/dough/though/build/tongue. Silent-h handles hour, honest,
+      honor, herb, ghost, and the wh-words (what, where, when, why).
+
+      Notable unifications: our and hour both land on 'aur' (true
+      homophones in English). soul keeps its spelling — the alignment
+      makes o the vowel and u silent, and the rules confirm that.
+    rules:
+      - name: "o→ou (when /oʊ/)"
+        phoneme: "OW"
+        from: "o"
+        to: "ou"
+        examples:
+          - { before: "go",    after: "gou" }
+          - { before: "old",   after: "ould" }
+          - { before: "home",  after: "houm" }
+          - { before: "boat",  after: "bout" }
+        exceptions:
+          - { word: "on",    reason: "o aligns to /AA/" }
+          - { word: "dog",   reason: "o aligns to /AO/" }
+          - { word: "do",    reason: "o aligns to /UW/" }
+          - { word: "some",  reason: "o aligns to /AH/" }
+
+      - name: "ow→ou (when /oʊ/)"
+        phoneme: "OW"
+        from: "ow"
+        to: "ou"
+        examples:
+          - { before: "snow",   after: "snou" }
+          - { before: "low",    after: "lou" }
+          - { before: "below",  after: "belou" }
+          - { before: "window", after: "windou" }
+
+      - name: "ow→au (when /aʊ/)"
+        phoneme: "AW"
+        from: "ow"
+        to: "au"
+        examples:
+          - { before: "cow",   after: "kau" }
+          - { before: "how",   after: "hau" }
+          - { before: "now",   after: "nau" }
+          - { before: "town",  after: "taun" }
+
+      - name: "ou→au (when /aʊ/)"
+        phoneme: "AW"
+        from: "ou"
+        to: "au"
+        examples:
+          - { before: "about", after: "abaut" }
+          - { before: "out",   after: "aut" }
+          - { before: "sound", after: "saund" }
+          - { before: "our",   after: "aur" }
+
+      - name: "a→∅ (silent)"
+        phoneme: null
+        from: "a"
+        to: ""
+        examples:
+          - { before: "boat",  after: "bout" }
+          - { before: "road",  after: "roud" }
+          - { before: "toast", after: "toust" }
+        notes: >
+          Targets the silent-a in o+a digraphs (boat, road, toast,
+          coat, goal, foam) where Phonetisaurus aligns the a to no
+          phoneme.
+
+      - name: "u→∅ (silent)"
+        phoneme: null
+        from: "u"
+        to: ""
+        examples:
+          - { before: "build",  after: "bild" }
+          - { before: "tongue", after: "tong" }
+          - { before: "soul",   after: "soul" }
+        notes: >
+          Drops the u in build/guest/tongue and the silent u after o
+          in soul/dough/though. The gu digraph (guess, guard, guy,
+          colleague) is safe — Phonetisaurus aligns it as a single
+          grapheme gu}G, so the rule never sees a bare 'u' there.
+
+      - name: "h→∅ (silent)"
+        phoneme: null
+        from: "h"
+        to: ""
+        examples:
+          - { before: "hour",    after: "aur" }
+          - { before: "honest",  after: "onest" }
+          - { before: "ghost",   after: "gost" }
+          - { before: "what",    after: "wat" }
+          - { before: "where",   after: "wer" }
+        notes: >
+          Drops silent h: word-initial (hour, honest, honor, herb,
+          heir), inside gh-clusters where g is pronounced (ghost,
+          ghastly), and after w in wh-words (what, where, when, why).
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
