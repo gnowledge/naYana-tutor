@@ -87,6 +87,12 @@ test('CRITICAL: sit is NOT rewritten', () => {
   assert.equal(rewrite('sit').spelling, 'sit');
 });
 
+test('CRITICAL: pronoun "I" → "Ai" (initial-cap, not all-caps "AI")', () => {
+  // A single uppercase letter is ambiguous between ALL-CAPS and Init-Cap;
+  // we treat it as initial-cap so the pronoun reads naturally.
+  assert.equal(rewrite('I').spelling, 'Ai');
+});
+
 // ---- y → ai (when /aɪ/) ----------------------------------------------------
 
 test('my → mai', () => {

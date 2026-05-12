@@ -102,9 +102,13 @@ export function rewriteWord(spelling, pairs, rules) {
  *   ALL CAPS    → ALL CAPS  ("PHILOSOPHY" → "FILOSOFY")
  *   Capitalized → Capitalized ("Philosophy" → "Filosofy")
  *   lowercase   → lowercase ("philosophy" → "filosofy")
+ *
+ * A single uppercase letter — like the pronoun "I" or a sentence-initial
+ * "A" — is ambiguous (could be all-caps or could be initial-cap). We treat
+ * it as initial-cap, so "I" → "Ai" rather than "AI".
  */
 function applyCaseFromOriginal(original, lowered) {
-  if (original === original.toUpperCase() && /[A-Z]/.test(original)) {
+  if (original.length > 1 && original === original.toUpperCase() && /[A-Z]/.test(original)) {
     return lowered.toUpperCase();
   }
   if (original[0] === original[0].toUpperCase() && /[A-Z]/.test(original[0])) {
