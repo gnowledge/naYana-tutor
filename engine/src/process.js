@@ -266,6 +266,10 @@ export function processHtml(html, lookup, rules, options = {}) {
  * Public API: process a plain text string (no HTML).
  * Returns the same shape as processHtml, with html containing escaped
  * text and spans around changed words.
+ *
+ * Input paragraphs (blocks separated by one or more blank lines) are
+ * preserved as <p> elements in the output so the reader can see where
+ * substitutions cluster paragraph-by-paragraph.
  */
 export function processText_(text, lookup, rules, options = {}) {
   const prefs = options.prefs || {};
@@ -274,6 +278,10 @@ export function processText_(text, lookup, rules, options = {}) {
     wordsChanged: 0,
     unknownWords: [],
   };
-  const html = processText(text, lookup, rules, stats, prefs);
+  const paragraphs = text.split(/\n\s*\n/);
+  const html = paragraphs
+    .map((p) => p.trim() ? `<p>${processText(p, lookup, rules, stats, prefs)}</p>` : '')
+    .filter(Boolean)
+    .join('');
   return { html, stats };
 }
