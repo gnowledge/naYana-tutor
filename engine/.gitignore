@@ -1,0 +1,10 @@
+node_modules/
+.venv/
+data/cmudict.txt
+data/cmudict.json
+data/catalogue.json
+data/aligned-cmudict.corpus
+public/fonts/*.otf
+public/fonts/*.ttf
+.DS_Store
+*.log

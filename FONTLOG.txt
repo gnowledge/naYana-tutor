@@ -1,0 +1,42 @@
+FONTLOG for Nayana
+==================
+
+Nayana is a derivative of Comic Neue (Craig Rozynski, 2014) modified to
+add OpenType features that progressively transform English text toward
+phonetic spelling. The base font glyphs are unmodified; phase-specific
+glyph variants and GSUB lookups are layered on as stylistic sets (ss01,
+ss02, ...).
+
+This font is part of the naYana project of the gnowledge lab at the
+Homi Bhabha Centre for Science Education, TIFR Mumbai. naYana proposes
+a phased phonetic reform of English orthography. Each phase adds one
+visual change. All phases ship in the same font; users opt into each
+via OpenType feature toggles.
+
+ChangeLog
+---------
+
+YYYY-MM-DD (Nayana Project) Nayana 0.1.0
+- Initial release.
+- Forked from Comic Neue Regular v2.51.
+- Added vowel_marker phase (ss01): baseline stroke under each Latin
+  vowel (a, e, i, o, u).
+- Renamed font family to "Nayana" per OFL 1.1 §1.
+
+Acknowledgements
+----------------
+
+Original font:
+  Comic Neue by Craig Rozynski
+  https://comicneue.com
+  https://github.com/crozynski/comicneue
+  Licensed under SIL Open Font License 1.1
+  Copyright 2014 The Comic Neue Project Authors
+
+naYana project:
+  Nagarjuna G., Vickram Krishna et al.
+  Gnowledge Lab, HBCSE/TIFR Mumbai
+  https://www.gnowledge.org/projects/naYana
+
+Derivatives of Nayana should add an entry to this log and rename per
+OFL 1.1 §1.

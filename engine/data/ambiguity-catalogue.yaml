@@ -1,0 +1,183 @@
+version: 0.2
+description: >
+  Nayana ambiguity catalogue (runtime). Rules are grouped into phases.
+  At phase N, rules from phases 1..N are applied cumulatively.
+
+  Each rule has:
+    name        — human-readable identifier
+    phoneme     — the ARPAbet phoneme this rule resolves (uppercase, no
+                  stress digit; e.g. "F", "K", "S", "AE")
+    from        — the grapheme (letters) to replace
+    to          — the canonical grapheme it becomes
+
+  The engine fires a rule when, in the word's grapheme→phoneme alignment,
+  some pair has `graphemes == from` AND `phoneme` appears in that pair's
+  phonemes. This positional check prevents over-application:
+    - "shepherd" — `ph` is split as p}P h}_ in the alignment, no pair
+      has graphemes "ph", so ph→f does not fire.
+    - "cycle"    — first c aligns to S, second to K, so c→s fires once
+      and c→k fires once in the same word, in the right positions.
+
+phases:
+  - number: 1
+    name: "ph → f"
+    description: "The 'ph' digraph becomes 'f' wherever it spells the /f/ sound."
+    rationale: >
+      High-frequency, clean rule. About 12% of /f/-spellings use 'ph'.
+      Exceptions (like 'shepherd') are handled by the alignment check:
+      'shepherd' aligns as p}P h}_, so no pair has graphemes "ph".
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+    rules:
+      - name: "ph→f"
+        phoneme: "F"
+        from: "ph"
+        to: "f"
+        examples:
+          - { before: "philosophy",  after: "filosofy" }
+          - { before: "phone",       after: "fone" }
+          - { before: "graph",       after: "graf" }
+          - { before: "elephant",    after: "elefant" }
+        exceptions:
+          - { word: "shepherd", reason: "h is silent (no aligned ph→F pair)" }
+          - { word: "uphold",   reason: "p and h align separately, no ph pair" }
+
+  - number: 2
+    name: "c → k or s"
+    description: "Resolves the c-ambiguity: c becomes k or s based on its sound."
+    rationale: >
+      The letter c has no inherent sound — it borrows /k/ or /s/ depending on
+      the following letter, with frequent exceptions (cello /tʃ/, ocean /ʃ/,
+      Celtic /k/ despite preceding e, facade /s/ despite preceding a).
+      Position-based alignment lets us follow pronunciation, not the spelling
+      rule. The cc digraph aligns as a single grapheme and almost always to
+      /k/ (account, accord, occur), so we add an explicit cc→k rule.
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+    rules:
+      - name: "c→k"
+        phoneme: "K"
+        from: "c"
+        to: "k"
+        examples:
+          - { before: "cat",     after: "kat" }
+          - { before: "Celtic",  after: "Keltik" }
+        exceptions:
+          - { word: "cello",     reason: "c aligns to /tʃ/, not /k/ or /s/" }
+          - { word: "ocean",     reason: "c aligns to /ʃ/" }
+
+      - name: "c→s"
+        phoneme: "S"
+        from: "c"
+        to: "s"
+        examples:
+          - { before: "city",    after: "sity" }
+          - { before: "facade",  after: "fasade" }
+        exceptions:
+          - { word: "cello",     reason: "c aligns to /tʃ/" }
+
+      - name: "cc→k"
+        phoneme: "K"
+        from: "cc"
+        to: "k"
+        examples:
+          - { before: "account", after: "akount" }
+          - { before: "accord",  after: "akord" }
+        notes: >
+          Phonetisaurus aligns 'cc' as a single grapheme token (e.g.
+          c|c}K). This rule targets that token specifically. The c→k rule
+          would not fire on cc because its graphemes don't equal "c".
+
+  - number: 3
+    name: "ck → k"
+    description: "The 'ck' digraph collapses to 'k' wherever it spells /k/."
+    rationale: >
+      English uses 'ck' to mark a preceding short vowel — a spelling
+      convention with no phonetic content. The /k/ is just /k/. Phonetisaurus
+      aligns 'ck' as a single grapheme c|k}K in essentially every word it
+      appears in (back, pick, sock, jacket, rocket), so this is one of the
+      cleanest possible rules with virtually no exceptions.
+    rules:
+      - name: "ck→k"
+        phoneme: "K"
+        from: "ck"
+        to: "k"
+        examples:
+          - { before: "back",    after: "bak" }
+          - { before: "pick",    after: "pik" }
+          - { before: "clock",   after: "klok" }
+          - { before: "jacket",  after: "jaket" }
+          - { before: "rocket",  after: "roket" }
+        notes: >
+          Combines naturally with phase 2: 'clock' aligns as c}K l}L
+          o}AA1 ck}K, so c→k fires once and ck→k fires once,
+          producing 'klok'.
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+  - number: 4
+    name: "silent letters (kn → n, wr → r, mb → m)"
+    description: "Silent letters in three common digraphs are dropped when alignment shows the letter is unpronounced."
+    rationale: >
+      The k in 'knife', the w in 'write', and the b in 'climb' are silent —
+      historical residue from older English spellings. The pronunciation
+      doesn't include them; the spelling pretends it does. Phonetisaurus
+      aligns each digraph to a single phoneme (kn→/N/, wr→/R/, mb→/M/),
+      so we can drop the silent letter cleanly. A nice side effect is
+      that some homophones long obscured by spelling reunite: 'knew'
+      becomes 'new', 'wrap' becomes 'rap', 'wrote' becomes 'rote'.
+      ('know' becomes 'now' — a visual collision but not a true match,
+      because Phonetisaurus keeps the 'ow' digraph. Later vowel phases
+      will resolve this.) The alignment also distinguishes silent from
+      pronounced cases: 'plumber' aligns mb→/M/ (rule fires) while
+      'number' aligns m}M b}B separately (rule does not fire).
+    rules:
+      - name: "kn→n"
+        phoneme: "N"
+        from: "kn"
+        to: "n"
+        examples:
+          - { before: "knife",   after: "nife" }
+          - { before: "knock",   after: "nok" }
+          - { before: "know",    after: "no" }
+          - { before: "knight",  after: "night" }
+        exceptions:
+          - { word: "acknowledge", reason: "k aligns with the preceding ck, not with n" }
+
+      - name: "wr→r"
+        phoneme: "R"
+        from: "wr"
+        to: "r"
+        examples:
+          - { before: "write",   after: "rite" }
+          - { before: "wrong",   after: "rong" }
+          - { before: "wrist",   after: "rist" }
+          - { before: "playwright", after: "playright" }
+
+      - name: "mb→m"
+        phoneme: "M"
+        from: "mb"
+        to: "m"
+        examples:
+          - { before: "comb",    after: "com" }
+          - { before: "lamb",    after: "lam" }
+          - { before: "climb",   after: "clim" }
+          - { before: "plumber", after: "plumer" }
+        exceptions:
+          - { word: "number",  reason: "b is pronounced; alignment is m}M b}B, no mb pair" }
+          - { word: "lumber",  reason: "b is pronounced" }
+          - { word: "member",  reason: "b is pronounced" }
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.

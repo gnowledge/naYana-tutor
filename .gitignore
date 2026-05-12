@@ -1,0 +1,24 @@
+# Local editor / IDE config
+.claude/
+.vscode/
+.idea/
+.DS_Store
+
+# Font build inputs and outputs are regenerable
+fonts/source/*.otf
+fonts/source/*.ttf
+fonts/output/*.otf
+fonts/output/*.ttf
+
+# Python build environments
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Logs
+*.log
+
+# Handoff bundles — should never be committed
+*.tar.gz
+*.patch

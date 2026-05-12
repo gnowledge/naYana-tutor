@@ -1,0 +1,122 @@
+;;; nayana-engine sample CMUdict
+;;; A minimal hand-extracted subset of CMUdict for testing the engine
+;;; before the full ~134k-word dictionary is fetched.
+;;;
+;;; Format matches CMUdict: WORD  AR PA BE T (space-separated ARPAbet)
+;;; Vowel stress: 0 = unstressed, 1 = primary stress, 2 = secondary stress
+;;;
+;;; Run scripts/fetch-cmudict.js on a machine with internet access to
+;;; replace this with the full dictionary.
+
+;;; Words testing ph → f rule
+PHILOSOPHY  F IH0 L AA1 S AH0 F IY0
+PHILOSOPHIES  F IH0 L AA1 S AH0 F IY0 Z
+PHONE  F OW1 N
+PHONES  F OW1 N Z
+PHONETIC  F AH0 N EH1 T IH0 K
+GRAPH  G R AE1 F
+GRAPHS  G R AE1 F S
+GRAPHIC  G R AE1 F IH0 K
+ELEPHANT  EH1 L AH0 F AH0 N T
+ELEPHANTS  EH1 L AH0 F AH0 N T S
+PHOTOGRAPH  F OW1 T AH0 G R AE2 F
+PHOTOGRAPHS  F OW1 T AH0 G R AE2 F S
+PHOTO  F OW1 T OW0
+PHYSICS  F IH1 Z IH0 K S
+PHYSICAL  F IH1 Z IH0 K AH0 L
+PHASE  F EY1 Z
+PHASES  F EY1 Z IH0 Z
+PHRASE  F R EY1 Z
+PHARMACY  F AA1 R M AH0 S IY0
+NEPHEW  N EH1 F Y UW0
+GEOGRAPHY  JH IY0 AA1 G R AH0 F IY0
+PARAGRAPH  P EH1 R AH0 G R AE2 F
+
+;;; Critical exceptions: ph is NOT /f/ here (morpheme boundary)
+SHEPHERD  SH EH1 P ER0 D
+UPHILL  AH2 P HH IH1 L
+UPHOLD  AH2 P HH OW1 L D
+HAPHAZARD  HH AE2 P HH AE1 Z ER0 D
+LOOPHOLE  L UW1 P HH OW2 L
+
+;;; Common function words and content words for natural test paragraphs
+THE  DH AH0
+A  AH0
+AN  AE1 N
+AND  AE1 N D
+OF  AH1 V
+IS  IH1 Z
+WAS  W AA1 Z
+THIS  DH IH1 S
+THAT  DH AE1 T
+TO  T UW1
+IN  IH0 N
+FOR  F AO1 R
+ON  AA1 N
+WITH  W IH1 DH
+AT  AE1 T
+BY  B AY1
+FROM  F R AH1 M
+AS  AE1 Z
+ARE  AA1 R
+BE  B IY1
+HAVE  HH AE1 V
+NOT  N AA1 T
+OR  AO1 R
+HE  HH IY1
+SHE  SH IY1
+HIS  HH IH1 Z
+HER  HH ER0
+THEY  DH EY1
+WE  W IY1
+YOU  Y UW1
+I  AY1
+IT  IH1 T
+ITS  IH1 T S
+WORD  W ER1 D
+WORDS  W ER1 D Z
+TEXT  T EH1 K S T
+LANGUAGE  L AE1 NG G W AH0 JH
+ENGLISH  IH1 NG G L IH0 SH
+LETTER  L EH1 T ER0
+LETTERS  L EH1 T ER0 Z
+SOUND  S AW1 N D
+SOUNDS  S AW1 N D Z
+READ  R IY1 D
+READING  R IY1 D IH0 NG
+WRITE  R AY1 T
+WRITING  R AY1 T IH0 NG
+SPELLING  S P EH1 L IH0 NG
+SPELL  S P EH1 L
+SPELLINGS  S P EH1 L IH0 NG Z
+
+;;; Helper words for sample paragraphs
+QUICK  K W IH1 K
+BROWN  B R AW1 N
+FOX  F AA1 K S
+JUMPS  JH AH1 M P S
+OVER  OW1 V ER0
+LAZY  L EY1 Z IY0
+DOG  D AO1 G
+ALL  AO1 L
+HUMAN  HH Y UW1 M AH0 N
+BEINGS  B IY1 IH0 NG Z
+BORN  B AO1 R N
+FREE  F R IY1
+EQUAL  IY1 K W AH0 L
+DIGNITY  D IH1 G N AH0 T IY0
+RIGHTS  R AY1 T S
+GOOD  G UH1 D
+WHAT  W AH1 T
+DO  D UW1
+DID  D IH1 D
+SAY  S EY1
+SAID  S EH1 D
+ASKED  AE1 S K T
+HER  HH ER0
+ABOUT  AH0 B AW1 T
+ANSWER  AE1 N S ER0
+WORK  W ER1 K
+WORKED  W ER1 K T
+DOES  D AH1 Z
+PHILOSOPHER  F AH0 L AA1 S AH0 F ER0

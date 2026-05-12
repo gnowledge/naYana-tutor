@@ -1,0 +1,14 @@
+Documentation in this repository (the contents of docs/ and the README.md,
+CONTRIBUTING.md, FONTLOG.txt, and other prose files at the repository root)
+is licensed under the Creative Commons Attribution 4.0 International License.
+
+To view a copy of this license, visit:
+https://creativecommons.org/licenses/by/4.0/
+
+Attribution: when reusing this documentation, please credit "Nayana project
+(gnowledge lab)" with a link back to the project repository.
+
+This documentation license is separate from:
+- The MIT license covering source code (LICENSE-CODE)
+- The SIL Open Font License 1.1 covering generated font files
+  (fonts/output/OFL.txt)

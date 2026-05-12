@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Nayana — Test Page</title>
+<style>
+  @font-face {
+    font-family: 'Nayana';
+    src: url('Nayana-Regular.otf') format('opentype');
+    font-display: block;
+  }
+
+  :root {
+    --line-height: 1.5;
+    --font-size: 18px;
+    --features: normal;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Nayana', sans-serif;
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    margin: 0;
+    padding: 0;
+    background: #fafafa;
+    color: #222;
+  }
+
+  body, main { font-feature-settings: var(--features); }
+
+  .controls {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 12px 24px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    z-index: 10;
+  }
+
+  .controls label { display: flex; align-items: center; gap: 6px; }
+  .controls input[type="range"] { width: 120px; }
+  .controls .group { display: flex; gap: 12px; align-items: center; padding: 4px 10px; border: 1px solid #eee; border-radius: 4px; }
+  .controls .group strong { font-family: monospace; }
+
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  section {
+    margin-bottom: 48px;
+    border-top: 1px solid #ddd;
+    padding-top: 24px;
+  }
+
+  section h2 {
+    font-family: system-ui, sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888;
+    margin: 0 0 16px 0;
+    font-weight: 600;
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .compare > div { padding: 20px; }
+  .compare .label {
+    font-family: system-ui, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #aaa;
+    margin-bottom: 8px;
+  }
+  .compare .off { font-feature-settings: normal; }
+
+  .grid-letters {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    text-align: center;
+  }
+  .grid-letters > div {
+    border: 1px solid #eee;
+    padding: 16px 0;
+    font-size: 64px;
+    background: #fff;
+  }
+
+  .descender-test, .reading {
+    background: #fff;
+    padding: 16px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+  }
+
+  .size-sweep div { padding: 4px 0; }
+  .s10 { font-size: 10px; }
+  .s12 { font-size: 12px; }
+  .s14 { font-size: 14px; }
+  .s18 { font-size: 18px; }
+  .s24 { font-size: 24px; }
+  .s48 { font-size: 48px; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <div class="group">
+    <span>Phases:</span>
+    <label><input type="checkbox" class="phase" data-tag="ss01" checked> <strong>ss01</strong> vowel marker</label>
+    <label><input type="checkbox" class="phase" data-tag="ss02"> <strong>ss02</strong></label>
+    <label><input type="checkbox" class="phase" data-tag="ss03"> <strong>ss03</strong></label>
+    <label><input type="checkbox" class="phase" data-tag="ss04"> <strong>ss04</strong></label>
+    <label><input type="checkbox" class="phase" data-tag="ss05"> <strong>ss05</strong></label>
+  </div>
+  <label>
+    Size:
+    <input type="range" id="size-slider" min="10" max="48" value="18">
+    <span id="size-value">18</span>px
+  </label>
+  <label>
+    Line height:
+    <input type="range" id="lh-slider" min="100" max="200" value="150">
+    <span id="lh-value">1.50</span>
+  </label>
+</div>
+
+<main>
+
+  <section>
+    <h2>Single-letter inspection</h2>
+    <div class="grid-letters">
+      <div>a</div><div>e</div><div>i</div><div>o</div><div>u</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Side-by-side: features off vs. on</h2>
+    <div class="compare">
+      <div>
+        <div class="label">all features off</div>
+        <div class="off">
+          The quick brown fox jumps over the lazy dog.
+          Pack my box with five dozen liquor jugs.
+        </div>
+      </div>
+      <div>
+        <div class="label">selected features on</div>
+        <div>
+          The quick brown fox jumps over the lazy dog.
+          Pack my box with five dozen liquor jugs.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Descender collision test</h2>
+    <div class="descender-test">
+      pageantry juggling psychology pyjamas eulogy<br>
+      apple eagle igloo orange under<br>
+      gypsy quagga jaguar enzyme polygon<br>
+      atom evil ivy oboe upon
+    </div>
+  </section>
+
+  <section>
+    <h2>Size sweep</h2>
+    <div class="size-sweep">
+      <div class="s10">10px — All human beings are born free and equal in dignity and rights.</div>
+      <div class="s12">12px — All human beings are born free and equal in dignity and rights.</div>
+      <div class="s14">14px — All human beings are born free and equal in dignity and rights.</div>
+      <div class="s18">18px — All human beings are born free and equal in dignity and rights.</div>
+      <div class="s24">24px — All human beings are born free and equal.</div>
+      <div class="s48">48px — vowels.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Reading passage</h2>
+    <div class="reading">
+      <p>
+        All human beings are born free and equal in dignity and rights.
+        They are endowed with reason and conscience and should act towards
+        one another in a spirit of brotherhood.
+      </p>
+      <p>
+        The recognition of the inherent dignity and of the equal and
+        inalienable rights of all members of the human family is the
+        foundation of freedom, justice and peace in the world.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Edge cases — silent vowels (currently still marked)</h2>
+    <p>
+      make bake site rope cute<br>
+      eight beautiful queue bureau leopard<br>
+      Wednesday colonel choir February
+    </p>
+  </section>
+
+  <section>
+    <h2>All-vowel and no-vowel words</h2>
+    <p>
+      audio queue eerie aurora oui<br>
+      rhythm crwth nymph hymn flyby
+    </p>
+  </section>
+
+</main>
+
+<script>
+  function updateFeatures() {
+    const tags = Array.from(document.querySelectorAll('.phase'))
+      .filter(cb => cb.checked)
+      .map(cb => `"${cb.dataset.tag}" on`);
+    const value = tags.length ? tags.join(', ') : 'normal';
+    document.documentElement.style.setProperty('--features', value);
+  }
+
+  document.querySelectorAll('.phase').forEach(cb => {
+    cb.addEventListener('change', updateFeatures);
+  });
+
+  const sizeSlider = document.getElementById('size-slider');
+  const sizeValue = document.getElementById('size-value');
+  const lhSlider = document.getElementById('lh-slider');
+  const lhValue = document.getElementById('lh-value');
+
+  sizeSlider.addEventListener('input', () => {
+    document.documentElement.style.setProperty('--font-size', sizeSlider.value + 'px');
+    sizeValue.textContent = sizeSlider.value;
+  });
+
+  lhSlider.addEventListener('input', () => {
+    const lh = (lhSlider.value / 100).toFixed(2);
+    document.documentElement.style.setProperty('--line-height', lh);
+    lhValue.textContent = lh;
+  });
+
+  updateFeatures();
+</script>
+
+</body>
+</html>

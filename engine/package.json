@@ -1,0 +1,23 @@
+{
+  "name": "nayana-engine",
+  "version": "0.1.0",
+  "description": "Nayana phased phonetic reform engine — converts English text to progressively more phonetic spelling",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "build": "node scripts/build-catalogue.js && node scripts/build-cmudict.js",
+    "fetch-cmudict": "node scripts/fetch-cmudict.js",
+    "align-cmudict": "node scripts/build-aligned-cmudict.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "js-yaml": "^4.1.0",
+    "node-html-parser": "^6.1.13"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,465 @@
+/* ---- Font ---------------------------------------------------------------- */
+@font-face {
+  font-family: 'Nayana';
+  src: url('fonts/NayanaComic-v01.otf') format('opentype');
+  font-display: swap;
+}
+
+/* ---- Reset and base ------------------------------------------------------ */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nayana', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #fafaf7;
+  /* Vowel-marker feature is on by default. Toggleable. */
+  font-feature-settings: "ss01" on;
+}
+
+body.no-vowel-marker {
+  font-feature-settings: "ss01" off;
+}
+
+/* ---- Top bar ------------------------------------------------------------- */
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  border-bottom: 1px solid #e2e2dc;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.bar-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-feature-settings: normal;
+  font-size: 14px;
+}
+
+.bar-title strong {
+  font-size: 18px;
+  color: #1a1a1a;
+}
+.bar-subtitle {
+  margin-left: 8px;
+  color: #888;
+  font-size: 12px;
+}
+
+.bar-controls {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.phase-control,
+.vowel-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phase-control input[type="range"] {
+  width: 140px;
+}
+
+#phase-value {
+  font-weight: 600;
+  font-size: 15px;
+  width: 1.5em;
+  text-align: center;
+}
+
+.bar-status {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.status-pill {
+  font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 13px;
+  color: #555;
+  padding: 4px 10px;
+  background: #f4f4ef;
+  border-radius: 4px;
+  font-feature-settings: normal;
+}
+
+/* Reader progression badge — gold when the reader has reached at least
+   phase 1, grey while still at phase 0. The .bump animation fires when
+   a new max is hit (after a Transform at a higher phase than recorded). */
+.phase-reached {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  background: #f4f4ef;
+  color: #aaa;
+  border: 1px solid transparent;
+}
+.phase-reached[data-level]:not([data-level="0"]) {
+  background: linear-gradient(to bottom, #fff5cc, #ffe88a);
+  color: #6a4a00;
+  border-color: #d4a800;
+}
+.phase-reached.bump {
+  animation: badge-bump 0.7s ease-out;
+}
+@keyframes badge-bump {
+  0%   { transform: scale(1);   box-shadow: 0 0 0 0 rgba(212, 168, 0, 0.5); }
+  30%  { transform: scale(1.18); box-shadow: 0 0 0 8px rgba(212, 168, 0, 0); }
+  100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(212, 168, 0, 0); }
+}
+
+.prefs-button {
+  background: #f4f4ef;
+  border: 1px solid #e2e2dc;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-feature-settings: normal;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+}
+.prefs-button:hover { background: #ebebe5; }
+.prefs-button #prefs-count {
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+/* ---- Main layout --------------------------------------------------------- */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+section {
+  background: #fff;
+  border: 1px solid #e8e8e2;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+section h2 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-feature-settings: normal;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  margin: 0 0 16px;
+}
+
+/* ---- Input section ------------------------------------------------------- */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e8e8e2;
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #888;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  font-feature-settings: normal;
+}
+
+.tab.active {
+  color: #1a1a1a;
+  border-bottom-color: #1a1a1a;
+}
+
+.tab-panel.hidden { display: none; }
+
+textarea, input[type="url"] {
+  width: 100%;
+  font-family: 'Nayana', -apple-system, system-ui, sans-serif;
+  font-size: 16px;
+  padding: 12px 14px;
+  border: 1px solid #d8d8d2;
+  border-radius: 6px;
+  background: #fdfdfa;
+  resize: vertical;
+}
+
+textarea:focus, input[type="url"]:focus {
+  outline: 2px solid #4a7eb8;
+  outline-offset: -1px;
+  border-color: #4a7eb8;
+}
+
+button.primary {
+  margin-top: 12px;
+  padding: 10px 22px;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-feature-settings: normal;
+}
+
+button.primary:hover { background: #333; }
+
+.hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #888;
+  font-feature-settings: normal;
+}
+
+/* ---- Output section ------------------------------------------------------ */
+.output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+
+.output-header h2 { margin: 0; }
+
+.stats {
+  font-family: ui-monospace, 'SF Mono', Monaco, monospace;
+  font-size: 12px;
+  color: #888;
+  font-feature-settings: normal;
+}
+
+.output-area {
+  min-height: 100px;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.output-area p { margin: 0 0 1em; }
+
+.output-area .placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* ---- Changed-word styling ------------------------------------------------ */
+.nayana-rewritten {
+  background: linear-gradient(to bottom, transparent 65%, #fdf3c4 65%);
+  padding: 0 1px;
+  border-radius: 2px;
+  cursor: help;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.nayana-rewritten:hover {
+  background: linear-gradient(to bottom, transparent 65%, #fde68a 65%);
+}
+
+/* Words with alternate pronunciations get three layered cues:
+   - a dotted underline (subtle)
+   - a small ▾ marker after the word (the primary scan cue)
+   - a pointer cursor + brighter hover highlight
+   The marker is drawn via ::after; the hover-tooltip uses ::before to
+   keep the two from clashing. */
+.nayana-has-alternates {
+  border-bottom: 1px dotted #b58a00;
+  cursor: pointer;
+}
+.nayana-has-alternates::after {
+  content: "▾";
+  display: inline-block;
+  vertical-align: super;
+  font-size: 0.55em;
+  margin-left: 2px;
+  color: #b58a00;
+  font-feature-settings: normal;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+.nayana-has-alternates:hover {
+  background: linear-gradient(to bottom, transparent 65%, #ffe06b 65%);
+}
+.nayana-has-alternates:hover::after {
+  color: #8a6500;
+}
+
+/* When the current pron's rewrite is unchanged but alternates exist, the
+   span still wraps the original word so the user can pick an alternate. */
+.nayana-unchanged {
+  background: none;
+}
+.nayana-unchanged:hover {
+  background: linear-gradient(to bottom, transparent 65%, #fff3a8 65%);
+}
+
+/* ---- Alternate-pronunciation popover ------------------------------------- */
+.nayana-popover {
+  position: fixed;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid #d8d8d2;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  padding: 6px;
+  min-width: 160px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-feature-settings: normal;
+  font-size: 14px;
+}
+.nayana-popover .popover-title {
+  padding: 4px 10px 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  border-bottom: 1px solid #f0f0ea;
+  margin-bottom: 4px;
+}
+.nayana-popover .popover-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  font-family: 'Nayana', inherit;
+  font-feature-settings: "ss01" on;
+  font-size: 15px;
+  color: #1a1a1a;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 4px;
+}
+.nayana-popover .popover-option:hover {
+  background: #f4f4ef;
+}
+.nayana-popover .popover-option.is-current {
+  color: #2a6;
+  font-weight: 500;
+}
+.nayana-popover .popover-mark {
+  font-size: 10px;
+  color: #aaa;
+  width: 12px;
+  text-align: center;
+}
+.nayana-popover .popover-option.is-current .popover-mark {
+  color: #2a6;
+}
+.nayana-popover .popover-hint {
+  padding: 6px 10px 4px;
+  margin-top: 4px;
+  border-top: 1px solid #f0f0ea;
+  font-size: 11px;
+  color: #aaa;
+  line-height: 1.4;
+}
+
+/* Tooltip-style hover-to-reveal-original.
+   The title attribute already gives a native tooltip, but we can
+   make it nicer with a CSS one. Uses ::before so ::after is free for
+   the alternates marker (see below). */
+.nayana-rewritten:hover::before {
+  content: attr(data-original);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 6px;
+  padding: 4px 10px;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 13px;
+  font-family: ui-monospace, 'SF Mono', Monaco, monospace;
+  font-feature-settings: normal;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Section highlight effect — applied briefly after a section is processed.
+   The animation fades a tinted background over 1.5s. */
+.nayana-section {
+  animation: section-flash 1.5s ease-out;
+}
+
+@keyframes section-flash {
+  0%   { background: rgba(74, 126, 184, 0.10); }
+  100% { background: transparent; }
+}
+
+/* ---- Phase info section -------------------------------------------------- */
+.phase-info {
+  background: #f4f4ef;
+}
+
+#phase-description h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-family: -apple-system, system-ui, sans-serif;
+  font-feature-settings: normal;
+}
+
+#phase-description p {
+  margin: 0 0 12px;
+  color: #444;
+  font-size: 14px;
+  line-height: 1.5;
+  font-feature-settings: normal;
+}
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.example {
+  background: #fff;
+  border: 1px solid #e8e8e2;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-family: ui-monospace, 'SF Mono', Monaco, monospace;
+  font-size: 13px;
+  font-feature-settings: normal;
+}
+
+.example .arrow {
+  margin: 0 6px;
+  color: #aaa;
+}
+
+.example .after {
+  color: #2a6;
+  font-weight: 600;
+}
