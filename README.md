@@ -1,15 +1,38 @@
 # Nayana
 
-**A phased phonetic reform of English orthography, delivered as an OpenType font.**
+**A phased phonetic reform of English orthography.**
 
-Nayana is a single, evolving font that gradually transitions English text
-toward IPA-aligned phonetic spelling. Each phase introduces one visual
-change. Readers acclimate to it before the next is layered on. All
-phases ship in the same font; users opt into each via OpenType feature
-toggles (`ss01`, `ss02`, ...).
+Two halves of one project:
 
-The font is a derivative of [Comic Neue](https://comicneue.com) by Craig
-Rozynski, used under the SIL Open Font License 1.1.
+- **A font** (`Nayana-Regular.otf`) that draws the eventual phonetic
+  glyphs, with phases enabled via OpenType feature toggles.
+- **A preprocessor** that progressively rewrites English text using
+  grapheme→phoneme alignment. Each phase is one new substitution rule.
+
+Readers advance through phases at their own pace. The original spelling
+is always recoverable — hover any rewritten word in the test harness.
+
+→ **Read the manifesto:**
+[*Returning Time to the Reader — On naYana*](engine/public/manifesto/index.html)
+(self-contained HTML; ships with the font bundled)
+
+---
+
+## How it looks
+
+| Phase | Rule(s)                          | Examples                                  |
+|-------|----------------------------------|-------------------------------------------|
+| 1     | `ph → f`                         | philosophy → filosofy                     |
+| 2     | `c → k`, `c → s`, `cc → k`       | city → sity, account → akount             |
+| 3     | `ck → k`                         | clock → klok, jacket → jaket              |
+| 4     | `kn → n`, `wr → r`, `mb → m`     | knife → nife, write → rite, comb → kom    |
+
+Each phase is cumulative: a reader at phase 4 sees all four rule sets
+applied. The rule fires only when alignment confirms the spelling matches
+the pronunciation, so words like *shepherd* (where `ph` is /p/+/h/, not
+/f/) and *number* (where the `b` is pronounced) are correctly left alone.
+
+---
 
 ## Project context
 
@@ -19,116 +42,113 @@ TIFR Mumbai. naYana proposes a complete IPA-mapped script; this
 repository implements a phased adoption path designed to lower the
 cold-start cost.
 
-See [docs/roadmap.md](docs/roadmap.md) for the full phasing plan.
+---
+
+## Two codebases under one roof
+
+- **`src/` + `fonts/` + `tests/`** — the font build (Python, FontForge).
+  Builds `Nayana-Regular.otf` from a Comic Neue base.
+- **`engine/`** — the preprocessor (Node.js) plus a local test harness
+  (Express + browser UI) for trying the rules on text or whole web
+  articles. Not the production runtime; that comes later as a browser
+  extension once the rule set has matured.
+
+The two share the IPA Unicode encoding decision but no runtime code.
+
+---
 
 ## Quick start
 
-### Prerequisites
+### Font
 
-- FontForge with Python bindings
-  - Ubuntu/Debian: `sudo apt install fontforge python3-fontforge`
-  - macOS: `brew install fontforge`
-  - Windows: [official installer](https://fontforge.org/en-US/downloads/windows/)
-- Python 3.8+ and `pip install fonttools pytest`
-
-### Build
+Prerequisites: FontForge with Python bindings, Python 3.8+,
+`pip install fonttools pytest`.
 
 ```bash
 make download    # fetch Comic Neue
 make build       # build with default phases (currently: vowel_marker)
+make test        # python tests
 make sample      # copy font into samples/, then open samples/test.html
 ```
 
-To enable additional phases:
+### Engine
+
+Prerequisites: Node 18+, Python 3 (for the one-time alignment build).
 
 ```bash
-# All currently registered phases
-make build-all
+cd engine
+npm install
+npm run fetch-cmudict             # one-time, downloads CMUdict
 
-# A specific subset
-make build PHASES="vowel_marker schwa_marker"
+# One-time alignment (Phonetisaurus, ~10–15 min)
+python3 -m venv .venv
+.venv/bin/pip install phonetisaurus
+npm run align-cmudict
 
-# See what's available
-make list-phases
+npm run build                     # compile dictionary + catalogue
+npm test                          # run the test suite (67 tests)
+PORT=5050 npm start               # serve test harness at http://localhost:5050
 ```
 
-## Architecture
+The test harness has a phase slider, a multi-pronunciation picker
+(click any word with a `▾` marker), per-phase demo text that loads as
+you advance, a progression badge that tracks the highest phase you've
+read at, and a URL fetch tab for trying the engine on real articles.
 
-The build is a Python pipeline. Each *phase* is a self-contained module
-that contributes glyph variants and GSUB rules. New phases plug in
-without disturbing existing ones.
-
-```
-src/
-├── build.py                Entry point: parses CLI, dispatches to phases
-└── nayana/
-    ├── __init__.py         Version, family name, derivative copyright
-    ├── config.py           Tunable parameters for all phases
-    ├── font_io.py          Open / save / metadata helpers
-    └── phases/
-        ├── __init__.py     Phase registry
-        ├── base.py         Phase base class + GSUB helpers
-        └── vowel_marker.py First phase: baseline stroke under vowels
-```
-
-To add a new phase:
-
-1. Create `src/nayana/phases/your_phase.py` with a class subclassing
-   `Phase`.
-2. Add tunable parameters to `src/nayana/config.py`.
-3. Register the class in `src/nayana/phases/__init__.py` (`REGISTRY`).
-4. Add tests in `tests/`.
-5. Update `docs/roadmap.md` and `docs/phases/your-phase.md`.
-
-The font's filename and family name don't change between phases. What
-changes is which OpenType features the user enables. A reader who has
-been using the font for six months simply turns on the next `ssNN` toggle
-when they're ready.
+---
 
 ## Repository layout
 
 ```
 nayana/
-├── src/                    Build pipeline (Python + FontForge)
-├── fonts/source/           Upstream fonts (downloaded at build)
-├── fonts/output/           Generated derivative font
-├── samples/                HTML test pages
-├── tests/                  pytest validation
+├── src/                    Font build pipeline (Python + FontForge)
+├── fonts/                  Comic Neue source + built Nayana-Regular.otf
+├── engine/                 The preprocessor (Node.js)
+│   ├── src/                Engine library
+│   ├── data/               Catalogue YAML + CMUdict + alignment
+│   ├── public/             Test harness UI + manifesto
+│   ├── scripts/            Build/fetch/align scripts
+│   └── tests/              Unit tests, one file per phase
+├── samples/                HTML test pages for the font
+├── tests/                  pytest validation for the font
 ├── docs/                   Design notes, roadmap, phase descriptions
-├── scripts/                Inspection and helper utilities
-├── Makefile                Build automation
-└── .github/workflows/      CI
+├── scripts/                Font inspection / comparison helpers
+└── Makefile                Font build automation
 ```
 
-See [docs/structure.md](docs/structure.md) for full details.
+Detailed orientation for new contributors and coding agents:
+**[AGENTS.md](AGENTS.md)**.
+
+---
 
 ## Roadmap
 
-- **vowel_marker** (current): baseline stroke under each Latin vowel.
-  Pure GSUB, no preprocessing required.
-- **pronounced_vowel** (planned): adds CMUdict preprocessor; stroke
-  appears only under voiced vowels.
-- **schwa_marker** (planned): unstressed vowels get a distinct modifier.
-- **long_short** (planned): long and short vowels become visibly distinct.
-- **diphthong** (planned): vowel digraphs render as unified phonemes.
-- **glyph_replacement** (planned): Latin vowel letters replaced with
-  naYana symbols.
+`docs/roadmap.md` is the source of truth for shipped phases. We do not
+commit to phase ordering past whatever is currently in flight — field
+testing decides what comes next.
 
-Each is a phase module, not a separate font version.
+---
 
 ## License
 
-- **Source code** (`src/`, `scripts/`, `tests/`): MIT. See `LICENSE-CODE`.
-- **Documentation** (`docs/`, READMEs): CC BY 4.0. See `LICENSE-DOCS`.
-- **Generated fonts** (`fonts/output/*.otf`): SIL Open Font License 1.1
-  (inherited from Comic Neue). See `fonts/output/OFL.txt`.
+- **Source code** (`src/`, `scripts/`, `tests/`, `engine/`): MIT.
+  See `LICENSE-CODE`.
+- **Documentation** (`docs/`, READMEs, manifesto prose): CC BY 4.0.
+  See `LICENSE-DOCS`.
+- **Generated fonts** (`fonts/output/*.otf`,
+  `engine/public/manifesto/Nayana-Regular.otf`): SIL Open Font License
+  1.1 (inherited from Comic Neue). See `fonts/output/OFL.txt`.
+
+---
 
 ## Credits
 
-- Original font: Comic Neue by Craig Rozynski.
+- Original font: [Comic Neue](https://comicneue.com) by Craig Rozynski.
 - naYana project: Nagarjuna G., Vickram Krishna et al., gnowledge lab,
   HBCSE/TIFR.
 - See `CONTRIBUTORS.md`.
+
+---
 
 ## Contributing
 

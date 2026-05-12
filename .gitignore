@@ -1,8 +1,10 @@
-# Local editor / IDE config
+# Local editor / IDE / agent config
 .claude/
 .vscode/
 .idea/
 .DS_Store
+# Local symlink to AGENTS.md so Claude Code auto-loads project context
+CLAUDE.md
 
 # Font build inputs and outputs are regenerable
 fonts/source/*.otf
