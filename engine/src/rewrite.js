@@ -21,6 +21,15 @@
 /**
  * Apply one rule to an aligned pair list.
  *
+ * A rule's `phoneme` field selects which pairs match:
+ *   - phoneme: "F" (or any ARPAbet symbol) — matches when that phoneme
+ *     is present in pair.phonemes (stress digits stripped).
+ *   - phoneme: null (or "") — epsilon rule: matches when pair.phonemes
+ *     is empty. Used for silent letters (gh in 'night', silent h, etc.).
+ *
+ * `rule.to` is the replacement grapheme(s); an empty string deletes the
+ * grapheme entirely.
+ *
  * Returns { pairs, applied, count } — pairs is the (possibly modified)
  * pair list, applied is true if any pair changed, count is how many.
  * The pair list itself is never mutated; modified pairs are new objects.
@@ -28,10 +37,15 @@
 export function applyRuleToPairs(pairs, rule) {
   let applied = false;
   let count = 0;
+  const isEpsilon = !rule.phoneme;
   const newPairs = pairs.map((pair) => {
     if (pair.graphemes.toLowerCase() !== rule.from.toLowerCase()) return pair;
-    const stripped = pair.phonemes.map((p) => p.replace(/[0-9]+$/, ''));
-    if (!stripped.includes(rule.phoneme)) return pair;
+    if (isEpsilon) {
+      if (pair.phonemes.length !== 0) return pair;
+    } else {
+      const stripped = pair.phonemes.map((p) => p.replace(/[0-9]+$/, ''));
+      if (!stripped.includes(rule.phoneme)) return pair;
+    }
     applied = true;
     count++;
     return { ...pair, graphemes: rule.to };
