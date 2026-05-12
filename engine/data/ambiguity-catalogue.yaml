@@ -183,29 +183,63 @@ phases:
       That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
 
   - number: 5
-    name: "gh — silent or → f"
-    description: "The 'gh' digraph is either silent (night, light, through) or sounded as /f/ (laugh, tough). Drop it or replace it accordingly."
+    name: "the long-i family — i/y → ai, gh dropped or → f"
+    description: "Mark the /aɪ/ diphthong (night, my, find), drop silent gh (through, light), and turn the /f/-sounding gh into f (laugh, tough)."
     rationale: >
-      'gh' is one of the worst offenders in English orthography. It descends
-      from a Middle English /x/ sound that vanished or shifted; the letters
-      stayed. Phonetisaurus aligns it cleanly: gh}∅ when silent and gh}F
-      when it kept its consonant value. We drop it (the silent case) or
-      replace with 'f'. Both rules use the same grapheme but different
-      phoneme targets, so they're mutually exclusive per word and compose
-      with the rest of the catalogue without surprises.
+      The long-i diphthong /aɪ/ has been hiding under bare letters: the i
+      in 'night' is the same vowel as the y in 'my', but English spelling
+      gives no clue. Phase 5 makes it visible — both spellings become 'ai',
+      so 'night' goes to 'nait' and 'my' goes to 'mai'. Short-i words
+      (nit, bit, sit) are untouched because their phoneme is /ɪ/, not /aɪ/.
+      Vowel-y unification also delivers on the project rule that y is
+      consonant-only: vowel uses of y (sky, why, type) become the
+      appropriate vowel glyph, while consonant y (yes, yellow) keeps its /j/.
+
+      Silent gh is dropped (night, light, through, bought, straight) and
+      /f/-sounding gh becomes f (laugh, tough, enough, rough). These two
+      cleanups are bundled with the vowel rule for one reason: doing
+      gh-removal alone would yield 'nit', 'lit', 'brit' — visually colliding
+      with the unrelated /ɪ/ words. The vowel rule fires in the same phase
+      so the reader never sees that collision.
+
       The deletion case is the project's first use of an epsilon rule:
       phoneme is null in the YAML, which the engine interprets as "fires
       when the pair has no phonemes." Words like 'ghost' are unaffected
       because Phonetisaurus splits them as g}G h}∅ (no 'gh' pair exists).
-      A bonus: 'straight' and 'strait' fully unify — they're true homophones
-      and the reform reveals it.
+      Bonus unification: 'straight' and 'strait' merge — both /streɪt/.
     rules:
+      - name: "i→ai (when /aɪ/)"
+        phoneme: "AY"
+        from: "i"
+        to: "ai"
+        examples:
+          - { before: "find",    after: "faind" }
+          - { before: "child",   after: "chaild" }
+          - { before: "mighty",  after: "maity" }
+          - { before: "die",     after: "daie" }
+        exceptions:
+          - { word: "nit",  reason: "i aligns to /IH/ (short-i), not /AY/" }
+          - { word: "sit",  reason: "i aligns to /IH/" }
+
+      - name: "y→ai (when /aɪ/)"
+        phoneme: "AY"
+        from: "y"
+        to: "ai"
+        examples:
+          - { before: "my",     after: "mai" }
+          - { before: "sky",    after: "skai" }
+          - { before: "fly",    after: "flai" }
+          - { before: "type",   after: "taipe" }
+        exceptions:
+          - { word: "yes",     reason: "y is consonant /j/, phoneme is Y not AY" }
+          - { word: "happy",   reason: "y aligns to /IY/ (the 'ee' sound), not /AY/" }
+
       - name: "gh→∅"
         phoneme: null
         from: "gh"
         to: ""
         examples:
-          - { before: "night",    after: "nit" }
+          - { before: "night",    after: "nait" }
           - { before: "through",  after: "throu" }
           - { before: "though",   after: "thou" }
           - { before: "bought",   after: "bout" }
@@ -235,4 +269,4 @@ phases:
 
       That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
 
-      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, and high on her own brightness. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.

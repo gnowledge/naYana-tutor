@@ -1,14 +1,19 @@
 /**
- * Phase 5 acid tests — gh deletion + gh→f.
+ * Phase 5 acid tests — the long-i family.
  *
- * Phase 5 introduces the first epsilon rule: gh→∅ fires on pairs where
- * graphemes are "gh" and the phoneme list is empty (silent gh). The
- * sibling gh→f rule fires on pairs where graphemes are "gh" and the
- * phoneme list contains /F/. The two are mutually exclusive per pair.
+ * Phase 5 bundles four rules:
+ *   i → ai   (when phoneme is /AY/)  — find → faind, night → nait
+ *   y → ai   (when phoneme is /AY/)  — my → mai, sky → skai
+ *   gh → ∅   (epsilon)               — through → throu, bought → bout
+ *   gh → f                            — laugh → lauf, tough → touf
  *
- * Critical negative cases — words where the alignment splits gh into
- * separate g}G h}∅ pairs (ghost, spaghetti) — confirm the rule
- * correctly does not fire there.
+ * The vowel rule is bundled with gh-removal on purpose: doing gh-removal
+ * alone would produce 'nit' for 'night', visually colliding with the
+ * unrelated /ɪ/ word. With i→ai active, 'night' becomes 'nait' and the
+ * collision never appears for the reader.
+ *
+ * The epsilon rule (gh→∅) introduces a new engine capability: rules with
+ * phoneme:null fire on pairs whose phoneme list is empty.
  */
 
 import { test } from 'node:test';
@@ -27,9 +32,13 @@ function rewrite(word) {
   return rewriteWord(word, pairs, phase5Rules);
 }
 
-test('phase 5 catalogue extends through gh→∅ and gh→f', () => {
+test('phase 5 catalogue extends through i→ai, y→ai, gh→∅, gh→f', () => {
   const names = phase5Rules.map((r) => r.name);
-  assert.deepEqual(names, ['ph→f', 'c→k', 'c→s', 'cc→k', 'ck→k', 'kn→n', 'wr→r', 'mb→m', 'gh→∅', 'gh→f']);
+  assert.deepEqual(names, [
+    'ph→f', 'c→k', 'c→s', 'cc→k', 'ck→k',
+    'kn→n', 'wr→r', 'mb→m',
+    'i→ai (when /aɪ/)', 'y→ai (when /aɪ/)', 'gh→∅', 'gh→f',
+  ]);
 });
 
 // ---- Engine: epsilon-rule plumbing -----------------------------------------
@@ -56,17 +65,75 @@ test('applyRuleToPairs: epsilon rule does NOT fire on pair with phonemes', () =>
   assert.equal(applied, false);
 });
 
-// ---- gh → ∅ (silent) -------------------------------------------------------
+// ---- i → ai (when /aɪ/) ----------------------------------------------------
 
-test('night → nit', () => {
-  assert.equal(rewrite('night').spelling, 'nit');
+test('find → faind', () => {
+  assert.equal(rewrite('find').spelling, 'faind');
 });
 
-test('light → lit', () => {
-  assert.equal(rewrite('light').spelling, 'lit');
+test('child → chaild', () => {
+  assert.equal(rewrite('child').spelling, 'chaild');
 });
 
-test('through → throu', () => {
+test('mighty → maity (i→ai AND gh→∅ both fire)', () => {
+  assert.equal(rewrite('mighty').spelling, 'maity');
+});
+
+test('CRITICAL: nit is NOT rewritten (i aligns to /IH/, not /AY/)', () => {
+  assert.equal(rewrite('nit').spelling, 'nit');
+});
+
+test('CRITICAL: sit is NOT rewritten', () => {
+  assert.equal(rewrite('sit').spelling, 'sit');
+});
+
+// ---- y → ai (when /aɪ/) ----------------------------------------------------
+
+test('my → mai', () => {
+  assert.equal(rewrite('my').spelling, 'mai');
+});
+
+test('sky → skai', () => {
+  assert.equal(rewrite('sky').spelling, 'skai');
+});
+
+test('fly → flai', () => {
+  assert.equal(rewrite('fly').spelling, 'flai');
+});
+
+test('cry → krai (c→k AND y→ai both fire)', () => {
+  assert.equal(rewrite('cry').spelling, 'krai');
+});
+
+test('CRITICAL: yes is NOT rewritten (consonant y, phoneme /Y/)', () => {
+  assert.equal(rewrite('yes').spelling, 'yes');
+});
+
+test('CRITICAL: happy is NOT rewritten (y aligns to /IY/, not /AY/)', () => {
+  assert.equal(rewrite('happy').spelling, 'happy');
+});
+
+// ---- gh → ∅ (silent) — combined with i→ai/y→ai ----------------------------
+
+test('CRITICAL: night → nait (i→ai AND gh→∅, no collision with nit)', () => {
+  const r = rewrite('night');
+  assert.equal(r.spelling, 'nait');
+  assert.equal(r.replacements, 2);
+});
+
+test('light → lait', () => {
+  assert.equal(rewrite('light').spelling, 'lait');
+});
+
+test('bright → brait', () => {
+  assert.equal(rewrite('bright').spelling, 'brait');
+});
+
+test('high → hai', () => {
+  assert.equal(rewrite('high').spelling, 'hai');
+});
+
+test('through → throu (no /aɪ/; only gh→∅ fires)', () => {
   assert.equal(rewrite('through').spelling, 'throu');
 });
 
@@ -74,11 +141,11 @@ test('though → thou', () => {
   assert.equal(rewrite('though').spelling, 'thou');
 });
 
-test('bought → bout (with silent u retained from alignment)', () => {
+test('bought → bout', () => {
   assert.equal(rewrite('bought').spelling, 'bout');
 });
 
-test('straight → strait (true homophone unification)', () => {
+test('straight → strait (true homophone unification; ai is for /EY/ here, not affected)', () => {
   assert.equal(rewrite('straight').spelling, 'strait');
 });
 
@@ -86,10 +153,16 @@ test('daughter → dauter', () => {
   assert.equal(rewrite('daughter').spelling, 'dauter');
 });
 
-test('caught → kaut (c→k AND gh→∅ both fire)', () => {
+test('caught → kaut (c→k AND gh→∅)', () => {
   const r = rewrite('caught');
   assert.equal(r.spelling, 'kaut');
   assert.equal(r.replacements, 2);
+});
+
+test('climb → klaim (c→k, mb→m, AND i→ai all fire)', () => {
+  const r = rewrite('climb');
+  assert.equal(r.spelling, 'klaim');
+  assert.equal(r.replacements, 3);
 });
 
 // ---- gh → f ----------------------------------------------------------------
@@ -130,8 +203,10 @@ test('phase 5 still applies phase 1: philosophy → filosofy', () => {
   assert.equal(rewrite('philosophy').spelling, 'filosofy');
 });
 
-test('phase 5 still applies phase 4: knife → nife', () => {
-  assert.equal(rewrite('knife').spelling, 'nife');
+test('phase 5 still applies phase 4: knife → naife (kn→n AND i→ai)', () => {
+  // At phase 4 alone, knife → nife. At phase 5, the i→ai rule also fires
+  // because knife's i aligns to /aɪ/ — so the phase-5 output is naife.
+  assert.equal(rewrite('knife').spelling, 'naife');
 });
 
 test('phase 5 still rejects phase 1 exception: shepherd unchanged', () => {
