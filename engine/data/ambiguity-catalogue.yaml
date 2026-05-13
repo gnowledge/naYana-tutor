@@ -912,3 +912,213 @@ phases:
       On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
 
       That night, after the philosopher had gone, the child sat with her mother and her three brothers. They had thought about the things he said — about every word being half schwa — and now they wondered about the rest. What about 'this', what about 'that'? What about the breath and the thought? Both seemed worth thinking about together. The mother smiled and said nothing. The brothers shrugged. The child looked at the lantern, and at her own breath in the cold air, and understood that the truth of every word was already there in the way she said it.
+
+  - number: 12
+    name: "the missing consonants — ʃ, tʃ, ʒ, ŋ"
+    description: "Four post-alveolar/velar consonants finally get their own IPA codepoints. Covers all the spellings English has overloaded for them: sh/ti/si/ci/ch/s/c for /ʃ/, ch/t for /tʃ/, si/s/g for /ʒ/, ng/n for /ŋ/."
+    rationale: >
+      Phase 11 split 'th' into /θ/ and /ð/. Phase 12 finishes the
+      consonant-introduction work: ship's /ʃ/, chip's /tʃ/, vision's
+      /ʒ/, and sing's /ŋ/ all get distinct IPA glyphs.
+
+      The big news is that one English digraph 'ch' represents two
+      different phonemes: /tʃ/ in chip, much, catch (the common case)
+      AND /ʃ/ in machine, chef, chic (loanwords). Same branching
+      pattern as the th split: rules with the same `from: "ch"` but
+      different `phoneme` targets, mutually exclusive per pair.
+      Likewise 'si' splits across /ʃ/ (tension) and /ʒ/ (vision), and
+      's' splits across /ʃ/ (sure) and /ʒ/ (measure).
+
+      Codepoints (all canonical IPA):
+        ʃ  U+0283  esh         — voiceless post-alveolar fricative
+        ʒ  U+0292  ezh         — voiced post-alveolar fricative
+        ŋ  U+014B  eng         — velar nasal
+        /tʃ/ uses the IPA digraph t+ʃ rather than the deprecated
+        single character ʧ (U+02A7). The Nayana font will draw the
+        t+ʃ sequence as a ligature in the font phase.
+
+      Font glyph plan (separate ticket, recorded for the font update):
+        - ch (the /tʃ/ digraph) → custom Nayana ligature shape
+        - ng (the /ŋ/ velar) → custom Nayana shape extending the
+          existing 'n' design
+      Until the font ships those glyphs, Comic Neue's defaults render.
+      The data layer is canonical IPA either way.
+
+    rules:
+      # ----- /ʃ/ (esh) -----
+      - name: "sh→ʃ"
+        phoneme: "SH"
+        from: "sh"
+        to: "ʃ"
+        examples:
+          - { before: "ship",   after: "ʃip" }
+          - { before: "fish",   after: "fiʃ" }
+          - { before: "wash",   after: "waʃ" }
+
+      - name: "ti→ʃ (when /ʃ/)"
+        phoneme: "SH"
+        from: "ti"
+        to: "ʃ"
+        examples:
+          - { before: "nation",    after: "neiʃən" }
+          - { before: "vacation",  after: "veikeiʃən" }
+        exceptions:
+          - { word: "question",  reason: "ti aligns to /CH/, not /SH/ — handled by ti→tʃ" }
+
+      - name: "si→ʃ (when /ʃ/)"
+        phoneme: "SH"
+        from: "si"
+        to: "ʃ"
+        examples:
+          - { before: "tension",  after: "tenʃən" }
+          - { before: "mansion",  after: "manʃən" }
+        exceptions:
+          - { word: "vision",   reason: "si aligns to /ZH/, not /SH/ — handled by si→ʒ" }
+
+      - name: "ci→ʃ (when /ʃ/)"
+        phoneme: "SH"
+        from: "ci"
+        to: "ʃ"
+        examples:
+          - { before: "special",   after: "speʃəl" }
+          - { before: "official",  after: "əfiʃəl" }
+
+      - name: "ch→ʃ (when /ʃ/)"
+        phoneme: "SH"
+        from: "ch"
+        to: "ʃ"
+        examples:
+          - { before: "machine",  after: "məʃiːn" }
+          - { before: "chef",     after: "ʃef" }
+        exceptions:
+          - { word: "chip",  reason: "ch aligns to /CH/ — handled by ch→tʃ" }
+
+      - name: "s→ʃ (when /ʃ/)"
+        phoneme: "SH"
+        from: "s"
+        to: "ʃ"
+        examples:
+          - { before: "sure",   after: "ʃur" }
+          - { before: "sugar",  after: "ʃugar" }
+        exceptions:
+          - { word: "see",  reason: "s is /S/, not /SH/" }
+
+      - name: "c→ʃ (when /ʃ/)"
+        phoneme: "SH"
+        from: "c"
+        to: "ʃ"
+        examples:
+          - { before: "ocean",  after: "ouʃən" }
+        exceptions:
+          - { word: "cat",   reason: "c is /K/" }
+          - { word: "city",  reason: "c is /S/" }
+
+      # ----- /tʃ/ (the digraph t+ʃ) -----
+      - name: "ch→tʃ (when /tʃ/)"
+        phoneme: "CH"
+        from: "ch"
+        to: "tʃ"
+        examples:
+          - { before: "chip",    after: "tʃip" }
+          - { before: "much",    after: "mutʃ" }
+          - { before: "catch",   after: "katʃ" }
+        notes: >
+          'catch' aligns as c}K a}AE1 t}∅ ch}CH — the t is silent,
+          ch carries /tʃ/. The c→k rule from phase 2 fires too, so
+          'catch' lands at 'katʃ'.
+
+      - name: "t→tʃ (when /tʃ/)"
+        phoneme: "CH"
+        from: "t"
+        to: "tʃ"
+        examples:
+          - { before: "nature",   after: "neitʃər" }
+          - { before: "culture",  after: "kultʃər" }
+          - { before: "century",  after: "sentʃəriː" }
+        notes: >
+          The 't' before -ure/-ury palatalises to /tʃ/ in CMUdict's
+          GA alignment. Phonetisaurus aligns it as a single t}CH pair.
+
+      - name: "ti→tʃ (when /tʃ/)"
+        phoneme: "CH"
+        from: "ti"
+        to: "tʃ"
+        examples:
+          - { before: "question",  after: "questʃən" }
+          - { before: "suggestion", after: "səgjestʃən" }
+        notes: >
+          Mirror of ti→ʃ for nation: the same 'ti' digraph branches by
+          phoneme. nation has ti}SH (→ʃ); question has ti}CH (→tʃ).
+
+      # ----- /ʒ/ (ezh) -----
+      - name: "si→ʒ (when /ʒ/)"
+        phoneme: "ZH"
+        from: "si"
+        to: "ʒ"
+        examples:
+          - { before: "vision",   after: "viʒən" }
+          - { before: "decision", after: "disiʒən" }
+
+      - name: "s→ʒ (when /ʒ/)"
+        phoneme: "ZH"
+        from: "s"
+        to: "ʒ"
+        examples:
+          - { before: "measure",   after: "meʒər" }
+          - { before: "treasure",  after: "treʒər" }
+          - { before: "pleasure",  after: "pleʒər" }
+
+      - name: "g→ʒ (when /ʒ/)"
+        phoneme: "ZH"
+        from: "g"
+        to: "ʒ"
+        examples:
+          - { before: "garage",  after: "gəraʒ" }
+          - { before: "beige",   after: "beiʒ" }
+
+      # ----- /ŋ/ (eng) -----
+      - name: "ng→ŋ"
+        phoneme: "NG"
+        from: "ng"
+        to: "ŋ"
+        examples:
+          - { before: "sing",    after: "siŋ" }
+          - { before: "long",    after: "loŋ" }
+          - { before: "bring",   after: "briŋ" }
+          - { before: "running", after: "runiŋ" }
+
+      - name: "n→ŋ (when /ŋ/)"
+        phoneme: "NG"
+        from: "n"
+        to: "ŋ"
+        examples:
+          - { before: "think",    after: "θiŋk" }
+          - { before: "English",  after: "iŋgliʃ" }
+          - { before: "finger",   after: "fiŋger" }
+        notes: >
+          Before /k/ or /g/, the letter 'n' is phonetically /ŋ/.
+          Phonetisaurus correctly aligns it as n}NG in these cases.
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+      At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
+
+      The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
+
+      On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
+
+      That night, after the philosopher had gone, the child sat with her mother and her three brothers. They had thought about the things he said — about every word being half schwa — and now they wondered about the rest. What about 'this', what about 'that'? What about the breath and the thought? Both seemed worth thinking about together. The mother smiled and said nothing. The brothers shrugged. The child looked at the lantern, and at her own breath in the cold air, and understood that the truth of every word was already there in the way she said it.
+
+      The next spring, the teacher came from the city. She spoke about nature and machines, about the vision of long English summers, about the question of treasure and measure. She would speak of fish and of the cheap shops by the bridge, of the special ocean shells the children would catch and the pleasure of the long song they would sing each evening. Every chapter of the lesson was a fresh thing: action and tension and decision, much and motion and music, the things a young brain could think and ask. The shepherd watched the teacher with attention. The plumber listened. The mother held her daughter's hand. The crane, watching from the wagon, opened one eye, and then closed it again.
