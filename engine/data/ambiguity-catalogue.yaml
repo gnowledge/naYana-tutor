@@ -726,3 +726,116 @@ phases:
       At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
 
       The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
+
+  - number: 10
+    name: "schwa /ə/ — the unstressed vowel"
+    description: "The single most common vowel in English: any of a/e/i/o/u when unstressed becomes ə."
+    rationale: >
+      Schwa /ə/ is the rest position of the human mouth — the vowel
+      every unstressed syllable reduces to. English spells it with all
+      five vowel letters depending on the word's history: 'a' in about,
+      'e' in taken, 'i' in pencil, 'o' in lemon, 'u' in circus. Phase 10
+      unifies them all under one IPA codepoint: U+0259 ə.
+
+      This is the project's first non-Latin grapheme. The Nayana font
+      will render U+0259 with a custom shape (two horizontal strokes
+      at the baseline — the natural extension of the vowel-marker
+      stroke that already runs under every Latin vowel in ss01). Until
+      the font ships that glyph, Comic Neue falls back to its default
+      "turned e" — visually rough but the data is correct, and IPA-aware
+      tools (TTS, linguistic software) will read /ə/ correctly because
+      the codepoint is the canonical IPA schwa.
+
+      This is the project's first stress-aware phoneme rule. The rules
+      target ARPAbet AH0 (unstressed AH) specifically, NOT AH1 or AH2
+      (stressed /ʌ/). So 'about' /əˈbaʊt/ → 'əbaut' while 'cup' /kʌp/
+      stays as 'kup'. The engine's applyRuleToPairs gained a small
+      branch: rules whose phoneme ends in a digit match exactly,
+      without stripping stress.
+
+      Pedagogical impact: schwa is the most frequent vowel in English
+      (and many other languages). Marking it explicitly is what turns
+      Nayana from "English with cleaner spelling" into "writing that
+      reveals what was always being said." 'the' /ðə/ becomes 'thə',
+      'about' becomes 'əbaut', 'banana' becomes 'bənanə'.
+    rules:
+      - name: "a→ə (when /ə/)"
+        phoneme: "AH0"
+        from: "a"
+        to: "ə"
+        examples:
+          - { before: "about",   after: "əbaut" }
+          - { before: "around",  after: "əraund" }
+          - { before: "sofa",    after: "soufə" }
+        exceptions:
+          - { word: "cat",   reason: "a is /AE/, not /AH0/" }
+          - { word: "face",  reason: "a is /EY/" }
+
+      - name: "e→ə (when /ə/)"
+        phoneme: "AH0"
+        from: "e"
+        to: "ə"
+        examples:
+          - { before: "taken",   after: "teikən" }
+          - { before: "open",    after: "oupən" }
+          - { before: "the",     after: "thə" }
+        exceptions:
+          - { word: "bed",  reason: "e is /EH/, not /AH0/" }
+          - { word: "be",   reason: "e is /IY/" }
+
+      - name: "i→ə (when /ə/)"
+        phoneme: "AH0"
+        from: "i"
+        to: "ə"
+        examples:
+          - { before: "pencil",  after: "pensəl" }
+          - { before: "animal",  after: "anəməl" }
+          - { before: "cousin",  after: "kuzən" }
+        exceptions:
+          - { word: "it",   reason: "i is /IH/" }
+          - { word: "ski",  reason: "i is /IY/" }
+
+      - name: "o→ə (when /ə/)"
+        phoneme: "AH0"
+        from: "o"
+        to: "ə"
+        examples:
+          - { before: "lemon",   after: "leməN" }
+          - { before: "wagon",   after: "wagən" }
+          - { before: "reason",  after: "riːzən" }
+        exceptions:
+          - { word: "on",   reason: "o is /AA/" }
+          - { word: "go",   reason: "o is /OW/" }
+
+      - name: "u→ə (when /ə/)"
+        phoneme: "AH0"
+        from: "u"
+        to: "ə"
+        examples:
+          - { before: "circus",   after: "sirkəs" }
+          - { before: "focus",    after: "foukəs" }
+          - { before: "album",    after: "albəm" }
+        exceptions:
+          - { word: "cup",   reason: "u is /AH1/ (stressed)" }
+          - { word: "run",   reason: "u is /AH1/" }
+          - { word: "blue",  reason: "u is /UW/" }
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+      At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
+
+      The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
+
+      On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
