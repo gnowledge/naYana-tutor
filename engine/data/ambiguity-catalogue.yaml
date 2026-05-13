@@ -1122,3 +1122,207 @@ phases:
       That night, after the philosopher had gone, the child sat with her mother and her three brothers. They had thought about the things he said — about every word being half schwa — and now they wondered about the rest. What about 'this', what about 'that'? What about the breath and the thought? Both seemed worth thinking about together. The mother smiled and said nothing. The brothers shrugged. The child looked at the lantern, and at her own breath in the cold air, and understood that the truth of every word was already there in the way she said it.
 
       The next spring, the teacher came from the city. She spoke about nature and machines, about the vision of long English summers, about the question of treasure and measure. She would speak of fish and of the cheap shops by the bridge, of the special ocean shells the children would catch and the pleasure of the long song they would sing each evening. Every chapter of the lesson was a fresh thing: action and tension and decision, much and motion and music, the things a young brain could think and ask. The shepherd watched the teacher with attention. The plumber listened. The mother held her daughter's hand. The crane, watching from the wagon, opened one eye, and then closed it again.
+
+  - number: 13
+    name: "the short vowels and /dʒ/ — ɪ ʊ ɛ æ ʌ dʒ"
+    description: "Five short vowels and one affricate. Resolves the iː/ɪ, uː/ʊ visual ambiguities once and for all, and gives /dʒ/ its own IPA digraph."
+    rationale: >
+      With the long vowels marked by length (iː uː) and schwa explicit
+      (ə), the short vowels still wore the bare Latin letters that
+      readers reduced to whichever sound context implied. Phase 13
+      makes them visible:
+
+        /ɪ/  ɪ  U+026A  small-cap I  bit, sit, fish, this
+        /ʊ/  ʊ  U+028A  turned omega  book, foot, put, full
+        /ɛ/  ɛ  U+025B  Latin epsilon bed, head, said
+        /æ/  æ  U+00E6  ash ligature  cat, bat, black
+        /ʌ/  ʌ  U+028C  turned v      cup, run, love, some
+
+      Plus the voiced partner of phase 12's /tʃ/:
+
+        /dʒ/ digraph  judge, age, gym, bridge
+
+      Engine extension: the new "AH+" syntax matches AH at any stressed
+      level (AH1 or AH2) without firing on schwa (AH0). Used so 'u → ʌ'
+      and 'o → ʌ' fire on cup/run/love but not on the schwa cases
+      handled by phase 10.
+
+      Notable cleanup: this phase resolves three long-standing
+      collisions / alignment quirks:
+        - eat (iːt) vs it (ɪt) — long and short i now distinct
+        - food (fuːd) vs foot (fʊt) — same for u
+        - head → 'hɛd' (was 'had'), bread → 'brɛd', said → 'sɛd'
+          (the phase-6 alignment quirk: Phonetisaurus aligned ea as
+          e-silent + a-as-/EH/. Now a → ɛ when /EH/ catches the
+          stranded a, giving the right phonetic spelling.)
+        - said → 'sɛd', sighed → 'said' — phase 7's spurious
+          collision is gone; said now reads correctly.
+
+      Font glyph notes (recorded for the font ticket):
+        - ʌ is the rotation of v. Same family of concern as ə
+          (rotation of e). Nayana shape: a wedge with the opening
+          downward and a longer base, distinct from v's open top.
+        - dʒ digraph should ligate to a single Nayana glyph,
+          matching the tʃ treatment.
+
+    rules:
+      # ----- /ɪ/ short-i -----
+      - name: "i→ɪ (when /ɪ/)"
+        phoneme: "IH"
+        from: "i"
+        to: "ɪ"
+        examples:
+          - { before: "bit",   after: "bɪt" }
+          - { before: "sit",   after: "sɪt" }
+          - { before: "fish",  after: "fɪʃ" }
+          - { before: "this",  after: "ðɪs" }
+        exceptions:
+          - { word: "ski",  reason: "i is /IY/, handled by phase 9" }
+          - { word: "it",   reason: "fires correctly here: it → ɪt" }
+
+      # ----- /ʊ/ short-oo -----
+      - name: "oo→ʊ (when /ʊ/)"
+        phoneme: "UH"
+        from: "oo"
+        to: "ʊ"
+        examples:
+          - { before: "book",  after: "bʊk" }
+          - { before: "foot",  after: "fʊt" }
+          - { before: "good",  after: "gʊd" }
+          - { before: "wood",  after: "wʊd" }
+        exceptions:
+          - { word: "food",  reason: "oo is /UW/ (handled by phase 8 → fuːd)" }
+
+      - name: "u→ʊ (when /ʊ/)"
+        phoneme: "UH"
+        from: "u"
+        to: "ʊ"
+        examples:
+          - { before: "put",   after: "pʊt" }
+          - { before: "full",  after: "fʊll" }
+
+      # ----- /ɛ/ short-e -----
+      - name: "e→ɛ (when /ɛ/)"
+        phoneme: "EH"
+        from: "e"
+        to: "ɛ"
+        examples:
+          - { before: "bed",   after: "bɛd" }
+          - { before: "red",   after: "rɛd" }
+          - { before: "met",   after: "mɛt" }
+          - { before: "let",   after: "lɛt" }
+
+      - name: "a→ɛ (when /ɛ/) — fixes the bread/head family"
+        phoneme: "EH"
+        from: "a"
+        to: "ɛ"
+        examples:
+          - { before: "head",   after: "hɛd" }
+          - { before: "bread",  after: "brɛd" }
+          - { before: "many",   after: "mɛniː" }
+        notes: >
+          Phase 6 silent-e produces head→'had' because alignment is
+          e}∅ a}EH1. This rule fixes it: the stranded a now becomes
+          ɛ, giving 'hɛd'.
+
+      - name: "ai→ɛ (when /ɛ/) — fixes said/sighed"
+        phoneme: "EH"
+        from: "ai"
+        to: "ɛ"
+        examples:
+          - { before: "said",   after: "sɛd" }
+          - { before: "again",  after: "əgɛn" }
+        notes: >
+          Phase 7's sighed→'said' collision is resolved: said now
+          becomes sɛd, sighed stays as said.
+
+      # ----- /æ/ short-a -----
+      - name: "a→æ (when /æ/)"
+        phoneme: "AE"
+        from: "a"
+        to: "æ"
+        examples:
+          - { before: "cat",     after: "kæt" }
+          - { before: "bat",     after: "bæt" }
+          - { before: "black",   after: "blæk" }
+          - { before: "at",      after: "æt" }
+
+      # ----- /ʌ/ stressed (cup, run, love) -----
+      - name: "u→ʌ (when stressed /ʌ/)"
+        phoneme: "AH+"
+        from: "u"
+        to: "ʌ"
+        examples:
+          - { before: "cup",   after: "kʌp" }
+          - { before: "run",   after: "rʌn" }
+          - { before: "sun",   after: "sʌn" }
+          - { before: "jump",  after: "dʒʌmp" }
+
+      - name: "o→ʌ (when stressed /ʌ/)"
+        phoneme: "AH+"
+        from: "o"
+        to: "ʌ"
+        examples:
+          - { before: "love",  after: "lʌv" }
+          - { before: "done",  after: "dʌn" }
+          - { before: "some",  after: "sʌm" }
+        exceptions:
+          - { word: "go",    reason: "o is /OW/, phase 7 handles" }
+          - { word: "lemon", reason: "o is /AH0/ (schwa, phase 10)" }
+
+      # ----- /dʒ/ — the voiced partner of /tʃ/ -----
+      - name: "j→dʒ"
+        phoneme: "JH"
+        from: "j"
+        to: "dʒ"
+        examples:
+          - { before: "judge",  after: "dʒʌdʒ" }
+          - { before: "jump",   after: "dʒʌmp" }
+
+      - name: "g→dʒ (when /dʒ/)"
+        phoneme: "JH"
+        from: "g"
+        to: "dʒ"
+        examples:
+          - { before: "age",     after: "eidʒ" }
+          - { before: "page",    after: "peidʒ" }
+          - { before: "large",   after: "lardʒ" }
+          - { before: "magic",   after: "mædʒɪk" }
+        exceptions:
+          - { word: "go",   reason: "g is /G/ here" }
+          - { word: "get",  reason: "g is /G/" }
+
+      - name: "dg→dʒ"
+        phoneme: "JH"
+        from: "dg"
+        to: "dʒ"
+        examples:
+          - { before: "judge",   after: "dʒʌdʒ" }
+          - { before: "bridge",  after: "brɪdʒ" }
+          - { before: "edge",    after: "ɛdʒ" }
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+      At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
+
+      The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
+
+      On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
+
+      That night, after the philosopher had gone, the child sat with her mother and her three brothers. They had thought about the things he said — about every word being half schwa — and now they wondered about the rest. What about 'this', what about 'that'? What about the breath and the thought? Both seemed worth thinking about together. The mother smiled and said nothing. The brothers shrugged. The child looked at the lantern, and at her own breath in the cold air, and understood that the truth of every word was already there in the way she said it.
+
+      The next spring, the teacher came from the city. She spoke about nature and machines, about the vision of long English summers, about the question of treasure and measure. She would speak of fish and of the cheap shops by the bridge, of the special ocean shells the children would catch and the pleasure of the long song they would sing each evening. Every chapter of the lesson was a fresh thing: action and tension and decision, much and motion and music, the things a young brain could think and ask. The shepherd watched the teacher with attention. The plumber listened. The mother held her daughter's hand. The crane, watching from the wagon, opened one eye, and then closed it again.
+
+      That summer the child judged the village fair. She watched the older boys jump from bridge to bridge, the red cat sit on the wooden bench, the man at the magic stall pull a rabbit from a black hat. She loved every minute. She put a foot in the cool stream, ate her bread on a small bed of moss, and laughed when the crane landed on her thumb. Her mother came back from the village with a full basket, and said: come home, my love. The page of the day, like every page, was already turning.

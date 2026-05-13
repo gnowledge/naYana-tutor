@@ -22,14 +22,18 @@
  * Apply one rule to an aligned pair list.
  *
  * A rule's `phoneme` field selects which pairs match:
- *   - phoneme: "F" (or any ARPAbet symbol without a digit) — matches when
- *     that phoneme is present in pair.phonemes at any stress level.
+ *   - phoneme: "F" (or any ARPAbet symbol without a digit or +) — matches
+ *     when that phoneme is present in pair.phonemes at any stress level.
  *     Stress digits are stripped before comparison ('AE' matches 'AE0',
  *     'AE1', 'AE2').
  *   - phoneme: "AH0" (ARPAbet with a stress digit) — exact match required,
  *     stress and all. Used to target schwa (AH0) without firing on the
  *     stressed /ʌ/ (AH1, AH2). Same pattern works for any vowel where
  *     stress matters.
+ *   - phoneme: "AH+" (ARPAbet with trailing +) — matches that phoneme at
+ *     any STRESSED level (digit 1-9), explicitly excluding the unstressed
+ *     stress digit 0. Used to target /ʌ/ (stressed AH) without firing on
+ *     schwa (AH0).
  *   - phoneme: null (or "") — epsilon rule: matches when pair.phonemes
  *     is empty. Used for silent letters (gh in 'night', silent h, etc.).
  *
@@ -44,13 +48,21 @@ export function applyRuleToPairs(pairs, rule) {
   let applied = false;
   let count = 0;
   const isEpsilon = !rule.phoneme;
-  const stressSpecific = !isEpsilon && /[0-9]$/.test(rule.phoneme);
+  const stressedOnly = !isEpsilon && /\+$/.test(rule.phoneme);
+  const stressedBase = stressedOnly ? rule.phoneme.slice(0, -1) : null;
+  const stressSpecific = !isEpsilon && !stressedOnly && /[0-9]$/.test(rule.phoneme);
   const newPairs = pairs.map((pair) => {
     if (pair.graphemes.toLowerCase() !== rule.from.toLowerCase()) return pair;
     if (isEpsilon) {
       if (pair.phonemes.length !== 0) return pair;
     } else if (stressSpecific) {
       if (!pair.phonemes.includes(rule.phoneme)) return pair;
+    } else if (stressedOnly) {
+      const hit = pair.phonemes.some((p) => {
+        const m = p.match(/^([A-Z]+)([1-9])$/);
+        return m && m[1] === stressedBase;
+      });
+      if (!hit) return pair;
     } else {
       const stripped = pair.phonemes.map((p) => p.replace(/[0-9]+$/, ''));
       if (!stripped.includes(rule.phoneme)) return pair;
