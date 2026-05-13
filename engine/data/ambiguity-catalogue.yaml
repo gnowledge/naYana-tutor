@@ -494,3 +494,111 @@ phases:
       The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
 
       The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+  - number: 8
+    name: "the long-u family — /uː/ → u"
+    description: "Five different graphemes spell /uː/ in English (do, food, blue, new, soup, fruit). All converge on a single 'u'."
+    rationale: >
+      English fragments /uː/ across at least five spellings: 'o' (do, to,
+      who, move), 'oo' (food, moon, room), 'u' (blue, true, rule — usually
+      with silent e), 'ew' (new, blew, knew), 'ou' (through, group, soup),
+      and 'ui' (fruit, suit, juice). All five become a single 'u'. The
+      bare-u case (blue, true, rule) is already handled by phase 6's
+      silent-e rule — drop the e and the u stays put. Other spellings
+      need their own rule.
+      Notable unifications: 'new' and 'knew' both land on 'nu' (true
+      homophones). 'through' becomes 'thru' (the informal spelling
+      becomes canonical). 'who' keeps its 'wh' for now (alignment
+      treats it as one grapheme); a future wh-rule will resolve.
+      Known collision left for a future phase: 'use' /juːz/ becomes
+      'us' (colliding with /ʌs/) because the alignment shows u}Y|UW1
+      and we don't yet have a rule that turns the /j/ component into
+      a visible 'y'.
+    rules:
+      - name: "o→u (when /uː/)"
+        phoneme: "UW"
+        from: "o"
+        to: "u"
+        examples:
+          - { before: "do",    after: "du" }
+          - { before: "to",    after: "tu" }
+          - { before: "lose",  after: "luz" }
+          - { before: "move",  after: "muv" }
+        exceptions:
+          - { word: "go",  reason: "o is /OW/ (handled by phase 7 → gou)" }
+          - { word: "on",  reason: "o is /AA/" }
+
+      - name: "oo→u (when /uː/)"
+        phoneme: "UW"
+        from: "oo"
+        to: "u"
+        examples:
+          - { before: "food",   after: "fud" }
+          - { before: "moon",   after: "mun" }
+          - { before: "soon",   after: "sun" }
+          - { before: "spoon",  after: "spun" }
+        exceptions:
+          - { word: "book",  reason: "oo is /UH/, not /UW/" }
+          - { word: "wood",  reason: "oo is /UH/" }
+
+      - name: "ew→u (when /uː/)"
+        phoneme: "UW"
+        from: "ew"
+        to: "u"
+        examples:
+          - { before: "new",   after: "nu" }
+          - { before: "blew",  after: "blu" }
+          - { before: "knew",  after: "nu" }
+          - { before: "flew",  after: "flu" }
+        notes: >
+          'knew' and 'new' both land on 'nu' — true homophones.
+
+      - name: "ou→u (when /uː/)"
+        phoneme: "UW"
+        from: "ou"
+        to: "u"
+        examples:
+          - { before: "through",  after: "thru" }
+          - { before: "group",    after: "grup" }
+          - { before: "soup",     after: "sup" }
+        exceptions:
+          - { word: "about",  reason: "ou is /AW/ (handled by phase 7 → abaut)" }
+
+      - name: "ui→u (when /uː/)"
+        phoneme: "UW"
+        from: "ui"
+        to: "u"
+        examples:
+          - { before: "fruit",  after: "frut" }
+          - { before: "suit",   after: "sut" }
+          - { before: "juice",  after: "jus" }
+
+      - name: "w→u (when /uː/)"
+        phoneme: "UW"
+        from: "w"
+        to: "u"
+        examples:
+          - { before: "few",     after: "fu" }
+          - { before: "Andrew",  after: "Andru" }
+          - { before: "anew",    after: "anu" }
+        notes: >
+          CMUdict often splits the 'ew' digraph as e}∅ w}UW for proper
+          names and longer words. The silent-e rule from phase 6 drops
+          the e; this rule turns the orphaned w into u. Together they
+          handle 731 entries that the ew→u rule alone would miss.
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+      At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
