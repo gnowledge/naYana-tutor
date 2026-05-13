@@ -839,3 +839,76 @@ phases:
       The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
 
       On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
+
+  - number: 11
+    name: "the th split — /θ/ and /ð/"
+    description: "The two th sounds finally distinguished: th → θ in thin, math, breath; th → ð in this, that, mother, the."
+    rationale: >
+      English uses one digraph 'th' for two completely different phonemes:
+      voiceless /θ/ (thin, math, three, thought) and voiced /ð/ (this,
+      that, the, mother). Speakers don't think of them as different
+      because the spelling collapses them, but they're as distinct as
+      /s/ and /z/. Native speakers reliably produce both, but learners
+      and dictionaries have to guess from context.
+      Phase 11 uses two IPA codepoints: U+03B8 θ for the voiceless,
+      U+00F0 ð for the voiced. Phonetisaurus aligns 'th' as a single
+      grapheme to TH or DH — the rule simply branches on phoneme.
+
+      'the' — the most common word in English — becomes 'ðə' (combining
+      with phase 10's schwa). The visual change is unmistakable.
+
+      Glyph design (separate font ticket): the Nayana font will draw
+      ð with a delta-curve shape (curve over a closed circle) — easy
+      to handwrite, visually distinct from anything else in the script.
+      θ uses a custom shape too. Until the font ships, Comic Neue's
+      fallback renders both; data layer is canonical IPA either way.
+    rules:
+      - name: "th→θ (voiceless)"
+        phoneme: "TH"
+        from: "th"
+        to: "θ"
+        examples:
+          - { before: "thin",     after: "θin" }
+          - { before: "math",     after: "maθ" }
+          - { before: "path",     after: "paθ" }
+          - { before: "thought",  after: "θout" }
+          - { before: "thumb",    after: "θum" }
+        exceptions:
+          - { word: "this",   reason: "th aligns to /DH/ (voiced)" }
+          - { word: "mother", reason: "th aligns to /DH/" }
+
+      - name: "th→ð (voiced)"
+        phoneme: "DH"
+        from: "th"
+        to: "ð"
+        examples:
+          - { before: "this",    after: "ðis" }
+          - { before: "that",    after: "ðat" }
+          - { before: "the",     after: "ðə" }
+          - { before: "mother",  after: "moðer" }
+          - { before: "smooth",  after: "smuːð" }
+        exceptions:
+          - { word: "thin",   reason: "th aligns to /TH/ (voiceless)" }
+          - { word: "math",   reason: "th aligns to /TH/" }
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+      At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
+
+      The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
+
+      On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
+
+      That night, after the philosopher had gone, the child sat with her mother and her three brothers. They had thought about the things he said — about every word being half schwa — and now they wondered about the rest. What about 'this', what about 'that'? What about the breath and the thought? Both seemed worth thinking about together. The mother smiled and said nothing. The brothers shrugged. The child looked at the lantern, and at her own breath in the cold air, and understood that the truth of every word was already there in the way she said it.
