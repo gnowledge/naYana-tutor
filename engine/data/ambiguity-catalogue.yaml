@@ -496,96 +496,115 @@ phases:
       The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
 
   - number: 8
-    name: "the long-u family — /uː/ → u"
-    description: "Five different graphemes spell /uː/ in English (do, food, blue, new, soup, fruit). All converge on a single 'u'."
+    name: "the long-u family — /uː/ → uː"
+    description: "Six different graphemes spell /uː/ in English (do, food, blue, new, soup, fruit). All converge on the IPA spelling 'uː'."
     rationale: >
-      English fragments /uː/ across at least five spellings: 'o' (do, to,
-      who, move), 'oo' (food, moon, room), 'u' (blue, true, rule — usually
-      with silent e), 'ew' (new, blew, knew), 'ou' (through, group, soup),
-      and 'ui' (fruit, suit, juice). All five become a single 'u'. The
-      bare-u case (blue, true, rule) is already handled by phase 6's
-      silent-e rule — drop the e and the u stays put. Other spellings
-      need their own rule.
-      Notable unifications: 'new' and 'knew' both land on 'nu' (true
-      homophones). 'through' becomes 'thru' (the informal spelling
-      becomes canonical). 'who' keeps its 'wh' for now (alignment
-      treats it as one grapheme); a future wh-rule will resolve.
+      English fragments /uː/ across at least six spellings: 'o' (do, to,
+      who, move), 'oo' (food, moon, room), 'u' (blue, true, rule), 'ew'
+      (new, blew, knew), 'ou' (through, group, soup), and 'ui' (fruit,
+      suit, juice). All six become 'uː' — the IPA notation that pairs
+      the close-back vowel with the length marker U+02D0.
+
+      Why the length marker? The bare 'u' in current English is read as
+      short /ʌ/ (cup, run) by default. Without a marker, /uː/ → 'u'
+      would visually collide with that short vowel: 'food' → 'fud'
+      reads as /fʌd/. The 'ː' makes long-u distinct: 'food' → 'fuːd'.
+      Same logic as phase 9 for /iː/ → 'iː'.
+
+      Notable unifications: 'new' and 'knew' both land on 'nuː' (true
+      homophones). 'through' becomes 'thruː'. 'who' keeps its 'wh'
+      for now (alignment treats it as one grapheme); a future wh-rule
+      will resolve.
       Known collision left for a future phase: 'use' /juːz/ becomes
-      'us' (colliding with /ʌs/) because the alignment shows u}Y|UW1
-      and we don't yet have a rule that turns the /j/ component into
-      a visible 'y'.
+      'uːs' (still some lossy mapping for the /j/ component) because
+      the alignment shows u}Y|UW1 and we don't yet have a rule that
+      turns the /j/ component into a visible 'y'.
     rules:
-      - name: "o→u (when /uː/)"
+      - name: "o→uː (when /uː/)"
         phoneme: "UW"
         from: "o"
-        to: "u"
+        to: "uː"
         examples:
-          - { before: "do",    after: "du" }
-          - { before: "to",    after: "tu" }
-          - { before: "lose",  after: "luz" }
-          - { before: "move",  after: "muv" }
+          - { before: "do",    after: "duː" }
+          - { before: "to",    after: "tuː" }
+          - { before: "lose",  after: "luːs" }
+          - { before: "move",  after: "muːv" }
         exceptions:
           - { word: "go",  reason: "o is /OW/ (handled by phase 7 → gou)" }
           - { word: "on",  reason: "o is /AA/" }
 
-      - name: "oo→u (when /uː/)"
+      - name: "oo→uː (when /uː/)"
         phoneme: "UW"
         from: "oo"
-        to: "u"
+        to: "uː"
         examples:
-          - { before: "food",   after: "fud" }
-          - { before: "moon",   after: "mun" }
-          - { before: "soon",   after: "sun" }
-          - { before: "spoon",  after: "spun" }
+          - { before: "food",   after: "fuːd" }
+          - { before: "moon",   after: "muːn" }
+          - { before: "soon",   after: "suːn" }
+          - { before: "spoon",  after: "spuːn" }
         exceptions:
           - { word: "book",  reason: "oo is /UH/, not /UW/" }
           - { word: "wood",  reason: "oo is /UH/" }
 
-      - name: "ew→u (when /uː/)"
+      - name: "u→uː (when /uː/)"
+        phoneme: "UW"
+        from: "u"
+        to: "uː"
+        examples:
+          - { before: "blue",   after: "bluː" }
+          - { before: "true",   after: "truː" }
+          - { before: "rule",   after: "ruːl" }
+          - { before: "flute",  after: "fluːt" }
+        notes: >
+          The bare-u cases (blue, true, rule, tube, flute) — Phonetisaurus
+          aligns these as u}UW with a separate silent e. Silent-e from
+          phase 6 drops the e; this rule adds the length marker to the u.
+
+      - name: "ew→uː (when /uː/)"
         phoneme: "UW"
         from: "ew"
-        to: "u"
+        to: "uː"
         examples:
-          - { before: "new",   after: "nu" }
-          - { before: "blew",  after: "blu" }
-          - { before: "knew",  after: "nu" }
-          - { before: "flew",  after: "flu" }
+          - { before: "new",   after: "nuː" }
+          - { before: "blew",  after: "bluː" }
+          - { before: "knew",  after: "nuː" }
+          - { before: "flew",  after: "fluː" }
         notes: >
-          'knew' and 'new' both land on 'nu' — true homophones.
+          'knew' and 'new' both land on 'nuː' — true homophones.
 
-      - name: "ou→u (when /uː/)"
+      - name: "ou→uː (when /uː/)"
         phoneme: "UW"
         from: "ou"
-        to: "u"
+        to: "uː"
         examples:
-          - { before: "through",  after: "thru" }
-          - { before: "group",    after: "grup" }
-          - { before: "soup",     after: "sup" }
+          - { before: "through",  after: "thruː" }
+          - { before: "group",    after: "gruːp" }
+          - { before: "soup",     after: "suːp" }
         exceptions:
           - { word: "about",  reason: "ou is /AW/ (handled by phase 7 → abaut)" }
 
-      - name: "ui→u (when /uː/)"
+      - name: "ui→uː (when /uː/)"
         phoneme: "UW"
         from: "ui"
-        to: "u"
+        to: "uː"
         examples:
-          - { before: "fruit",  after: "frut" }
-          - { before: "suit",   after: "sut" }
-          - { before: "juice",  after: "jus" }
+          - { before: "fruit",  after: "fruːt" }
+          - { before: "suit",   after: "suːt" }
+          - { before: "juice",  after: "juːs" }
 
-      - name: "w→u (when /uː/)"
+      - name: "w→uː (when /uː/)"
         phoneme: "UW"
         from: "w"
-        to: "u"
+        to: "uː"
         examples:
-          - { before: "few",     after: "fu" }
-          - { before: "Andrew",  after: "Andru" }
-          - { before: "anew",    after: "anu" }
+          - { before: "few",     after: "fuː" }
+          - { before: "Andrew",  after: "Andruː" }
+          - { before: "anew",    after: "anuː" }
         notes: >
           CMUdict often splits the 'ew' digraph as e}∅ w}UW for proper
           names and longer words. The silent-e rule from phase 6 drops
-          the e; this rule turns the orphaned w into u. Together they
-          handle 731 entries that the ew→u rule alone would miss.
+          the e; this rule turns the orphaned w into uː. Together they
+          handle 731 entries that the ew→uː rule alone would miss.
     demoText: |
       A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
 
@@ -604,71 +623,84 @@ phases:
       At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
 
   - number: 9
-    name: "the long-e family — /iː/ → i"
-    description: "The long-e sound — be, see, sea, eat, happy, key — converges on a single 'i'."
+    name: "the long-e family — /iː/ → iː"
+    description: "The long-e sound — be, see, sea, eat, happy, key — converges on the IPA spelling 'iː'."
     rationale: >
       English spreads /iː/ across at least four spellings: bare 'e' at
       word-end (be, he, she, me, we, complete), the 'ee' digraph (see,
       meet, three — which CMUdict aligns as e}∅ e}IY so silent-e drops
       the first), 'ea' (sea, eat, meat, team, leaf, please), and
       vowel-y at word end (happy, baby, money, key, lady). All converge
-      on a single 'i'. The 'ie' words (chief, field, brief) are already
-      handled by phase 6's silent-e — drop the e and the i remains.
-      Loanwords with bare i for /iː/ (ski, taxi, machine) are
-      already correct.
+      on 'iː' — the IPA notation that pairs the close-front vowel with
+      the length marker U+02D0. The 'ie' words (chief, field, brief)
+      are handled by phase 6's silent-e plus the new bare-i rule —
+      drop the e and lengthen the i.
 
-      Notable unifications: meet and meat both land on 'mit' (true
-      homophones). see and sea both land on 'si'. The vowel-y rule
+      Why the length marker? Without it /iː/ → 'i' would visually
+      collide with short /ɪ/ words (it, bit, sit). 'eat' and 'it'
+      would both spell 'it'. With 'iː', the long-vowel words become
+      visibly distinct: 'eat' → 'iːt', 'meat' → 'miːt'. The marker
+      uses the canonical IPA codepoint per the project's encoding rule.
+
+      Notable unifications: meet and meat both land on 'miːt' (true
+      homophones). see and sea both land on 'siː'. The vowel-y rule
       completes the project decision that 'y' is consonant-only —
       every vowel use of y now has a Latin vowel partner: 'ai' for
-      /aɪ/ (sky → skai, phase 5) and 'i' for /iː/ (happy → hapi).
-
-      Known collision (accepted): /iː/ → 'i' shares the visual with
-      short /ɪ/ words (bit, sit, rich). 'beat' and 'bit' both end up
-      spelled 'bit'. The reform's principle is one phoneme per spelling;
-      the old English overload is the problem being reformed. A future
-      phase that introduces a distinct glyph for /ɪ/ would resolve.
+      /aɪ/ (sky → skai, phase 5) and 'iː' for /iː/ (happy → happiː).
     rules:
-      - name: "e→i (when /iː/)"
+      - name: "e→iː (when /iː/)"
         phoneme: "IY"
         from: "e"
-        to: "i"
+        to: "iː"
         examples:
-          - { before: "be",       after: "bi" }
-          - { before: "he",       after: "hi" }
-          - { before: "she",      after: "shi" }
-          - { before: "we",       after: "wi" }
-          - { before: "complete", after: "komplit" }
+          - { before: "be",       after: "biː" }
+          - { before: "he",       after: "hiː" }
+          - { before: "she",      after: "shiː" }
+          - { before: "we",       after: "wiː" }
+          - { before: "complete", after: "kompliːt" }
         exceptions:
           - { word: "the",   reason: "e is /AH/ (schwa)" }
           - { word: "bed",   reason: "e is /EH/" }
           - { word: "red",   reason: "e is /EH/" }
 
-      - name: "ea→i (when /iː/)"
+      - name: "ea→iː (when /iː/)"
         phoneme: "IY"
         from: "ea"
-        to: "i"
+        to: "iː"
         examples:
-          - { before: "sea",   after: "si" }
-          - { before: "eat",   after: "it" }
-          - { before: "team",  after: "tim" }
-          - { before: "leaf",  after: "lif" }
-          - { before: "meat",  after: "mit" }
+          - { before: "sea",   after: "siː" }
+          - { before: "eat",   after: "iːt" }
+          - { before: "team",  after: "tiːm" }
+          - { before: "leaf",  after: "liːf" }
+          - { before: "meat",  after: "miːt" }
         exceptions:
           - { word: "head",   reason: "ea is /EH/, not /IY/" }
           - { word: "bread",  reason: "ea is /EH/" }
           - { word: "great",  reason: "ea is /EY/ (handled by phase 6 silent-e + a→ei)" }
 
-      - name: "y→i (when /iː/)"
+      - name: "i→iː (when /iː/)"
+        phoneme: "IY"
+        from: "i"
+        to: "iː"
+        examples:
+          - { before: "ski",      after: "skiː" }
+          - { before: "machine",  after: "machiːn" }
+          - { before: "chief",    after: "chiːf" }
+        notes: >
+          Loanwords (ski, taxi, machine) and 'ie' words (chief, field,
+          brief — where Phonetisaurus aligns the i to /IY/ and the e
+          as silent) now all carry the length marker explicitly.
+
+      - name: "y→iː (when /iː/)"
         phoneme: "IY"
         from: "y"
-        to: "i"
+        to: "iː"
         examples:
-          - { before: "happy",   after: "happi" }
-          - { before: "baby",    after: "beibi" }
-          - { before: "money",   after: "moni" }
-          - { before: "key",     after: "ki" }
-          - { before: "taxi",    after: "taxi" }
+          - { before: "happy",   after: "happiː" }
+          - { before: "baby",    after: "beibiː" }
+          - { before: "money",   after: "moniː" }
+          - { before: "key",     after: "kiː" }
+          - { before: "taxi",    after: "taxiː" }
         exceptions:
           - { word: "yes",   reason: "y is consonant /j/, phoneme is Y not IY" }
           - { word: "my",    reason: "y is /AY/ (handled by phase 5 → mai)" }
