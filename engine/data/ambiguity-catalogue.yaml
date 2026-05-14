@@ -1493,3 +1493,265 @@ phases:
       That summer the child judged the village fair. She watched the older boys jump from bridge to bridge, the red cat sit on the wooden bench, the man at the magic stall pull a rabbit from a black hat. She loved every minute. She put a foot in the cool stream, ate her bread on a small bed of moss, and laughed when the crane landed on her thumb. Her mother came back from the village with a full basket, and said: come home, my love. The page of the day, like every page, was already turning.
 
       In the autumn, her brother taught her the names of the birds. She would learn the words of every singer that arrived: the warbler in the cedar, the heron at the river, the thrush whose song her mother said was earth itself. The teacher showed her how to write the words on paper, and the philosopher showed her how to speak them. The world turned, the season turned, and the girl turned with them, surer of herself with every word she heard.
+
+  - number: 15
+    name: "spelling cleanup — geminates, silent letters, /j+uː/, wh, x, f→v"
+    description: "Final spelling cleanup. Doubled consonants collapse, silent letters drop, and a handful of small rules close long-standing gaps."
+    rationale: >
+      Most phonemes have IPA glyphs by phase 14. What remains are the
+      visible-but-unjustified leftovers: doubled letters that English
+      spells as a single sound, silent letters that the alignment
+      flagged but no rule has dropped yet, and a few specific cases
+      that have been flagged across the project (use/us, whole, of,
+      box). Phase 15 sweeps them up.
+
+      Skipped this phase (require future vowel introductions):
+        - silent-l (walk, talk, half, calm) aligns as al}AO1, al}AE1,
+          al}AA1 — multi-letter grapheme. The /ɔː/ /ɑː/ vowels haven't
+          been introduced yet; this is for a later phase.
+
+    rules:
+      # ----- Geminate consonant collapse -----
+      - name: "mm→m"
+        phoneme: "M"
+        from: "mm"
+        to: "m"
+        examples:
+          - { before: "summer", after: "sʌmɚ" }
+          - { before: "common", after: "komən" }
+
+      - name: "nn→n"
+        phoneme: "N"
+        from: "nn"
+        to: "n"
+        examples:
+          - { before: "running", after: "rʌnɪŋ" }
+          - { before: "dinner",  after: "dɪnɚ" }
+
+      - name: "ll→l"
+        phoneme: "L"
+        from: "ll"
+        to: "l"
+        examples:
+          - { before: "dollar", after: "dolɚ" }
+          - { before: "full",   after: "fʊl" }
+          - { before: "all",    after: "al" }
+
+      - name: "tt→t"
+        phoneme: "T"
+        from: "tt"
+        to: "t"
+        examples:
+          - { before: "letter", after: "lɛtɚ" }
+          - { before: "butter", after: "bʌtɚ" }
+          - { before: "attack", after: "ətæk" }
+
+      - name: "pp→p"
+        phoneme: "P"
+        from: "pp"
+        to: "p"
+        examples:
+          - { before: "happy", after: "hæpiː" }
+          - { before: "apple", after: "æpəl" }
+
+      - name: "ss→s"
+        phoneme: "S"
+        from: "ss"
+        to: "s"
+        examples:
+          - { before: "miss",  after: "mɪs" }
+          - { before: "kiss",  after: "kɪs" }
+
+      - name: "ff→f"
+        phoneme: "F"
+        from: "ff"
+        to: "f"
+        examples:
+          - { before: "off",    after: "of" }
+          - { before: "coffee", after: "kofiː" }
+
+      - name: "rr→r"
+        phoneme: "R"
+        from: "rr"
+        to: "r"
+        examples:
+          - { before: "carry",  after: "kæriː" }
+          - { before: "sorry",  after: "soriː" }
+
+      - name: "dd→d"
+        phoneme: "D"
+        from: "dd"
+        to: "d"
+        examples:
+          - { before: "add",    after: "æd" }
+          - { before: "ladder", after: "lædɚ" }
+
+      # ----- Silent letters (epsilon rules) -----
+      - name: "t→∅ (silent)"
+        phoneme: null
+        from: "t"
+        to: ""
+        examples:
+          - { before: "catch",     after: "kætʃ" }
+          - { before: "watch",     after: "watʃ" }
+          - { before: "listen",    after: "lɪsən" }
+          - { before: "often",     after: "ofən" }
+          - { before: "Christmas", after: "krɪsməs" }
+        notes: >
+          Drops silent t in tch (catch, watch, match), in -ten endings
+          (listen, fasten, often), and in 'Christmas'.
+
+      - name: "o→∅ (silent)"
+        phoneme: null
+        from: "o"
+        to: ""
+        examples:
+          - { before: "door",    after: "dor" }
+          - { before: "journey", after: "dʒɝniː" }
+          - { before: "young",   after: "yʌŋ" }
+
+      - name: "w→∅ (silent)"
+        phoneme: null
+        from: "w"
+        to: ""
+        examples:
+          - { before: "two",      after: "tuː" }
+          - { before: "answer",   after: "ænsɚ" }
+          - { before: "sword",    after: "sord" }
+        notes: >
+          Different from phase 8's w→uː rule which fires on /Y/+/UW/
+          alignments. This epsilon rule fires when the w pair is
+          phonetically silent (empty phoneme list).
+
+      - name: "d→∅ (silent)"
+        phoneme: null
+        from: "d"
+        to: ""
+        examples:
+          - { before: "Wednesday", after: "wɛnzdei" }
+          - { before: "handsome",  after: "hænsəm" }
+
+      - name: "r→∅ (silent)"
+        phoneme: null
+        from: "r"
+        to: ""
+        examples:
+          - { before: "carry",   after: "kæriː" }
+          - { before: "marry",   after: "mɛriː" }
+          - { before: "herring", after: "hɛrɪŋ" }
+        notes: >
+          Doubled-r words align as r}∅ r}R (one silent, one pronounced)
+          rather than as a single rr grapheme. This rule drops the
+          silent half — same shape as the rr→r rule for cases that DO
+          align as one grapheme.
+
+      - name: "bt→t (silent b)"
+        phoneme: "T"
+        from: "bt"
+        to: "t"
+        examples:
+          - { before: "doubt",  after: "daut" }
+          - { before: "debt",   after: "dɛt" }
+        notes: >
+          Phonetisaurus aligns 'bt' as a single grapheme to /T/ in
+          doubt/debt — the b is silent. Multi-letter substitution
+          drops the b.
+
+      - name: "mn→m (silent n)"
+        phoneme: "M"
+        from: "mn"
+        to: "m"
+        examples:
+          - { before: "autumn",  after: "ɔtəm" }
+          - { before: "hymn",    after: "hɪm" }
+          - { before: "column",  after: "koləm" }
+
+      # ----- Small wins -----
+      - name: "f→v (when /v/)"
+        phoneme: "V"
+        from: "f"
+        to: "v"
+        examples:
+          - { before: "of", after: "ʌv" }
+        notes: >
+          'of' is the standout case in English where the letter f
+          spells /v/. Most other f's are /F/ and stay.
+
+      - name: "wh→h (when /h/)"
+        phoneme: "HH"
+        from: "wh"
+        to: "h"
+        examples:
+          - { before: "whole",  after: "houl" }
+          - { before: "who",    after: "huː" }
+          - { before: "whoever", after: "huɛvɚ" }
+        notes: >
+          Phase 7's silent-h handles the wh-words where alignment
+          splits as w}W h}∅ (what, where, when, why → wat, wer, wen,
+          wai). The remaining cases — 'whole', 'who', 'whoever' —
+          align wh as one grapheme to /HH/. This rule catches them.
+          Bonus unification: whole → houl now matches hole → houl.
+
+      - name: "x→ks (when /k/)"
+        phoneme: "K"
+        from: "x"
+        to: "ks"
+        examples:
+          - { before: "box",  after: "boks" }
+          - { before: "fox",  after: "foks" }
+          - { before: "six",  after: "sɪks" }
+          - { before: "tax",  after: "tæks" }
+
+      - name: "x→gz (when /g/)"
+        phoneme: "G"
+        from: "x"
+        to: "gz"
+        examples:
+          - { before: "exit",     after: "ɛgzɪt" }
+          - { before: "exam",     after: "ɪgzæm" }
+          - { before: "example",  after: "ɪgzæmpəl" }
+
+      - name: "uː→juː (when /j/+/uː/)"
+        phoneme: "Y"
+        from: "uː"
+        to: "juː"
+        examples:
+          - { before: "use",   after: "juːs" }
+          - { before: "cute",  after: "kjuːt" }
+          - { before: "music", after: "mjuːzɪk" }
+          - { before: "few",   after: "fjuː" }
+        notes: >
+          Phase 8 converts u-as-/UW/ to 'uː'. For words where the u
+          carries both /j/ and /uː/ (use, music, cute, huge, few),
+          this rule runs after phase 8 and inserts the j marker.
+          Resolves the use→us collision flagged since phase 8.
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+      At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
+
+      The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
+
+      On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
+
+      That night, after the philosopher had gone, the child sat with her mother and her three brothers. They had thought about the things he said — about every word being half schwa — and now they wondered about the rest. What about 'this', what about 'that'? What about the breath and the thought? Both seemed worth thinking about together. The mother smiled and said nothing. The brothers shrugged. The child looked at the lantern, and at her own breath in the cold air, and understood that the truth of every word was already there in the way she said it.
+
+      The next spring, the teacher came from the city. She spoke about nature and machines, about the vision of long English summers, about the question of treasure and measure. She would speak of fish and of the cheap shops by the bridge, of the special ocean shells the children would catch and the pleasure of the long song they would sing each evening. Every chapter of the lesson was a fresh thing: action and tension and decision, much and motion and music, the things a young brain could think and ask. The shepherd watched the teacher with attention. The plumber listened. The mother held her daughter's hand. The crane, watching from the wagon, opened one eye, and then closed it again.
+
+      That summer the child judged the village fair. She watched the older boys jump from bridge to bridge, the red cat sit on the wooden bench, the man at the magic stall pull a rabbit from a black hat. She loved every minute. She put a foot in the cool stream, ate her bread on a small bed of moss, and laughed when the crane landed on her thumb. Her mother came back from the village with a full basket, and said: come home, my love. The page of the day, like every page, was already turning.
+
+      In the autumn, her brother taught her the names of the birds. She would learn the words of every singer that arrived: the warbler in the cedar, the heron at the river, the thrush whose song her mother said was earth itself. The teacher showed her how to write the words on paper, and the philosopher showed her how to speak them. The world turned, the season turned, and the girl turned with them, surer of herself with every word she heard.
+
+      The final winter, the music of the village had become something new. Letters arrived from far cities, written in a script that doubled no consonants, dropped no silent letters, and added the small marks for every breath of every word. The teacher read them aloud to the children. The plumber kept the letters in a box near the kitchen. The crane watched from the doorway. The mother said: he taught us to listen. The girl, who was no longer a girl, took the letters in her hands, and read them to herself, and answered each one in the same script. Every word she wrote came out exactly the way she said it.
