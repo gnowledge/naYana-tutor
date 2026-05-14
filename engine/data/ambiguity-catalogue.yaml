@@ -1755,3 +1755,203 @@ phases:
       In the autumn, her brother taught her the names of the birds. She would learn the words of every singer that arrived: the warbler in the cedar, the heron at the river, the thrush whose song her mother said was earth itself. The teacher showed her how to write the words on paper, and the philosopher showed her how to speak them. The world turned, the season turned, and the girl turned with them, surer of herself with every word she heard.
 
       The final winter, the music of the village had become something new. Letters arrived from far cities, written in a script that doubled no consonants, dropped no silent letters, and added the small marks for every breath of every word. The teacher read them aloud to the children. The plumber kept the letters in a box near the kitchen. The crane watched from the doorway. The mother said: he taught us to listen. The girl, who was no longer a girl, took the letters in her hands, and read them to herself, and answered each one in the same script. Every word she wrote came out exactly the way she said it.
+
+  - number: 16
+    name: "vowel completion — ɔː, ɑː, ɔɪ (and silent-l finally)"
+    description: "The remaining English vowels get IPA glyphs. /ɔː/ for call/water/walk, /ɑː/ for father/lot/palm, /ɔɪ/ for boy/voice. Silent-l in walk/palm/half is now addressed via the al→ɔː/ɑː/æ rules."
+    rationale: >
+      After phase 15, the only English vowel phonemes still wearing
+      bare Latin letters were /ɔː/ /ɑː/ /ɔɪ/ — the open-o, the
+      cardinal a, and the oy diphthong. Phase 16 introduces all three
+      and, in doing so, finally addresses silent-l: walk/palm/half
+      align as al}AO1 / al}AA1 / al}AE1 (one grapheme to the vowel
+      phoneme), so the rules that introduce the new vowels naturally
+      drop the l along the way.
+
+      Codepoints (canonical IPA):
+        ɔ  U+0254  open o, with length marker → ɔː
+        ɑ  U+0251  script a, with length marker → ɑː
+        ɔɪ digraph (ɔ + ɪ from phase 13) — diphthong, no length marker
+          (consistent with ai, ei, ou, au treatment from phases 5-7)
+
+      After this phase, every English vowel phoneme that has an IPA
+      glyph has been introduced. The remaining work is consonant
+      cleanup (s→z, y→ɪ, ng-glyph) and the always-deferred future
+      Nayana font ligatures.
+
+      Two extra cleanup rules ride along since they share the
+      "multi-letter -l grapheme" pattern: ol→ou for folk (where
+      Phonetisaurus alignment groups o+l for /OW/), and ul→ʊ for
+      could/would/should.
+
+    rules:
+      # ----- /ɔː/ open-o long -----
+      - name: "a→ɔː (when /ɔː/)"
+        phoneme: "AO"
+        from: "a"
+        to: "ɔː"
+        examples:
+          - { before: "call",   after: "kɔːl" }
+          - { before: "all",    after: "ɔːl" }
+          - { before: "water",  after: "wɔːtɚ" }
+          - { before: "warm",   after: "wɔːrm" }
+
+      - name: "ou→ɔː (when /ɔː/)"
+        phoneme: "AO"
+        from: "ou"
+        to: "ɔː"
+        examples:
+          - { before: "ought",    after: "ɔːt" }
+          - { before: "thought",  after: "θɔːt" }
+
+      - name: "au→ɔː (when /ɔː/)"
+        phoneme: "AO"
+        from: "au"
+        to: "ɔː"
+        examples:
+          - { before: "taught",  after: "tɔːt" }
+          - { before: "autumn",  after: "ɔːtəm" }
+
+      - name: "aw→ɔː (when /ɔː/)"
+        phoneme: "AO"
+        from: "aw"
+        to: "ɔː"
+        examples:
+          - { before: "saw",   after: "sɔː" }
+          - { before: "draw",  after: "drɔː" }
+          - { before: "law",   after: "lɔː" }
+          - { before: "dawn",  after: "dɔːn" }
+
+      - name: "o→ɔː (when /ɔː/)"
+        phoneme: "AO"
+        from: "o"
+        to: "ɔː"
+        examples:
+          - { before: "for",     after: "fɔːr" }
+          - { before: "more",    after: "mɔːr" }
+          - { before: "before",  after: "bɪfɔːr" }
+          - { before: "door",    after: "dɔːr" }
+
+      - name: "al→ɔː (when /ɔː/) — silent-l for walk/talk"
+        phoneme: "AO"
+        from: "al"
+        to: "ɔː"
+        examples:
+          - { before: "walk",  after: "wɔːk" }
+          - { before: "talk",  after: "tɔːk" }
+        notes: >
+          Phonetisaurus aligns 'al' as one grapheme to /AO/ in walk,
+          talk. The l becomes silent in this substitution.
+
+      # ----- /ɑː/ cardinal a long -----
+      - name: "o→ɑː (when /ɑː/)"
+        phoneme: "AA"
+        from: "o"
+        to: "ɑː"
+        examples:
+          - { before: "lot",   after: "lɑːt" }
+          - { before: "hot",   after: "hɑːt" }
+          - { before: "top",   after: "tɑːp" }
+          - { before: "rock",  after: "rɑːk" }
+          - { before: "stop",  after: "stɑːp" }
+          - { before: "watch", after: "wɑːtʃ" }
+
+      - name: "a→ɑː (when /ɑː/)"
+        phoneme: "AA"
+        from: "a"
+        to: "ɑː"
+        examples:
+          - { before: "father",  after: "fɑːðɚ" }
+          - { before: "car",     after: "kɑːr" }
+          - { before: "far",     after: "fɑːr" }
+          - { before: "park",    after: "pɑːrk" }
+
+      - name: "al→ɑː (when /ɑː/) — silent-l for palm/calm"
+        phoneme: "AA"
+        from: "al"
+        to: "ɑː"
+        examples:
+          - { before: "palm",  after: "pɑːm" }
+          - { before: "calm",  after: "kɑːm" }
+
+      # ----- /ɔɪ/ diphthong -----
+      - name: "oy→ɔɪ (when /ɔɪ/)"
+        phoneme: "OY"
+        from: "oy"
+        to: "ɔɪ"
+        examples:
+          - { before: "boy",    after: "bɔɪ" }
+          - { before: "toy",    after: "tɔɪ" }
+          - { before: "joy",    after: "dʒɔɪ" }
+          - { before: "enjoy",  after: "ɛndʒɔɪ" }
+
+      - name: "oi→ɔɪ (when /ɔɪ/)"
+        phoneme: "OY"
+        from: "oi"
+        to: "ɔɪ"
+        examples:
+          - { before: "voice",   after: "vɔɪs" }
+          - { before: "point",   after: "pɔɪnt" }
+          - { before: "noise",   after: "nɔɪs" }
+          - { before: "choice",  after: "tʃɔɪs" }
+
+      # ----- silent-l stragglers + al→æ + ol/ul cleanup -----
+      - name: "al→æ (when /æ/) — silent-l for half/salmon"
+        phoneme: "AE"
+        from: "al"
+        to: "æ"
+        examples:
+          - { before: "half",     after: "hælf" }
+          - { before: "salmon",   after: "sælmən" }
+
+      - name: "ol→ou (when /oʊ/) — silent-l for folk"
+        phoneme: "OW"
+        from: "ol"
+        to: "ou"
+        examples:
+          - { before: "folk",  after: "fouk" }
+
+      - name: "ul→ʊ (when /ʊ/) — silent-l for would/could/should"
+        phoneme: "UH"
+        from: "ul"
+        to: "ʊ"
+        examples:
+          - { before: "would",   after: "wʊd" }
+          - { before: "could",   after: "kʊd" }
+          - { before: "should",  after: "ʃʊd" }
+        notes: >
+          Combined with phase 15's silent-o, would/could/should align
+          as w}W o}∅ ul}UH1 d}D — silent-o drops the o, ul→ʊ drops
+          the l, leaving 'wʊd', 'kʊd', 'ʃʊd'.
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+      At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
+
+      The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
+
+      On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
+
+      That night, after the philosopher had gone, the child sat with her mother and her three brothers. They had thought about the things he said — about every word being half schwa — and now they wondered about the rest. What about 'this', what about 'that'? What about the breath and the thought? Both seemed worth thinking about together. The mother smiled and said nothing. The brothers shrugged. The child looked at the lantern, and at her own breath in the cold air, and understood that the truth of every word was already there in the way she said it.
+
+      The next spring, the teacher came from the city. She spoke about nature and machines, about the vision of long English summers, about the question of treasure and measure. She would speak of fish and of the cheap shops by the bridge, of the special ocean shells the children would catch and the pleasure of the long song they would sing each evening. Every chapter of the lesson was a fresh thing: action and tension and decision, much and motion and music, the things a young brain could think and ask. The shepherd watched the teacher with attention. The plumber listened. The mother held her daughter's hand. The crane, watching from the wagon, opened one eye, and then closed it again.
+
+      That summer the child judged the village fair. She watched the older boys jump from bridge to bridge, the red cat sit on the wooden bench, the man at the magic stall pull a rabbit from a black hat. She loved every minute. She put a foot in the cool stream, ate her bread on a small bed of moss, and laughed when the crane landed on her thumb. Her mother came back from the village with a full basket, and said: come home, my love. The page of the day, like every page, was already turning.
+
+      In the autumn, her brother taught her the names of the birds. She would learn the words of every singer that arrived: the warbler in the cedar, the heron at the river, the thrush whose song her mother said was earth itself. The teacher showed her how to write the words on paper, and the philosopher showed her how to speak them. The world turned, the season turned, and the girl turned with them, surer of herself with every word she heard.
+
+      The final winter, the music of the village had become something new. Letters arrived from far cities, written in a script that doubled no consonants, dropped no silent letters, and added the small marks for every breath of every word. The teacher read them aloud to the children. The plumber kept the letters in a box near the kitchen. The crane watched from the doorway. The mother said: he taught us to listen. The girl, who was no longer a girl, took the letters in her hands, and read them to herself, and answered each one in the same script. Every word she wrote came out exactly the way she said it.
+
+      Years later, on a small farm beyond the long river, the woman who had been the girl walked with her own daughter to the calm palm grove behind the warm yellow walls of the kitchen. The lot was full of wild salmon and old dogs and the small voice of every bird. She thought of the philosopher, of the teacher, of her mother, of all who had taught her how to read and how to listen. The boy at the door of the workshop said: father is calling. The woman bent down and kissed her daughter's hair, and walked into the soft light of the autumn yard, and answered the call with all the joy of a thought finally caught.
