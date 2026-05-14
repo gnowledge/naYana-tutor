@@ -49,8 +49,8 @@ doesn't have to relitigate them:
 |--------|-----------|---------|---------|-------|:----:|:---------:|-------|
 | θ | U+03B8 | voiceless /θ/ (thin) | thin → θɪn | 11 | ☑ | ☐ | Greek theta — visually distinctive, may not need redesign |
 | ð | U+00F0 | voiced /ð/ (this) | this → ðɪs | 11 | ☑ | ☑ | **DECIDED**: render as Greek small `δ` — curve over closed circle, easy to handwrite |
-| ʃ | U+0283 | /ʃ/ (sh) | ship → ʃɪp | 12 | ☑ | ☐ | Esh — already distinct |
-| ʒ | U+0292 | /ʒ/ (zh) | vision → vɪʒən | 12 | ☑ | ☐ | Ezh — already distinct |
+| ʃ | U+0283 | /ʃ/ (sh) | ship → ʃɪp | 12 | ☑ | ☑ | **DECIDED**: `s` with an acute accent (ś), as in Sanskrit IAST śiva. The acute becomes a general-purpose Nayana modifier available for future use. |
+| ʒ | U+0292 | /ʒ/ (zh) | vision → vɪʒən | 12 | ☑ | ☑ | **DECIDED**: `j` with an acute accent. Avoids the ʒ/3 visual confusion in handwriting. Note: the dʒ ligature renders as plain `j`, so /ʒ/ as j-with-acute is distinguished from /dʒ/ only by the accent. |
 | ŋ | U+014B | /ŋ/ (ng) | sing → sɪŋ | 12 | ☑ | ☑ | **DECIDED**: an `n` with a `b`-shaped tail, where b's bowl descends below the baseline. |
 | tʃ | t + ʃ | /tʃ/ (ch) | chip → tʃɪp | 12 | ☑ | ☑ | **DECIDED**: ligature renders as Latin `c` shape (Sanskrit IAST tradition; c is unused in current Nayana output) |
 | dʒ | d + ʒ | /dʒ/ (j) | judge → dʒʌdʒ | 13 | ☑ | ☑ | **DECIDED**: ligature renders as Latin `j` shape (Sanskrit IAST tradition; j is unused in current Nayana output) |
@@ -78,11 +78,13 @@ doesn't have to relitigate them:
 
 **Total IPA characters in the engine**: 19 (7 consonants + 12 vowel-related, including the length marker and one diphthong).
 
-**Decided shapes** (10 IPA codepoints + 1 Latin letter — all flagged glyphs now decided):
+**Decided shapes** (12 IPA codepoints + 1 Latin letter):
 
 | Character | Designed shape | Reason |
 |-----------|----------------|--------|
 | ð | Greek small `δ` | curve over closed circle, easy handwriting |
+| ʃ | `s` with acute accent (ś) | Sanskrit IAST; acute becomes a Nayana modifier |
+| ʒ | `j` with acute accent | Avoids ʒ/3 confusion |
 | tʃ | Latin `c` shape (ligature) | Sanskrit IAST; c unused in output |
 | dʒ | Latin `j` shape (ligature) | Sanskrit IAST; j unused (Y is /j/) |
 | ə | Baseline two-stroke (`=`-like) | Extends vowel-marker stroke; avoids rotation-of-e |
@@ -94,10 +96,10 @@ doesn't have to relitigate them:
 | ŋ | `n` with a `b`-shaped tail, b's bowl below baseline | — |
 | Latin `d` | Greek capital `Δ` | b/d mirror avoidance; ties to ð→δ family |
 
-The remaining 9 IPA characters (θ, ʃ, ʒ, ː, ɪ, ʊ, ɛ, ɔ, ɔɪ) are
-visually distinct in standard IPA fonts and may not strictly
-require new shapes — but a consistent Nayana treatment across the
-whole inventory is worth considering when the font phase begins.
+The remaining 7 IPA characters (θ, ː, ɪ, ʊ, ɛ, ɔ, ɔɪ) are visually
+distinct in standard IPA fonts and may not strictly require new
+shapes — but a consistent Nayana treatment across the whole
+inventory is worth considering when the font phase begins.
 
 ## Latin-letter digraphs (no new IPA codepoints)
 
@@ -132,6 +134,8 @@ codepoints from Greek's small letters).
 | IPA codepoint(s) | Designed font shape | Reason |
 |------------------|---------------------|--------|
 | `ð` (U+00F0) | Greek small `δ` | Curve over closed circle, easy to handwrite. Pairs visually with d → Δ for the alveolar/dental d-family. |
+| `ʃ` (U+0283) | `s` with an acute accent (ś) | Sanskrit IAST tradition (śiva). Establishes the acute as a general-purpose Nayana modifier available for future use when the project encounters non-English material. |
+| `ʒ` (U+0292) | `j` with an acute accent | The IPA `ʒ` shape is too close to the digit `3` and easy to confuse in handwriting. The acute on `j` borrows the same modifier idea as ʃ → ś. Note: bare /ʒ/ as j-with-acute will be visually close to /dʒ/ as plain `j` (the dʒ ligature) — distinguished only by the accent. |
 | `tʃ` digraph (t + ʃ) | Latin `c` shape (ligature) | Sanskrit IAST tradition; c is unused in current Nayana output (phase 2 c→k/c→s removed it). Font ligates the two-character sequence to one `c`-shaped glyph. |
 | `dʒ` digraph (d + ʒ) | Latin `j` shape (ligature) | Sanskrit IAST tradition; j is unused in current Nayana output (we use Y for the consonant /j/). Font ligates to one `j`-shaped glyph. |
 | `ə` (U+0259) | Baseline two-stroke (`=`-like) | Extends the vowel-marker baseline stroke. Avoids the rotation-of-e shape that the standard IPA glyph carries. |
