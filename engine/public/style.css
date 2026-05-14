@@ -14,13 +14,14 @@ html, body {
 }
 
 body {
-  font-family: 'Nayana', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  /* Page chrome and input English text use a regular sans-serif. Nayana
+     is scoped to .nayana-rewritten (the rewritten output spans) so that
+     d→Δ and other shape replacements don't bleed into source English. */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   font-size: 17px;
   line-height: 1.6;
   color: #1a1a1a;
   background: #fafaf7;
-  /* Vowel-marker feature is on by default. Toggleable. */
-  font-feature-settings: "ss01" on;
 }
 
 body.no-vowel-marker {
@@ -200,7 +201,8 @@ section h2 {
 
 textarea, input[type="url"] {
   width: 100%;
-  font-family: 'Nayana', -apple-system, system-ui, sans-serif;
+  /* Source English is typed/pasted here — render with a regular sans, not Nayana. */
+  font-family: -apple-system, system-ui, sans-serif;
   font-size: 16px;
   padding: 12px 14px;
   border: 1px solid #d8d8d2;
@@ -272,12 +274,21 @@ button.primary:hover { background: #333; }
 
 /* ---- Changed-word styling ------------------------------------------------ */
 .nayana-rewritten {
+  /* The Nayana font is scoped here: only words rewritten by the engine
+     are rendered in Nayana glyphs. Source English in the input and
+     untouched English in the output stay in the page's regular sans. */
+  font-family: 'Nayana', -apple-system, system-ui, sans-serif;
+  font-feature-settings: "ss01" on;
   background: linear-gradient(to bottom, transparent 65%, #fdf3c4 65%);
   padding: 0 1px;
   border-radius: 2px;
   cursor: help;
   position: relative;
   transition: background 0.2s ease;
+}
+
+body.no-vowel-marker .nayana-rewritten {
+  font-feature-settings: "ss01" off;
 }
 
 .nayana-rewritten:hover {
