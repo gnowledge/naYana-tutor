@@ -65,7 +65,7 @@ doesn't have to relitigate them:
 | ʊ | U+028A | short /ʊ/ | book → bʊk | 13 | ☑ | ☐ | Turned omega — not a Latin rotation |
 | ɛ | U+025B | short /ɛ/ | bed → bɛd | 13 | ☑ | ☐ | Latin epsilon — distinct from e |
 | æ | U+00E6 | /æ/ | cat → kæt | 13 | ☑ | ☑ | **DECIDED**: render as Latin `a` shape (cat reads as "kat"). Latin a is unused standalone in current Nayana output — only appears in `ai`/`au` digraphs, which is consistent with English's existing a-for-/æ/ convention |
-| ʌ | U+028C | stressed /ʌ/ | cup → kʌp | 13 | ☑ | ☑ | Rotation-of-v concern. Suggested: wedge with downward opening, longer base |
+| ʌ | U+028C | stressed /ʌ/ | cup → kʌp | 13 | ☑ | ☑ | **DECIDED**: `=` with a degree sign above. Builds on the schwa `=` shape (same vowel quality as /ə/) with a stress mark `°` on top. |
 | ɝ | U+025D | stressed r-colored | bird → bɝd | 14 | ☑ | ☑ | **DECIDED**: two V-shapes stacked vertically with a gap, like `:` but with V's instead of dots. Top is `∨` (arms up, point down toward the gap); bottom is `∧` (arms down, point up toward the gap). Like the letter `x` cut horizontally in half with the middle removed. The gap visualises "r is there but not there" — r-coloration without full articulation. |
 | ɚ | U+025A | unstressed r-colored | teacher → tiːtʃɚ | 14 | ☑ | ☑ | **DECIDED**: two small hollow circles (degree-symbol size, `°`) stacked vertically with a gap — like a colon `:` with outlines drawn instead of filled dots. The lighter pair to ɝ's V-stack: same vertical-gap structure, hollow circles instead of solid V-points to signal the unstressed quality. |
 | ɔ | U+0254 | open /ɔ/ | call → kɔːl | 16 | ☑ | ☐ | Open o — distinct from o |
@@ -78,7 +78,7 @@ doesn't have to relitigate them:
 
 **Total IPA characters in the engine**: 19 (7 consonants + 12 vowel-related, including the length marker and one diphthong).
 
-**Decided shapes** (9 IPA codepoints + 1 Latin letter):
+**Decided shapes** (10 IPA codepoints + 1 Latin letter — all flagged glyphs now decided):
 
 | Character | Designed shape | Reason |
 |-----------|----------------|--------|
@@ -88,16 +88,11 @@ doesn't have to relitigate them:
 | ə | Baseline two-stroke (`=`-like) | Extends vowel-marker stroke; avoids rotation-of-e |
 | æ | Latin `a` shape | a unused standalone in output; matches English's a-for-/æ/ |
 | ɑ | Greek `α` (closer to `∝` infinity) | Phonetic match for cardinal /a/; visually distinct from Latin a |
+| ʌ | `=` with a degree sign above | Same vowel as schwa `=` plus stress mark; encodes the ə/ʌ stress pair |
 | ɝ | Two V's stacked vertically (∨ above ∧) with a gap | Like `:` but V's instead of dots; gap signals not-quite-r |
 | ɚ | Two hollow circles (degree-symbol size) stacked vertically with a gap | Like `:` with outlined dots; lighter pair to ɝ's V-stack |
 | ŋ | `n` with a `b`-shaped tail, b's bowl below baseline | — |
 | Latin `d` | Greek capital `Δ` | b/d mirror avoidance; ties to ð→δ family |
-
-**Still open** (1 character):
-
-| Character | Status | Notes |
-|-----------|--------|-------|
-| ʌ | open | Wedge with downward opening, longer base (sketch only) |
 
 The remaining 9 IPA characters (θ, ʃ, ʒ, ː, ɪ, ʊ, ɛ, ɔ, ɔɪ) are
 visually distinct in standard IPA fonts and may not strictly
@@ -140,6 +135,7 @@ codepoints from Greek's small letters).
 | `tʃ` digraph (t + ʃ) | Latin `c` shape (ligature) | Sanskrit IAST tradition; c is unused in current Nayana output (phase 2 c→k/c→s removed it). Font ligates the two-character sequence to one `c`-shaped glyph. |
 | `dʒ` digraph (d + ʒ) | Latin `j` shape (ligature) | Sanskrit IAST tradition; j is unused in current Nayana output (we use Y for the consonant /j/). Font ligates to one `j`-shaped glyph. |
 | `ə` (U+0259) | Baseline two-stroke (`=`-like) | Extends the vowel-marker baseline stroke. Avoids the rotation-of-e shape that the standard IPA glyph carries. |
+| `ʌ` (U+028C) | `=` with a degree sign above | Same vowel quality as /ə/, only stressed. Built from the schwa `=` shape with a degree-sign stress mark on top — the visual encodes the ə/ʌ stress pair. |
 | `æ` (U+00E6) | Latin `a` shape | Latin a is unused standalone in current output (only appears in `ai`/`au` digraphs). Matches English's existing a-for-/æ/ convention: cat reads as "kat". |
 | `ɑ` (U+0251) | Greek `α` (closer to `∝` infinity sign) | Phonetic match for the cardinal /a/. Drawn with the curl-with-extension form so it's clearly distinct from Latin a. hot reads as "hαːt". |
 | `ɝ` (U+025D) | Two V-shapes stacked vertically (∨ over ∧) with a gap between | Direct visual analogue of `:` (two stacked dots) — but V-shapes instead of dots. Top is `∨` with arms reaching up and point at bottom; bottom is `∧` with arms reaching down and point at top; the two points face each other across a vertical gap. Equivalent: the letter `x` cut in half horizontally, middle removed. The gap is the "r is there but not there" — r-coloration without articulation. |
