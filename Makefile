@@ -17,7 +17,7 @@ BUILD_SCRIPT := src/build.py
 
 # Default phase set. Override on the command line:
 #   make build PHASES="vowel_marker schwa_marker"
-PHASES ?= vowel_marker
+PHASES ?= vowel_marker ipa_glyphs ipa_ligatures
 
 COMIC_NEUE_URL := https://github.com/crozynski/comicneue/raw/master/Fonts/OTF/ComicNeue-Regular.otf
 

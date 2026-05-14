@@ -20,17 +20,15 @@ each phase via CSS:
 
 from nayana.phases.base import Phase
 from nayana.phases.vowel_marker import VowelMarkerPhase
+from nayana.phases.ipa_glyphs import IpaGlyphsPhase
+from nayana.phases.ipa_ligatures import IpaLigaturesPhase
 
 # Registry: maps phase name (CLI string) to phase class. Order matters
 # only for the --all CLI flag, which applies phases in registration order.
 REGISTRY = {
     "vowel_marker": VowelMarkerPhase,
-    # Future:
-    # "pronounced_vowel": PronouncedVowelPhase,
-    # "schwa_marker": SchwaMarkerPhase,
-    # "long_short": LongShortPhase,
-    # "diphthong": DiphthongPhase,
-    # "glyph_replacement": GlyphReplacementPhase,
+    "ipa_glyphs": IpaGlyphsPhase,
+    "ipa_ligatures": IpaLigaturesPhase,
 }
 
 

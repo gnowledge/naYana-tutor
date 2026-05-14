@@ -60,8 +60,9 @@ def main():
                         help="Path to source font (OTF/TTF)")
     parser.add_argument("-o", "--output", required=True,
                         help="Path to write derivative font")
-    parser.add_argument("--phases", nargs="+", default=["vowel_marker"],
-                        help="Phases to apply (default: vowel_marker)")
+    parser.add_argument("--phases", nargs="+",
+                        default=["vowel_marker", "ipa_glyphs", "ipa_ligatures"],
+                        help="Phases to apply (default: all three)")
     parser.add_argument("--all", action="store_true",
                         help="Apply all registered phases (overrides --phases)")
     parser.add_argument("--list-phases", action="store_true",
