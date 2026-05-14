@@ -51,7 +51,7 @@ doesn't have to relitigate them:
 | ð | U+00F0 | voiced /ð/ (this) | this → ðɪs | 11 | ☑ | ☑ | **DECIDED**: render as Greek small `δ` — curve over closed circle, easy to handwrite |
 | ʃ | U+0283 | /ʃ/ (sh) | ship → ʃɪp | 12 | ☑ | ☐ | Esh — already distinct |
 | ʒ | U+0292 | /ʒ/ (zh) | vision → vɪʒən | 12 | ☑ | ☐ | Ezh — already distinct |
-| ŋ | U+014B | /ŋ/ (ng) | sing → sɪŋ | 12 | ☑ | ☑ | Recorded for font: refined extension of n |
+| ŋ | U+014B | /ŋ/ (ng) | sing → sɪŋ | 12 | ☑ | ☑ | **DECIDED**: an `n` with a `b`-shaped tail, where b's bowl descends below the baseline. |
 | tʃ | t + ʃ | /tʃ/ (ch) | chip → tʃɪp | 12 | ☑ | ☑ | **DECIDED**: ligature renders as Latin `c` shape (Sanskrit IAST tradition; c is unused in current Nayana output) |
 | dʒ | d + ʒ | /dʒ/ (j) | judge → dʒʌdʒ | 13 | ☑ | ☑ | **DECIDED**: ligature renders as Latin `j` shape (Sanskrit IAST tradition; j is unused in current Nayana output) |
 
@@ -78,7 +78,7 @@ doesn't have to relitigate them:
 
 **Total IPA characters in the engine**: 19 (7 consonants + 12 vowel-related, including the length marker and one diphthong).
 
-**Decided shapes** (8 IPA codepoints + 1 Latin letter):
+**Decided shapes** (9 IPA codepoints + 1 Latin letter):
 
 | Character | Designed shape | Reason |
 |-----------|----------------|--------|
@@ -90,13 +90,13 @@ doesn't have to relitigate them:
 | ɑ | Greek `α` (closer to `∝` infinity) | Phonetic match for cardinal /a/; visually distinct from Latin a |
 | ɝ | Two V's stacked vertically (∨ above ∧) with a gap | Like `:` but V's instead of dots; gap signals not-quite-r |
 | ɚ | Two hollow circles (degree-symbol size) stacked vertically with a gap | Like `:` with outlined dots; lighter pair to ɝ's V-stack |
+| ŋ | `n` with a `b`-shaped tail, b's bowl below baseline | — |
 | Latin `d` | Greek capital `Δ` | b/d mirror avoidance; ties to ð→δ family |
 
-**Still open** (2 characters):
+**Still open** (1 character):
 
 | Character | Status | Notes |
 |-----------|--------|-------|
-| ŋ | open | Refined extension of n (sketch only) |
 | ʌ | open | Wedge with downward opening, longer base (sketch only) |
 
 The remaining 9 IPA characters (θ, ʃ, ʒ, ː, ɪ, ʊ, ɛ, ɔ, ɔɪ) are
@@ -144,6 +144,7 @@ codepoints from Greek's small letters).
 | `ɑ` (U+0251) | Greek `α` (closer to `∝` infinity sign) | Phonetic match for the cardinal /a/. Drawn with the curl-with-extension form so it's clearly distinct from Latin a. hot reads as "hαːt". |
 | `ɝ` (U+025D) | Two V-shapes stacked vertically (∨ over ∧) with a gap between | Direct visual analogue of `:` (two stacked dots) — but V-shapes instead of dots. Top is `∨` with arms reaching up and point at bottom; bottom is `∧` with arms reaching down and point at top; the two points face each other across a vertical gap. Equivalent: the letter `x` cut in half horizontally, middle removed. The gap is the "r is there but not there" — r-coloration without articulation. |
 | `ɚ` (U+025A) | Two hollow circles (`°`-size) stacked vertically with a gap between | Direct visual analogue of `:` with the dots drawn as outlines instead of filled. Pairs with ɝ's V-stack: same vertical-stack-with-gap structure, but circles instead of points to signal the lighter, unstressed quality of the unstressed r-colored vowel. teacher reads as "tiːc°°" (with the trailing pair representing the rhotic schwa). |
+| `ŋ` (U+014B) | An `n` with a `b`-shaped tail, where b's bowl descends below the baseline | — |
 
 | Latin codepoint | Designed font shape | Reason |
 |-----------------|---------------------|--------|
