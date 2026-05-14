@@ -2119,3 +2119,111 @@ phases:
       Years later, on a small farm beyond the long river, the woman who had been the girl walked with her own daughter to the calm palm grove behind the warm yellow walls of the kitchen. The lot was full of wild salmon and old dogs and the small voice of every bird. She thought of the philosopher, of the teacher, of her mother, of all who had taught her how to read and how to listen. The boy at the door of the workshop said: father is calling. The woman bent down and kissed her daughter's hair, and walked into the soft light of the autumn yard, and answered the call with all the joy of a thought finally caught.
 
       The crane was old by the time the daughter learned to read. She wanted to know the words of every song her mother had sung — the rhymes about roses and dishes and music in the kitchen, the prayers her grandmother had spoken in the autumn dawn. The dog watched the bird, and the bird watched the dog, and the woman watched both. The girl asked about gym class, about the syntax of her hymn book, about the symbol of her family crest. Her mother answered each question with the patience of one who has been listened to. Because every answer, in this script, came out exactly as it sounded — and every word she had ever heard was already there, waiting to be written.
+
+  - number: 18
+    name: "qu, ea, ps, silent-g — small targeted cleanups"
+    description: "Six rules closing the last common spelling oddities: qu → kw (queen, quick, liquid), qu → k (antique), ea → ɪ (near, year, fear), ps → s (psychology), silent-g (gnome)."
+    rationale: >
+      After the big landmarks of phases 13–17, the remaining cleanup is
+      a handful of low-frequency-but-visible spelling oddities. Phase 18
+      sweeps them up:
+
+      qu (the q+u digraph): English's most idiosyncratic letter
+      sequence. Two patterns:
+        - q}K u}W (queen, quick, quit, liquid) — q and u as separate
+          pairs. Two rules: q → k when /K/, u → w when /W/. Together
+          they collapse 'qu' to 'kw'.
+        - qu}K (antique, technique) — qu as one grapheme to /K/.
+          Single rule: qu → k when /K/.
+
+      ea: phase 13 covered ea → ɛ (when /EH/) for head/bread, and
+      phase 9 covered ea → iː (when /IY/) for sea/eat. The remaining
+      case is ea → /IH/ for near/year/fear/beard/clear/dear, where the
+      ea aligns to short-i. Add ea → ɪ when /IH/.
+
+      ps: a Greek-loan cluster where p is silent. psychology, psalm,
+      psychic. Phonetisaurus aligns 'ps' as one grapheme to /S/, so
+      a clean ps → s when /S/ rule.
+
+      Silent g: another Greek-loan oddity. gnome, gnaw, sign? (sign
+      has a different alignment). The Phonetisaurus marker is g}∅
+      at word start.
+
+    rules:
+      - name: "q→k (when /k/)"
+        phoneme: "K"
+        from: "q"
+        to: "k"
+        examples:
+          - { before: "queen",   after: "kwiːn" }
+          - { before: "quick",   after: "kwɪk" }
+          - { before: "quit",    after: "kwɪt" }
+          - { before: "liquid",  after: "lɪkwəd" }
+        notes: >
+          Pairs with the u → w rule below. Together they convert
+          q+u sequences to k+w in queen, quick, quit, liquid, etc.
+
+      - name: "u→w (when /w/)"
+        phoneme: "W"
+        from: "u"
+        to: "w"
+        examples:
+          - { before: "queen",   after: "kwiːn" }
+          - { before: "quack",   after: "kwæk" }
+        notes: >
+          Specifically for u after q. The /W/ phoneme alignment is
+          rare otherwise (penguin? vague? need to confirm), so
+          over-fire risk is low.
+
+      - name: "qu→k (when /k/) — for antique, technique"
+        phoneme: "K"
+        from: "qu"
+        to: "k"
+        examples:
+          - { before: "antique",    after: "æntiːk" }
+          - { before: "technique",  after: "tɛkniːk" }
+        notes: >
+          Phonetisaurus aligns 'qu' as one grapheme to /K/ in some
+          loanwords (antique, technique, mosque). The q→k + u→w
+          rules don't fire there because there's no separate q
+          and u pair. This rule catches the digraph form.
+
+      - name: "ea→ɪ (when /ɪ/)"
+        phoneme: "IH"
+        from: "ea"
+        to: "ɪ"
+        examples:
+          - { before: "near",   after: "nɪr" }
+          - { before: "year",   after: "yɪr" }
+          - { before: "fear",   after: "fɪr" }
+          - { before: "beard",  after: "bɪrd" }
+          - { before: "clear",  after: "klɪr" }
+          - { before: "dear",   after: "dɪr" }
+        notes: >
+          Completes the ea coverage: phase 9 ea → iː (when /IY/, sea/eat),
+          phase 13 ea → ɛ (when /EH/, head/bread), now ea → ɪ for
+          ea-before-r words (the alignment marks them /IH/).
+
+      - name: "ps→s (when /s/)"
+        phoneme: "S"
+        from: "ps"
+        to: "s"
+        examples:
+          - { before: "psychology",  after: "saikɑːlədʒiː" }
+          - { before: "psalm",       after: "sɑːm" }
+          - { before: "psychic",     after: "saikɪk" }
+        notes: >
+          Greek-loan cluster: p is silent before s. psychology, psalm,
+          psychic, pseudo. Phonetisaurus aligns 'ps' as one grapheme
+          to /S/.
+
+      - name: "g→∅ (silent)"
+        phoneme: null
+        from: "g"
+        to: ""
+        examples:
+          - { before: "gnome",  after: "noum" }
+          - { before: "gnaw",   after: "nɔː" }
+        notes: >
+          Greek-loan oddity: g silent before n at word start. gnome,
+          gnaw, gnostic. Phonetisaurus marks the g as g}∅.
