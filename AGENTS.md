@@ -66,6 +66,35 @@ cognitive friction (mirror pairs, near-duplicates), Nayana picks different
 shapes. But the Unicode codepoint remains the IPA one. Only the glyph
 design changes.
 
+**Font glyph design — visual vocabulary.** A consistent visual grammar
+has been chosen for the IPA characters the engine emits. Recorded in
+detail in `docs/font-glyph-checklist.md`. The settled rules:
+
+- **Avoid mirror symmetries.** Pairs like `b/d` and `p/q` create reading
+  confusion. Where a Latin letter has a mirror partner already in use,
+  design a non-mirror replacement (e.g. Latin `d` → Greek capital `Δ`).
+- **Avoid rotational symmetries.** `ə` is the rotation of `e`, `ʌ` is
+  the rotation of `v`. Their Nayana shapes must not rotate any letter
+  the reader already knows.
+- **Reuse unused Latin letters.** Letters that don't appear in current
+  Nayana output (`c`, `j`, `q`, `x`) are available as glyph slots —
+  either as ligatures for IPA digraphs (tʃ → c, dʒ → j) or as the
+  rendering shape for IPA codepoints with phonetic precedent
+  (e.g. Sanskrit IAST: `c` for /tʃ/, `j` for /dʒ/).
+- **Greek letters fill IPA codepoint slots.** IPA being case-less,
+  Greek capitals have no codepoint conflict and provide clean shapes
+  (Δ for Latin d, δ for ð, α for ɑ).
+- **Modifiers form a vocabulary.** The acute accent is a general-purpose
+  Nayana modifier (s → /ʃ/, j → /ʒ/). The degree sign marks stress
+  (`=` for /ə/, `=` with `°` above for /ʌ/).
+- **Stress is encoded by element weight.** ɝ (stressed) uses solid V's;
+  ɚ (unstressed) uses hollow circles. ʌ (stressed) adds a degree mark
+  to the schwa `=`.
+
+12 of 19 IPA characters have decided shapes; 1 Latin letter (d) is
+customized; 7 IPA characters keep their default IPA glyphs unless
+revisited. See the checklist for the full mapping.
+
 **Alignment is owned, not borrowed.** The grapheme→phoneme corpus is
 generated locally with Phonetisaurus (BSD-3-Clause) from CMUdict. We do
 not depend on third-party aligned corpora of unclear licensing. The
@@ -129,6 +158,7 @@ nayana/                          (the repo)
 │   ├── structure.md             Repo layout reference
 │   ├── ofl-compliance.md        OFL 1.1 obligations
 │   ├── missing-alignments.md    488 entries Phonetisaurus drops; strategy
+│   ├── font-glyph-checklist.md  Per-character font shape decisions
 │   └── phases/                  One file per shipped phase
 │
 ├── Makefile                     Font build automation
@@ -149,24 +179,53 @@ of the same project.
   baseline beneath each lowercase Latin vowel. Pure GSUB.
 - Capital vowels (A, E, I, O, U) not yet handled — small overdue
   follow-up.
+- **Glyph shape design phase in progress** — most IPA characters that
+  need custom Nayana shapes have been decided (12 of 19 IPA + 1 Latin
+  letter). See `docs/font-glyph-checklist.md` for the full inventory
+  and the visual-vocabulary section in Architectural Decisions above.
+  The actual FontForge work to draw the glyphs is the next concrete
+  font-side step.
 
-### Engine — phases 1–4 shipped
-All phases use position-based grapheme→phoneme alignment:
+### Engine — phases 1–18 shipped
+All phases use position-based grapheme→phoneme alignment, with three
+extensions to the basic rule shape: epsilon rules (phoneme:null,
+fires on silent-letter pairs), stress-specific rules (phoneme:"AH0",
+exact match), and stressed-only rules (phoneme:"AH+", matches
+stressed AH at any non-zero stress).
 
-| Phase | Rule(s)                          | Examples                                  |
-|-------|----------------------------------|-------------------------------------------|
-| 1     | `ph → f`                         | philosophy → filosofy                     |
-| 2     | `c → k`, `c → s`, `cc → k`       | city → sity, account → akount             |
-| 3     | `ck → k`                         | clock → klok, jacket → jaket              |
-| 4     | `kn → n`, `wr → r`, `mb → m`     | knife → nife, write → rite, comb → kom    |
+| Phase | Theme                                             | New IPA introduced |
+|-------|---------------------------------------------------|--------------------|
+| 1     | `ph → f`                                          | —                  |
+| 2     | c-ambiguity: `c → k/s`, `cc → k`                  | —                  |
+| 3     | `ck → k`                                          | —                  |
+| 4     | silent letters: `kn → n`, `wr → r`, `mb → m`      | —                  |
+| 5     | long-i: `i/y → ai` (when /aɪ/), `gh` cleanup      | —                  |
+| 6     | long-a: `a/ay/ai/ey → ei`, silent-e               | —                  |
+| 7     | o-family: /oʊ/ → ou, /aʊ/ → au, silent a/u/h      | —                  |
+| 8     | long-u: /uː/ → uː                                 | ː (length marker)  |
+| 9     | long-e: /iː/ → iː                                 | —                  |
+| 10    | schwa: a/e/i/o/u → ə (when AH0)                   | ə                  |
+| 11    | th split: /θ/ vs /ð/                              | θ, ð               |
+| 12    | missing consonants: ʃ, tʃ, ʒ, ŋ                   | ʃ, ʒ, ŋ (+ tʃ)    |
+| 13    | short vowels + /dʒ/                               | ɪ, ʊ, ɛ, æ, ʌ, dʒ |
+| 14    | r-colored vowels                                  | ɝ, ɚ               |
+| 15    | spelling cleanup (geminates, silent letters,…)    | —                  |
+| 16    | vowel completion: ɔː, ɑː, ɔɪ + silent-l           | ɔ, ɑ, ɔɪ           |
+| 17    | voicing: s → z, ed → t, ss → ʃ, y/e → ɪ           | —                  |
+| 18    | qu, ea→ɪ, ps→s, silent-g                          | —                  |
 
 Each rule fires only when alignment confirms the grapheme matches the
 expected phoneme. This handles tricky cases by construction:
 *shepherd* (alignment is `p}P h}_`, so `ph→f` does not fire) and
 *number* (alignment is `m}M b}B`, so `mb→m` does not fire).
 
-67 unit tests cover positives, exception cases, capitalization
-preservation, and multi-rule composition.
+538 unit tests cover positives, exception cases, capitalization
+preservation, multi-rule composition, and the engine extensions.
+
+The reform is functionally complete for everyday English text — every
+English phoneme that has an IPA glyph has been introduced. Remaining
+work is per-word edge cases (queue's odd alignment, dialectal variation,
+very rare loanwords) rather than systematic phoneme coverage.
 
 ### Test harness (engine/public/)
 - Phase slider 0..N
@@ -280,10 +339,21 @@ Each pronunciation entry in the dictionary carries a `pairs` array:
 ]
 ```
 
-A rule has shape `{ name, from, to, phoneme }`. It fires on a pair when:
-1. `pair.graphemes.toLowerCase() === rule.from.toLowerCase()`
-2. `rule.phoneme` appears in `pair.phonemes` (after stripping stress
-   digits — so a rule targeting `AE` matches `AE0`/`AE1`/`AE2`).
+A rule has shape `{ name, from, to, phoneme }`. The phoneme field
+selects matching pairs in one of four modes:
+
+1. **No-digit** (`phoneme: "F"`, `"AE"`, …) — matches the phoneme at any
+   stress level. Stress digits are stripped before comparison, so `AE`
+   matches `AE0`/`AE1`/`AE2`.
+2. **Stress-specific** (`phoneme: "AH0"`) — exact match required including
+   stress. Used for schwa (AH0) without firing on stressed /ʌ/ (AH1, AH2).
+3. **Stressed-only** (`phoneme: "AH+"`) — matches at any non-zero stress
+   (AH1 or AH2 but not AH0). Used for /ʌ/ without colliding with schwa.
+4. **Epsilon** (`phoneme: null` or `""`) — matches when the pair's phoneme
+   list is empty. Used for silent letters (gh, t, o, w, d, r, …).
+
+In all four modes, the grapheme match is the same: `pair.graphemes.toLowerCase()
+=== rule.from.toLowerCase()`.
 
 When a rule fires, the pair's graphemes are replaced with `rule.to`.
 The final spelling is the concatenation of pair graphemes after all
