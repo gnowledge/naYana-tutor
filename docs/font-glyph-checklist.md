@@ -64,12 +64,12 @@ doesn't have to relitigate them:
 | ɪ | U+026A | short /ɪ/ | bit → bɪt | 13 | ☑ | ☐ | Small-cap I — distinct from i |
 | ʊ | U+028A | short /ʊ/ | book → bʊk | 13 | ☑ | ☐ | Turned omega — not a Latin rotation |
 | ɛ | U+025B | short /ɛ/ | bed → bɛd | 13 | ☑ | ☐ | Latin epsilon — distinct from e |
-| æ | U+00E6 | /æ/ | cat → kæt | 13 | ☑ | ☐ | Ash ligature — already in Latin-1 |
+| æ | U+00E6 | /æ/ | cat → kæt | 13 | ☑ | ☑ | **DECIDED**: render as Latin `a` shape (cat reads as "kat"). Latin a is unused standalone in current Nayana output — only appears in `ai`/`au` digraphs, which is consistent with English's existing a-for-/æ/ convention |
 | ʌ | U+028C | stressed /ʌ/ | cup → kʌp | 13 | ☑ | ☑ | Rotation-of-v concern. Suggested: wedge with downward opening, longer base |
 | ɝ | U+025D | stressed r-colored | bird → bɝd | 14 | ☑ | ☑ | **OPEN** — see [R-colored vowels brainstorm](#r-colored-vowels-ɝ-and-ɚ) below. Family of paired-mark proposals (wedges, circles, vertical bars). |
 | ɚ | U+025A | unstressed r-colored | teacher → tiːtʃɚ | 14 | ☑ | ☑ | **OPEN** — see [R-colored vowels brainstorm](#r-colored-vowels-ɝ-and-ɚ) below. The lighter half of the pair. |
 | ɔ | U+0254 | open /ɔ/ | call → kɔːl | 16 | ☑ | ☐ | Open o — distinct from o |
-| ɑ | U+0251 | cardinal /ɑ/ | hot → hɑːt | 16 | ☑ | ☐ | Script a — distinct from two-story a |
+| ɑ | U+0251 | cardinal /ɑ/ | hot → hɑːt | 16 | ☑ | ☑ | **DECIDED**: render as Greek `α` shape, drawn closer to the infinity sign `∝` (curl-with-extension form) so it reads visibly distinct from Latin a. Greek α matches the IPA's own one-story tradition and gives "hot" → "hαːt" |
 | ɔɪ | ɔ + ɪ | /ɔɪ/ diphthong | boy → bɔɪ | 16 | ☑ | ☐ | Composed of ɔ and ɪ — could ligate or render sequentially |
 
 ---
@@ -78,27 +78,29 @@ doesn't have to relitigate them:
 
 **Total IPA characters in the engine**: 19 (7 consonants + 12 vowel-related, including the length marker and one diphthong).
 
-**Status of the 8 characters flagged for new shape design**:
+**Decided shapes** (6 IPA codepoints + 1 Latin letter):
 
-| Character | Status | Designed shape |
-|-----------|--------|----------------|
-| ð | **decided** | Greek small `δ` |
-| tʃ | **decided** | Latin `c` shape (font ligature) |
-| dʒ | **decided** | Latin `j` shape (font ligature) |
-| ə | **decided** | Baseline two-stroke (`=`-like) |
+| Character | Designed shape | Reason |
+|-----------|----------------|--------|
+| ð | Greek small `δ` | curve over closed circle, easy handwriting |
+| tʃ | Latin `c` shape (ligature) | Sanskrit IAST; c unused in output |
+| dʒ | Latin `j` shape (ligature) | Sanskrit IAST; j unused (Y is /j/) |
+| ə | Baseline two-stroke (`=`-like) | Extends vowel-marker stroke; avoids rotation-of-e |
+| æ | Latin `a` shape | a unused standalone in output; matches English's a-for-/æ/ |
+| ɑ | Greek `α` (closer to `∝` infinity) | Phonetic match for cardinal /a/; visually distinct from Latin a |
+| Latin `d` | Greek capital `Δ` | b/d mirror avoidance; ties to ð→δ family |
+
+**Still open** (4 characters):
+
+| Character | Status | Notes |
+|-----------|--------|-------|
 | ŋ | open | Refined extension of n (sketch only) |
 | ʌ | open | Wedge with downward opening, longer base (sketch only) |
 | ɝ | open | See R-colored vowels brainstorm below |
 | ɚ | open | See R-colored vowels brainstorm below |
 
-**Plus one Latin letter customization**:
-
-| Letter | Designed shape | Reason |
-|--------|----------------|--------|
-| Latin `d` | Greek capital `Δ` shape | b/d mirror avoidance; ties to ð → δ family |
-
-The remaining 11 IPA characters (θ, ʃ, ʒ, ː, ɪ, ʊ, ɛ, æ, ɔ, ɑ, ɔɪ)
-are visually distinct in standard IPA fonts and may not strictly
+The remaining 9 IPA characters (θ, ʃ, ʒ, ː, ɪ, ʊ, ɛ, ɔ, ɔɪ) are
+visually distinct in standard IPA fonts and may not strictly
 require new shapes — but a consistent Nayana treatment across the
 whole inventory is worth considering when the font phase begins.
 
@@ -124,17 +126,26 @@ may want ligature treatment for some, but no new codepoints needed.
 
 ---
 
-## Latin letter shape customizations
+## Letter-shape mappings — IPA codepoints rendered as Latin/Greek shapes
 
-Latin letters whose Comic Neue default shape is replaced with a
-Nayana design — for readability, mirror-avoidance, or to render an
-IPA codepoint as a Latin-letter shape via ligature.
+Engine still emits canonical IPA codepoints; the font draws each one
+with a Nayana-designed shape that's either a familiar Latin letter
+(via ligature for digraphs) or a Greek letter (free of IPA conflict
+because IPA is case-less for Greek capitals and uses different
+codepoints from Greek's small letters).
 
-| Codepoint(s) emitted by engine | Designed font shape | Reason |
-|--------------------------------|---------------------|--------|
-| IPA `tʃ` (t + ʃ digraph) | Latin `c` shape | Sanskrit IAST tradition; c is unused in current Nayana output (phase 2 c→k or c→s removed it). Engine still emits canonical IPA `tʃ`; the font ligates the two-character sequence into one `c`-shaped glyph. |
-| IPA `dʒ` (d + ʒ digraph) | Latin `j` shape | Sanskrit IAST tradition; j is unused in current Nayana output (we use Y for the consonant /j/). Engine emits `dʒ`; font ligates to a `j`-shaped glyph. |
-| Latin `d` (U+0064) | Greek capital `Δ` shape | The Latin `d` shape is the mirror of `b`. Replacing the glyph with capital delta breaks the mirror confusion. Ties visually to the ð → δ family (both delta-related shapes for the alveolar/dental d-sounds). IPA being case-less, capital delta has no IPA conflict. |
+| IPA codepoint(s) | Designed font shape | Reason |
+|------------------|---------------------|--------|
+| `ð` (U+00F0) | Greek small `δ` | Curve over closed circle, easy to handwrite. Pairs visually with d → Δ for the alveolar/dental d-family. |
+| `tʃ` digraph (t + ʃ) | Latin `c` shape (ligature) | Sanskrit IAST tradition; c is unused in current Nayana output (phase 2 c→k/c→s removed it). Font ligates the two-character sequence to one `c`-shaped glyph. |
+| `dʒ` digraph (d + ʒ) | Latin `j` shape (ligature) | Sanskrit IAST tradition; j is unused in current Nayana output (we use Y for the consonant /j/). Font ligates to one `j`-shaped glyph. |
+| `ə` (U+0259) | Baseline two-stroke (`=`-like) | Extends the vowel-marker baseline stroke. Avoids the rotation-of-e shape that the standard IPA glyph carries. |
+| `æ` (U+00E6) | Latin `a` shape | Latin a is unused standalone in current output (only appears in `ai`/`au` digraphs). Matches English's existing a-for-/æ/ convention: cat reads as "kat". |
+| `ɑ` (U+0251) | Greek `α` (closer to `∝` infinity sign) | Phonetic match for the cardinal /a/. Drawn with the curl-with-extension form so it's clearly distinct from Latin a. hot reads as "hαːt". |
+
+| Latin codepoint | Designed font shape | Reason |
+|-----------------|---------------------|--------|
+| Latin `d` (U+0064) | Greek capital `Δ` shape | Latin `d` is the mirror of `b`. Replacing the glyph with capital delta breaks the mirror confusion. Ties visually to ð → δ for the alveolar/dental d-family. IPA being case-less, capital delta has no IPA conflict. |
 
 ## Open design questions
 
