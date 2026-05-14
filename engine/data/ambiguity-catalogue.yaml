@@ -1326,3 +1326,170 @@ phases:
       The next spring, the teacher came from the city. She spoke about nature and machines, about the vision of long English summers, about the question of treasure and measure. She would speak of fish and of the cheap shops by the bridge, of the special ocean shells the children would catch and the pleasure of the long song they would sing each evening. Every chapter of the lesson was a fresh thing: action and tension and decision, much and motion and music, the things a young brain could think and ask. The shepherd watched the teacher with attention. The plumber listened. The mother held her daughter's hand. The crane, watching from the wagon, opened one eye, and then closed it again.
 
       That summer the child judged the village fair. She watched the older boys jump from bridge to bridge, the red cat sit on the wooden bench, the man at the magic stall pull a rabbit from a black hat. She loved every minute. She put a foot in the cool stream, ate her bread on a small bed of moss, and laughed when the crane landed on her thumb. Her mother came back from the village with a full basket, and said: come home, my love. The page of the day, like every page, was already turning.
+
+  - number: 14
+    name: "the r-colored vowels — ɝ and ɚ"
+    description: "Stressed /ɝ/ (her, bird, work) and unstressed /ɚ/ (teacher, philosopher, dollar) get distinct IPA glyphs. Five graphemes (er, ir, ur, or, ar) converge."
+    rationale: >
+      English carries the rhotic vowel under five different spellings —
+      er (her, teacher), ir (bird), ur (turn), or (work, doctor), ar
+      (heard after silent-e, dollar). All five collapse onto two IPA
+      codepoints by stress:
+
+        ɝ  U+025D  reversed open e with hook  — STRESSED  /ɝ/
+        ɚ  U+025A  schwa with hook            — UNSTRESSED /ɚ/
+
+      Mirrors the ʌ/ə split from earlier phases: same vowel quality,
+      stress changes the symbol. Phonetisaurus aligns these as single
+      multi-letter graphemes (er, ir, ur, or, ar} bound to ER0/ER1/ER2,
+      so the rules are clean per-pair substitutions using the AH+/ER+
+      stress-aware syntax.
+
+      Critical negatives stay untouched: 'car' aligns as a}AA1 r}R
+      (separate pairs), 'for' as o}AO1 r}R, 'more' as o}AO1 r}R e}∅.
+      The bare r stays bare in those words.
+
+      Notable transformations:
+        teacher       → tiːtʃɚ     (the canonical -er ending)
+        philosopher   → fəlosəfɚ   (clean ending at last)
+        bird          → bɝd
+        work          → wɝk
+        her           → hɝ
+        earth         → ɝθ          (silent-e + ar→ɝ + th→θ)
+
+      Font note (per the established policy: IPA codepoint stays,
+      visual is font-side):
+        - ɝ is reversed-ɛ-with-hook. Rotation/mirror of ɛ. Suggest a
+          Nayana shape that adds a clear rhoticity stroke to the ɛ
+          body without mirroring it.
+        - ɚ is turned-r-with-hook. Rotation of r. Suggest a glyph that
+          combines the schwa baseline-stroke with a small rhoticity
+          mark, distinct from r.
+        Recorded for the font ticket.
+
+    rules:
+      # ----- ɝ (stressed) -----
+      - name: "er→ɝ (when stressed /ɝ/)"
+        phoneme: "ER+"
+        from: "er"
+        to: "ɝ"
+        examples:
+          - { before: "her",      after: "hɝ" }
+          - { before: "were",     after: "wɝ" }
+          - { before: "person",   after: "pɝsən" }
+          - { before: "term",     after: "tɝm" }
+
+      - name: "ir→ɝ (when stressed /ɝ/)"
+        phoneme: "ER+"
+        from: "ir"
+        to: "ɝ"
+        examples:
+          - { before: "bird",   after: "bɝd" }
+          - { before: "girl",   after: "gɝl" }
+          - { before: "first",  after: "fɝst" }
+
+      - name: "ur→ɝ (when stressed /ɝ/)"
+        phoneme: "ER+"
+        from: "ur"
+        to: "ɝ"
+        examples:
+          - { before: "turn",    after: "tɝn" }
+          - { before: "fur",     after: "fɝ" }
+          - { before: "burn",    after: "bɝn" }
+
+      - name: "or→ɝ (when stressed /ɝ/)"
+        phoneme: "ER+"
+        from: "or"
+        to: "ɝ"
+        examples:
+          - { before: "work",    after: "wɝk" }
+          - { before: "word",    after: "wɝd" }
+          - { before: "world",   after: "wɝld" }
+        exceptions:
+          - { word: "for",   reason: "or is /AO/+/R/ (separate pairs); no 'or' grapheme to match" }
+          - { word: "more",  reason: "same — alignment splits o and r" }
+
+      - name: "ar→ɝ (when stressed /ɝ/)"
+        phoneme: "ER+"
+        from: "ar"
+        to: "ɝ"
+        examples:
+          - { before: "heard",   after: "hɝd" }
+          - { before: "earth",   after: "ɝθ" }
+          - { before: "learn",   after: "lɝn" }
+        notes: >
+          Words like 'heard', 'earth', 'learn' align as e}∅ ar}ER1.
+          Phase 6's silent-e drops the e; this rule catches the
+          'ar' that's left, which in these words carries the stressed
+          rhotic vowel.
+
+      # ----- ɚ (unstressed) -----
+      - name: "er→ɚ (when /ɚ/)"
+        phoneme: "ER0"
+        from: "er"
+        to: "ɚ"
+        examples:
+          - { before: "teacher",  after: "tiːtʃɚ" }
+          - { before: "mother",   after: "mʌðɚ" }
+          - { before: "summer",   after: "sʌmɚ" }
+          - { before: "philosopher", after: "fəlosəfɚ" }
+
+      - name: "ar→ɚ (when /ɚ/)"
+        phoneme: "ER0"
+        from: "ar"
+        to: "ɚ"
+        examples:
+          - { before: "dollar",  after: "dolɚ" }
+          - { before: "sugar",   after: "ʃʊgɚ" }
+          - { before: "liar",    after: "laiɚ" }
+
+      - name: "or→ɚ (when /ɚ/)"
+        phoneme: "ER0"
+        from: "or"
+        to: "ɚ"
+        examples:
+          - { before: "doctor",  after: "doktɚ" }
+          - { before: "factor",  after: "fæktɚ" }
+
+      - name: "ir→ɚ (when /ɚ/)"
+        phoneme: "ER0"
+        from: "ir"
+        to: "ɚ"
+        notes: >
+          Rare in English (most ir is stressed). Included for symmetry
+          so any rare unstressed cases align cleanly to ɚ.
+
+      - name: "ur→ɚ (when /ɚ/)"
+        phoneme: "ER0"
+        from: "ur"
+        to: "ɚ"
+        notes: >
+          Rare in English (most ur is stressed). Same symmetry note.
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+      At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
+
+      The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
+
+      On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
+
+      That night, after the philosopher had gone, the child sat with her mother and her three brothers. They had thought about the things he said — about every word being half schwa — and now they wondered about the rest. What about 'this', what about 'that'? What about the breath and the thought? Both seemed worth thinking about together. The mother smiled and said nothing. The brothers shrugged. The child looked at the lantern, and at her own breath in the cold air, and understood that the truth of every word was already there in the way she said it.
+
+      The next spring, the teacher came from the city. She spoke about nature and machines, about the vision of long English summers, about the question of treasure and measure. She would speak of fish and of the cheap shops by the bridge, of the special ocean shells the children would catch and the pleasure of the long song they would sing each evening. Every chapter of the lesson was a fresh thing: action and tension and decision, much and motion and music, the things a young brain could think and ask. The shepherd watched the teacher with attention. The plumber listened. The mother held her daughter's hand. The crane, watching from the wagon, opened one eye, and then closed it again.
+
+      That summer the child judged the village fair. She watched the older boys jump from bridge to bridge, the red cat sit on the wooden bench, the man at the magic stall pull a rabbit from a black hat. She loved every minute. She put a foot in the cool stream, ate her bread on a small bed of moss, and laughed when the crane landed on her thumb. Her mother came back from the village with a full basket, and said: come home, my love. The page of the day, like every page, was already turning.
+
+      In the autumn, her brother taught her the names of the birds. She would learn the words of every singer that arrived: the warbler in the cedar, the heron at the river, the thrush whose song her mother said was earth itself. The teacher showed her how to write the words on paper, and the philosopher showed her how to speak them. The world turned, the season turned, and the girl turned with them, surer of herself with every word she heard.
