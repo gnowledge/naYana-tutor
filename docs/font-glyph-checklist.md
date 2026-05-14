@@ -67,7 +67,7 @@ doesn't have to relitigate them:
 | æ | U+00E6 | /æ/ | cat → kæt | 13 | ☑ | ☑ | **DECIDED**: render as Latin `a` shape (cat reads as "kat"). Latin a is unused standalone in current Nayana output — only appears in `ai`/`au` digraphs, which is consistent with English's existing a-for-/æ/ convention |
 | ʌ | U+028C | stressed /ʌ/ | cup → kʌp | 13 | ☑ | ☑ | Rotation-of-v concern. Suggested: wedge with downward opening, longer base |
 | ɝ | U+025D | stressed r-colored | bird → bɝd | 14 | ☑ | ☑ | **DECIDED**: two V-shapes stacked vertically with a gap, like `:` but with V's instead of dots. Top is `∨` (arms up, point down toward the gap); bottom is `∧` (arms down, point up toward the gap). Like the letter `x` cut horizontally in half with the middle removed. The gap visualises "r is there but not there" — r-coloration without full articulation. |
-| ɚ | U+025A | unstressed r-colored | teacher → tiːtʃɚ | 14 | ☑ | ☑ | **OPEN** — see [R-colored vowels brainstorm](#r-colored-vowels-ɝ-and-ɚ) below. The lighter half of the pair. |
+| ɚ | U+025A | unstressed r-colored | teacher → tiːtʃɚ | 14 | ☑ | ☑ | **DECIDED**: two small hollow circles (degree-symbol size, `°`) stacked vertically with a gap — like a colon `:` with outlines drawn instead of filled dots. The lighter pair to ɝ's V-stack: same vertical-gap structure, hollow circles instead of solid V-points to signal the unstressed quality. |
 | ɔ | U+0254 | open /ɔ/ | call → kɔːl | 16 | ☑ | ☐ | Open o — distinct from o |
 | ɑ | U+0251 | cardinal /ɑ/ | hot → hɑːt | 16 | ☑ | ☑ | **DECIDED**: render as Greek `α` shape, drawn closer to the infinity sign `∝` (curl-with-extension form) so it reads visibly distinct from Latin a. Greek α matches the IPA's own one-story tradition and gives "hot" → "hαːt" |
 | ɔɪ | ɔ + ɪ | /ɔɪ/ diphthong | boy → bɔɪ | 16 | ☑ | ☐ | Composed of ɔ and ɪ — could ligate or render sequentially |
@@ -78,7 +78,7 @@ doesn't have to relitigate them:
 
 **Total IPA characters in the engine**: 19 (7 consonants + 12 vowel-related, including the length marker and one diphthong).
 
-**Decided shapes** (7 IPA codepoints + 1 Latin letter):
+**Decided shapes** (8 IPA codepoints + 1 Latin letter):
 
 | Character | Designed shape | Reason |
 |-----------|----------------|--------|
@@ -89,15 +89,15 @@ doesn't have to relitigate them:
 | æ | Latin `a` shape | a unused standalone in output; matches English's a-for-/æ/ |
 | ɑ | Greek `α` (closer to `∝` infinity) | Phonetic match for cardinal /a/; visually distinct from Latin a |
 | ɝ | Two V's stacked vertically (∨ above ∧) with a gap | Like `:` but V's instead of dots; gap signals not-quite-r |
+| ɚ | Two hollow circles (degree-symbol size) stacked vertically with a gap | Like `:` with outlined dots; lighter pair to ɝ's V-stack |
 | Latin `d` | Greek capital `Δ` | b/d mirror avoidance; ties to ð→δ family |
 
-**Still open** (3 characters):
+**Still open** (2 characters):
 
 | Character | Status | Notes |
 |-----------|--------|-------|
 | ŋ | open | Refined extension of n (sketch only) |
 | ʌ | open | Wedge with downward opening, longer base (sketch only) |
-| ɚ | open | Pair with ɝ; one of the remaining brainstorm options below |
 
 The remaining 9 IPA characters (θ, ʃ, ʒ, ː, ɪ, ʊ, ɛ, ɔ, ɔɪ) are
 visually distinct in standard IPA fonts and may not strictly
@@ -143,6 +143,7 @@ codepoints from Greek's small letters).
 | `æ` (U+00E6) | Latin `a` shape | Latin a is unused standalone in current output (only appears in `ai`/`au` digraphs). Matches English's existing a-for-/æ/ convention: cat reads as "kat". |
 | `ɑ` (U+0251) | Greek `α` (closer to `∝` infinity sign) | Phonetic match for the cardinal /a/. Drawn with the curl-with-extension form so it's clearly distinct from Latin a. hot reads as "hαːt". |
 | `ɝ` (U+025D) | Two V-shapes stacked vertically (∨ over ∧) with a gap between | Direct visual analogue of `:` (two stacked dots) — but V-shapes instead of dots. Top is `∨` with arms reaching up and point at bottom; bottom is `∧` with arms reaching down and point at top; the two points face each other across a vertical gap. Equivalent: the letter `x` cut in half horizontally, middle removed. The gap is the "r is there but not there" — r-coloration without articulation. |
+| `ɚ` (U+025A) | Two hollow circles (`°`-size) stacked vertically with a gap between | Direct visual analogue of `:` with the dots drawn as outlines instead of filled. Pairs with ɝ's V-stack: same vertical-stack-with-gap structure, but circles instead of points to signal the lighter, unstressed quality of the unstressed r-colored vowel. teacher reads as "tiːc°°" (with the trailing pair representing the rhotic schwa). |
 
 | Latin codepoint | Designed font shape | Reason |
 |-----------------|---------------------|--------|
@@ -150,7 +151,7 @@ codepoints from Greek's small letters).
 
 ## Open design questions
 
-### R-colored vowels — ɝ decided, ɚ still open
+### R-colored vowels — both ɝ and ɚ decided
 
 These two IPA characters represent r-coloration applied to a vowel —
 a quality of the vowel itself rather than a separate /r/ consonant.
@@ -158,7 +159,14 @@ The visual idea is to mark the "r-colored but not fully articulated"
 quality with a paired gap shape, analogous to the way the length
 marker `ː` uses paired dots.
 
-**ɝ (stressed, bird → bɝd) — DECIDED**:
+Both shapes share the same structure (vertically stacked elements
+with a gap between, like `:`); the difference is in the visual
+weight of the elements:
+
+- **ɝ (stressed, bird → bɝd)** — pointed V's: heavier, more present
+- **ɚ (unstressed, teacher → tiːtʃɚ)** — hollow circles: lighter, more absent
+
+**ɝ (stressed) — DECIDED**:
 
 Two V-shapes stacked **vertically** with a gap between, exactly the
 way `:` is two dots stacked vertically — but V's instead of dots.
@@ -171,20 +179,30 @@ with the middle removed — the upper and lower halves of x remain
 but no longer touch. The gap signals "r is there but not there" —
 r-coloration without a fully articulated /r/.
 
-**ɚ (unstressed, teacher → tiːtʃɚ) — OPEN**:
+**ɚ (unstressed) — DECIDED**:
 
-Should pair visually with ɝ but signal the lighter, unstressed
-quality. Remaining options from the original brainstorm:
+Two small hollow circles (degree-symbol size, like `°`) stacked
+vertically with a gap between — like a colon `:` with its dots
+drawn as outlines instead of filled. The lighter pair to ɝ's
+V-stack: same vertical-stack-with-gap structure, but rounded and
+hollow instead of pointed and solid, signalling the lighter
+unstressed quality.
 
-- Two small circles stacked vertically (like the degrees symbol `°` paired)
+<!-- Original brainstorm preserved below for reference; the
+     "two stacked circles" option was selected. -->
+
+Brainstorm options that were considered for ɚ:
+
+- Two small circles stacked vertically (like the degrees symbol `°` paired) — **selected**
 - Two small vertical bars with a gap (like `‖` but smaller, with whitespace between)
 - Some lighter form of the ɝ V-stack (smaller V's, dotted, or hollow)
 
-The heuristic is "lighter mark for the unstressed form" so the
-reader's eye can register stress visually.
+The heuristic was "lighter mark for the unstressed form" so the
+reader's eye can register stress visually. The hollow circles
+selected pair cleanly with ɝ's solid V's.
 
 ### Other open shape questions
 
-The 11 IPA characters not pre-flagged for new shape (θ, ʃ, ʒ, ː, ɪ,
-ʊ, ɛ, æ, ɔ, ɑ, ɔɪ) render acceptably in standard IPA fonts. Whether
+The 9 IPA characters not pre-flagged for new shape (θ, ʃ, ʒ, ː, ɪ,
+ʊ, ɛ, ɔ, ɔɪ) render acceptably in standard IPA fonts. Whether
 to give them consistent Nayana treatment is a font-phase question.
