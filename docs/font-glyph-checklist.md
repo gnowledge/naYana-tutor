@@ -19,31 +19,55 @@ To mark a decision: replace ☐ with ☑ in the relevant cell.
 
 ---
 
+## Design principles
+
+Constraints on font shape choices, recorded so the design phase
+doesn't have to relitigate them:
+
+- **Avoid mirror symmetries.** Pairs like `b/d` and `p/q` create
+  reading confusion (a known cause of dyslexia-adjacent difficulties).
+  Where the Latin form has a mirror partner already in use, design a
+  non-mirror replacement.
+- **Avoid rotational symmetries.** The 180° rotation of `e` is `ə`;
+  the rotation of `v` is `ʌ`. The Nayana shapes for these characters
+  must not be rotations of any letter the reader already knows.
+- **Reuse unused Latin letter slots as font glyphs.** Latin letters
+  that don't appear in current Nayana output (`c`, `j`, `q`, `x`)
+  are available as glyph slots — either as ligatures for IPA digraphs
+  or as the rendering shape for IPA codepoints with phonetic
+  precedent in another script tradition.
+- **Greek capital letters are free for IPA renderings.** IPA is a
+  case-less script (no capital/small distinction). Where a Greek
+  capital provides a clean shape with no IPA conflict, it can be
+  used as the visual form of an IPA codepoint.
+
+---
+
 ## Consonants
 
 | Symbol | Codepoint | Phoneme | Example | Phase | Keep | New shape | Notes |
 |--------|-----------|---------|---------|-------|:----:|:---------:|-------|
 | θ | U+03B8 | voiceless /θ/ (thin) | thin → θɪn | 11 | ☑ | ☐ | Greek theta — visually distinctive, may not need redesign |
-| ð | U+00F0 | voiced /ð/ (this) | this → ðɪs | 11 | ☑ | ☑ | Proposed shape: δ-like — curve over closed circle, easy to handwrite |
+| ð | U+00F0 | voiced /ð/ (this) | this → ðɪs | 11 | ☑ | ☑ | **DECIDED**: render as Greek small `δ` — curve over closed circle, easy to handwrite |
 | ʃ | U+0283 | /ʃ/ (sh) | ship → ʃɪp | 12 | ☑ | ☐ | Esh — already distinct |
 | ʒ | U+0292 | /ʒ/ (zh) | vision → vɪʒən | 12 | ☑ | ☐ | Ezh — already distinct |
 | ŋ | U+014B | /ŋ/ (ng) | sing → sɪŋ | 12 | ☑ | ☑ | Recorded for font: refined extension of n |
-| tʃ | t + ʃ | /tʃ/ (ch) | chip → tʃɪp | 12 | ☑ | ☑ | Ligature: single Nayana glyph for the digraph |
-| dʒ | d + ʒ | /dʒ/ (j) | judge → dʒʌdʒ | 13 | ☑ | ☑ | Ligature: matches tʃ treatment |
+| tʃ | t + ʃ | /tʃ/ (ch) | chip → tʃɪp | 12 | ☑ | ☑ | **DECIDED**: ligature renders as Latin `c` shape (Sanskrit IAST tradition; c is unused in current Nayana output) |
+| dʒ | d + ʒ | /dʒ/ (j) | judge → dʒʌdʒ | 13 | ☑ | ☑ | **DECIDED**: ligature renders as Latin `j` shape (Sanskrit IAST tradition; j is unused in current Nayana output) |
 
 ## Vowels
 
 | Symbol | Codepoint | Phoneme | Example | Phase | Keep | New shape | Notes |
 |--------|-----------|---------|---------|-------|:----:|:---------:|-------|
 | ː | U+02D0 | length marker | meet → miːt | 8 / 9 | ☑ | ☐ | Triangular colon — pairs with iː uː ɔː ɑː |
-| ə | U+0259 | schwa | about → əbaut | 10 | ☑ | ☑ | Proposed shape: baseline two-stroke (`=`-like), extending the vowel-marker stroke |
+| ə | U+0259 | schwa | about → əbaut | 10 | ☑ | ☑ | **DECIDED**: baseline two-stroke (`=`-like at baseline), extending the vowel-marker stroke. Avoids the rotational-of-e shape. |
 | ɪ | U+026A | short /ɪ/ | bit → bɪt | 13 | ☑ | ☐ | Small-cap I — distinct from i |
 | ʊ | U+028A | short /ʊ/ | book → bʊk | 13 | ☑ | ☐ | Turned omega — not a Latin rotation |
 | ɛ | U+025B | short /ɛ/ | bed → bɛd | 13 | ☑ | ☐ | Latin epsilon — distinct from e |
 | æ | U+00E6 | /æ/ | cat → kæt | 13 | ☑ | ☐ | Ash ligature — already in Latin-1 |
 | ʌ | U+028C | stressed /ʌ/ | cup → kʌp | 13 | ☑ | ☑ | Rotation-of-v concern. Suggested: wedge with downward opening, longer base |
-| ɝ | U+025D | stressed r-colored | bird → bɝd | 14 | ☑ | ☑ | Reversed-ɛ-with-hook. Suggested: extend ɛ body with rhoticity stroke without mirroring |
-| ɚ | U+025A | unstressed r-colored | teacher → tiːtʃɚ | 14 | ☑ | ☑ | Schwa-with-hook. Suggested: combine baseline schwa shape with rhoticity hook, distinct from r |
+| ɝ | U+025D | stressed r-colored | bird → bɝd | 14 | ☑ | ☑ | **OPEN** — see [R-colored vowels brainstorm](#r-colored-vowels-ɝ-and-ɚ) below. Family of paired-mark proposals (wedges, circles, vertical bars). |
+| ɚ | U+025A | unstressed r-colored | teacher → tiːtʃɚ | 14 | ☑ | ☑ | **OPEN** — see [R-colored vowels brainstorm](#r-colored-vowels-ɝ-and-ɚ) below. The lighter half of the pair. |
 | ɔ | U+0254 | open /ɔ/ | call → kɔːl | 16 | ☑ | ☐ | Open o — distinct from o |
 | ɑ | U+0251 | cardinal /ɑ/ | hot → hɑːt | 16 | ☑ | ☐ | Script a — distinct from two-story a |
 | ɔɪ | ɔ + ɪ | /ɔɪ/ diphthong | boy → bɔɪ | 16 | ☑ | ☐ | Composed of ɔ and ɪ — could ligate or render sequentially |
@@ -54,23 +78,29 @@ To mark a decision: replace ☐ with ☑ in the relevant cell.
 
 **Total IPA characters in the engine**: 19 (7 consonants + 12 vowel-related, including the length marker and one diphthong).
 
-**Pre-flagged for new Nayana shape design** (8 characters):
+**Status of the 8 characters flagged for new shape design**:
 
-| Character | Why |
-|-----------|-----|
-| ð | Proposed δ-like baseline shape |
-| ŋ | Custom extension of n |
-| tʃ | Ligature for the digraph |
-| dʒ | Ligature for the digraph |
-| ə | Baseline two-stroke (`=`-like) extension of vowel marker |
-| ʌ | Rotation-of-v — needs distinct wedge form |
-| ɝ | Reversed-ɛ — needs non-mirror rhoticity mark |
-| ɚ | Turned-r — needs distinct rhoticity-with-schwa shape |
+| Character | Status | Designed shape |
+|-----------|--------|----------------|
+| ð | **decided** | Greek small `δ` |
+| tʃ | **decided** | Latin `c` shape (font ligature) |
+| dʒ | **decided** | Latin `j` shape (font ligature) |
+| ə | **decided** | Baseline two-stroke (`=`-like) |
+| ŋ | open | Refined extension of n (sketch only) |
+| ʌ | open | Wedge with downward opening, longer base (sketch only) |
+| ɝ | open | See R-colored vowels brainstorm below |
+| ɚ | open | See R-colored vowels brainstorm below |
 
-The remaining 11 characters are visually distinct in standard IPA fonts
-and may not strictly require new shapes — but a consistent Nayana
-treatment across the whole inventory is worth considering when the
-font phase begins.
+**Plus one Latin letter customization**:
+
+| Letter | Designed shape | Reason |
+|--------|----------------|--------|
+| Latin `d` | Greek capital `Δ` shape | b/d mirror avoidance; ties to ð → δ family |
+
+The remaining 11 IPA characters (θ, ʃ, ʒ, ː, ɪ, ʊ, ɛ, æ, ɔ, ɑ, ɔɪ)
+are visually distinct in standard IPA fonts and may not strictly
+require new shapes — but a consistent Nayana treatment across the
+whole inventory is worth considering when the font phase begins.
 
 ## Latin-letter digraphs (no new IPA codepoints)
 
@@ -91,3 +121,45 @@ may want ligature treatment for some, but no new codepoints needed.
 | ks | /ks/ | boks | k + s |
 | gz | /gz/ | ɛgzɪt | g + z |
 | juː | /juː/ | juːs | j + u + ː |
+
+---
+
+## Latin letter shape customizations
+
+Latin letters whose Comic Neue default shape is replaced with a
+Nayana design — for readability, mirror-avoidance, or to render an
+IPA codepoint as a Latin-letter shape via ligature.
+
+| Codepoint(s) emitted by engine | Designed font shape | Reason |
+|--------------------------------|---------------------|--------|
+| IPA `tʃ` (t + ʃ digraph) | Latin `c` shape | Sanskrit IAST tradition; c is unused in current Nayana output (phase 2 c→k or c→s removed it). Engine still emits canonical IPA `tʃ`; the font ligates the two-character sequence into one `c`-shaped glyph. |
+| IPA `dʒ` (d + ʒ digraph) | Latin `j` shape | Sanskrit IAST tradition; j is unused in current Nayana output (we use Y for the consonant /j/). Engine emits `dʒ`; font ligates to a `j`-shaped glyph. |
+| Latin `d` (U+0064) | Greek capital `Δ` shape | The Latin `d` shape is the mirror of `b`. Replacing the glyph with capital delta breaks the mirror confusion. Ties visually to the ð → δ family (both delta-related shapes for the alveolar/dental d-sounds). IPA being case-less, capital delta has no IPA conflict. |
+
+## Open design questions
+
+### R-colored vowels (ɝ and ɚ)
+
+These two IPA characters represent r-coloration applied to a vowel —
+a quality of the vowel itself rather than a separate /r/ consonant.
+Since the r is "not produced as a separate sound," the font can
+visually mark it as a paired gap-style mark to the right, analogous
+to how the length marker `ː` uses paired dots.
+
+Brainstormed options for the gap-style mark (one for stressed ɝ,
+one for unstressed ɚ — each has its own twist):
+
+- **Two small wedges facing opposite** (like `>` and `<` or `▷ ◁` stacked)
+- **Two small circles stacked vertically** (like the degrees symbol `°` paired)
+- **Two small vertical bars with a gap** (like `‖` but smaller, with whitespace between)
+
+Which mark goes with which form (stressed vs unstressed) is open. One
+plausible heuristic: the visually heavier mark (filled wedges, solid
+circles) for the stressed `ɝ`, the lighter mark (vertical bars,
+hollow circles) for the unstressed `ɚ`.
+
+### Other open shape questions
+
+The 11 IPA characters not pre-flagged for new shape (θ, ʃ, ʒ, ː, ɪ,
+ʊ, ɛ, æ, ɔ, ɑ, ɔɪ) render acceptably in standard IPA fonts. Whether
+to give them consistent Nayana treatment is a font-phase question.
