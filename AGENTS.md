@@ -52,9 +52,22 @@ phase rule system is in the preprocessor; the font supplies glyphs.
 others come later. Schwa (/ə/) and stressed schwa (/ʌ/) are distinct
 phonemes following CMUdict's distinction.
 
-**`y` is consonant-only in Nayana.** `y` represents /j/ only (yes,
-yellow). The vowel uses of `y` (happy, gym, my) get rewritten to the
-appropriate vowel glyph in a later phase. No conditional behavior.
+**`y` is the canonical letter for /j/. `j` is reserved for the dʒ
+ligature.** Two halves of one decision:
+
+- `y` is consonant-only in Nayana — represents /j/ only. Holds for
+  input y (yes, yellow stays as `y`) AND for engine-inserted /j/
+  (use → yuːs, cute → kyuːt, music → myuːzɪk). Vowel uses of input
+  y (happy, gym, my) get rewritten to the appropriate vowel glyph
+  by phases 5/9/17 (y → ai when /aɪ/, y → iː when /iː/, y → ɪ when /ɪ/).
+- `j` never appears bare in Nayana output. Input `j` is converted to
+  the dʒ digraph by phase 13 (judge → dʒʌdʒ); the font then ligates
+  d+ʒ to a single `j`-shaped glyph. So the visual `j` shape on the
+  page always means /dʒ/, never /j/.
+
+Any new rule that emits a /j/ phoneme into the spelling MUST emit
+the letter `y`, not `j`. Failing to do so creates a real
+ambiguity — readers parse a bare `j` as /dʒ/ via the ligature.
 
 **Diphthongs are emergent, not engineered.** Adjacent vowel glyphs with
 the vowel_marker (ss01) feature visually run together because of the
