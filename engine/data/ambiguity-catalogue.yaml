@@ -1955,3 +1955,167 @@ phases:
       The final winter, the music of the village had become something new. Letters arrived from far cities, written in a script that doubled no consonants, dropped no silent letters, and added the small marks for every breath of every word. The teacher read them aloud to the children. The plumber kept the letters in a box near the kitchen. The crane watched from the doorway. The mother said: he taught us to listen. The girl, who was no longer a girl, took the letters in her hands, and read them to herself, and answered each one in the same script. Every word she wrote came out exactly the way she said it.
 
       Years later, on a small farm beyond the long river, the woman who had been the girl walked with her own daughter to the calm palm grove behind the warm yellow walls of the kitchen. The lot was full of wild salmon and old dogs and the small voice of every bird. She thought of the philosopher, of the teacher, of her mother, of all who had taught her how to read and how to listen. The boy at the door of the workshop said: father is calling. The woman bent down and kissed her daughter's hair, and walked into the soft light of the autumn yard, and answered the call with all the joy of a thought finally caught.
+
+  - number: 17
+    name: "voicing and -ed cleanup — s→z, ed→t, ss→ʃ, silent-s, y→ɪ, e→ɪ"
+    description: "Six small rules closing high-frequency loose ends: voicing of s to z (plurals, music, was), past-tense -ed contraction, ss-to-ʃ for assurance, silent-s for mission, and short-i marking on y and e where the alignment needs it."
+    rationale: >
+      With every English vowel phoneme in IPA after phase 16, what's
+      left is a handful of high-frequency cleanups that have been
+      flagged across phases. Phase 17 sweeps them up:
+
+      Voicing:
+        s → z when /Z/  catches every voiced 's': plurals (dogs → dogz),
+                        copulas (was → wɑːz, is → ɪz, his → hɪz),
+                        intervocalic (rose → rouz, music → mjuːzɪk,
+                        prison → prɪzən, easy → iːziː).
+
+      Past tense -ed:
+        ed → t when /T/  walked → wɔːkt, kicked → kɪkt, helped → hɛlpt,
+                          baked → beikt. The other -ed alignments
+                          (e}∅ d}D for played; e}AH0 d}D for needed;
+                          e}IH0 d}D for wanted) compose with prior
+                          phases — the new e→ɪ rule below catches
+                          the wanted-style case.
+
+      Sibilants:
+        ss → ʃ when /SH/  assurance → əʃʊrəns. The mission-family
+                          words (mission, passion, session, expression)
+                          align as s}∅ si}SH — handled via the new
+                          silent-s rule below plus phase 12's si→ʃ.
+        s  → ∅ (silent)   mission, passion, session, expression,
+                          science (the leading silent s).
+
+      Vowel cleanup:
+        y → ɪ when /IH/   hymn → hɪm, gym → dʒɪm, syntax → sɪntæks,
+                          myth → mɪθ, crystal → krɪstəl, symbol → sɪmbəl.
+                          Completes the project rule that vowel y
+                          always has a Latin partner (phase 5: y → ai
+                          for /aɪ/, phase 9: y → iː for /iː/, now ɪ
+                          for /ɪ/).
+        e → ɪ when /IH/   wanted → wɔːntɪd, lifted → lɪftɪd, roses
+                          → rouzɪz, because → bɪkɔːz. Mirror of the
+                          y → ɪ rule for grapheme 'e'.
+
+    rules:
+      - name: "s→z (when /z/)"
+        phoneme: "Z"
+        from: "s"
+        to: "z"
+        examples:
+          - { before: "dogs",   after: "dɔːgz" }
+          - { before: "is",     after: "ɪz" }
+          - { before: "his",    after: "hɪz" }
+          - { before: "was",    after: "wɑːz" }
+          - { before: "rose",   after: "rouz" }
+          - { before: "music",  after: "mjuːzɪk" }
+          - { before: "easy",   after: "iːziː" }
+        notes: >
+          Major visual change for English text: every plural with a
+          voiced ending (dogz, runz, plays → pleiz) and every copula
+          (is, was, his, has) gets the z. Intervocalic s in music,
+          rose, easy, busy, prison, Jesus also fires.
+
+      - name: "ed→t (when past-tense /t/)"
+        phoneme: "T"
+        from: "ed"
+        to: "t"
+        examples:
+          - { before: "walked",  after: "wɔːkt" }
+          - { before: "kicked",  after: "kɪkt" }
+          - { before: "helped",  after: "hɛlpt" }
+          - { before: "baked",   after: "beikt" }
+          - { before: "watched", after: "wɑːtʃt" }
+        notes: >
+          Past-tense -ed has three alignment patterns in CMUdict:
+          ed}T (voiceless ending — handled by this rule), e}∅ d}D
+          (voiced — silent-e from phase 6 + d), and e}IH0 d}D /
+          e}AH0 d}D (syllabic — schwa from phase 10 + d, plus the
+          new e→ɪ rule below). All three now produce clean output.
+
+      - name: "ss→ʃ (when /ʃ/)"
+        phoneme: "SH"
+        from: "ss"
+        to: "ʃ"
+        examples:
+          - { before: "assurance",  after: "əʃʊrəns" }
+
+      - name: "s→∅ (silent)"
+        phoneme: null
+        from: "s"
+        to: ""
+        examples:
+          - { before: "mission",     after: "mɪʃən" }
+          - { before: "passion",     after: "pæʃən" }
+          - { before: "session",     after: "sɛʃən" }
+          - { before: "expression",  after: "ɪksprɛʃən" }
+          - { before: "science",     after: "saɪəns" }
+        notes: >
+          Drops the silent-s in mission-family words (alignment
+          s}∅ si}SH — the first s is silent, then si→ʃ from phase 12).
+          Also catches the leading silent-s in 'science'.
+
+      - name: "y→ɪ (when /ɪ/)"
+        phoneme: "IH"
+        from: "y"
+        to: "ɪ"
+        examples:
+          - { before: "hymn",     after: "hɪm" }
+          - { before: "gym",      after: "dʒɪm" }
+          - { before: "syntax",   after: "sɪntæks" }
+          - { before: "myth",     after: "mɪθ" }
+          - { before: "crystal",  after: "krɪstəl" }
+          - { before: "symbol",   after: "sɪmbəl" }
+        notes: >
+          Completes the project rule that y is consonant-only in
+          Nayana. Phases 5 (y→ai for /aɪ/) and 9 (y→iː for /iː/)
+          covered the other vowel-y cases. This adds /ɪ/.
+
+      - name: "e→ɪ (when /ɪ/)"
+        phoneme: "IH"
+        from: "e"
+        to: "ɪ"
+        examples:
+          - { before: "wanted",   after: "wɔːntɪd" }
+          - { before: "lifted",   after: "lɪftɪd" }
+          - { before: "roses",    after: "rouzɪz" }
+          - { before: "because",  after: "bɪkɔːz" }
+        notes: >
+          Mirror of i→ɪ from phase 13 for the grapheme 'e'. Catches
+          the e in past-tense -ed words (wanted, lifted) and in
+          plural -es (roses, dishes), where Phonetisaurus marks the
+          vowel as /IH0/.
+    demoText: |
+      A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+      The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.
+
+      In the afternoon, the children kicked a black ball back and forth in the park. They ducked behind the broken clock, laughed at every tick of every second, and dared each other to climb the rocket statue. One wore a yellow jacket, another carried a stuffed duck, and the smallest stuffed pickles into the pocket of her backpack.
+
+      That evening, the plumber climbed up to the broken pipe. He tied a knot in the rope, wrapped a wreath around his wrist for luck, and wrote down what he saw. The shepherd's lamb had wandered into the wrong tomb again, and the knight on the wall painting just stared with his thumb on the hilt of his knife.
+
+      Through the night, by the light of a single bright lantern, the daughter of the plumber sat at the table and laughed at the tough riddles her father bought home from the market. She was eight, my child, and high on her own brightness. She would try to fly, find every rhyme in the sky, and cry only when the type of question stumped her. She thought the world was straight, and her father did not have the heart to tell her enough to think otherwise.
+
+      The next day, the same child made her way back to the lake. She came face to face with a great crane that took flight in the rain. She gave it a name — Grey — and stayed away from the train tracks where it played. They became friends. Each day she made her way to the same place, where the crane would wait by the gate.
+
+      The next sunrise, my heart was both heavy and light. I rode the slow boat across the round bay, watching the crowd of small boats sound their horns as they crossed each other's wake. Cows on the shore made low sounds. The whole town was awake. She found her way home through the early shadow of the old oak. She was a soul, around twelve, holding a yellow note that she would not let go.
+
+      At noon they took the new boat through the smooth blue lake. The food was simple: bread, fruit, soup made of cool root vegetables and a few moon-shaped biscuits. The soup spoon was too small, but no one would move to find another. Who, on such a blue day, would refuse?
+
+      The next week, she sat by the lake to read a story. The crane meanwhile was at the sea, eating fresh meat from the deep waves. They would meet at three each evening — she would bring tea and a key to the gate, and the crane would speak in the language of dreams. Each day was simple. Each day was complete.
+
+      On her tenth birthday the philosopher came again. He spoke about wagons and lemons, about the season's lessons in patience. The crane returned, balancing on the wagon's wooden rim, opening every present she had wrapped. There were sevens and circles and a small album of photographs. The shepherd brought a basket of fruit. The plumber brought a lantern. And the philosopher, who had been silent for a moment, finally spoke: every word you say, child, is already half schwa. The world has been whispering its rest position all along.
+
+      That night, after the philosopher had gone, the child sat with her mother and her three brothers. They had thought about the things he said — about every word being half schwa — and now they wondered about the rest. What about 'this', what about 'that'? What about the breath and the thought? Both seemed worth thinking about together. The mother smiled and said nothing. The brothers shrugged. The child looked at the lantern, and at her own breath in the cold air, and understood that the truth of every word was already there in the way she said it.
+
+      The next spring, the teacher came from the city. She spoke about nature and machines, about the vision of long English summers, about the question of treasure and measure. She would speak of fish and of the cheap shops by the bridge, of the special ocean shells the children would catch and the pleasure of the long song they would sing each evening. Every chapter of the lesson was a fresh thing: action and tension and decision, much and motion and music, the things a young brain could think and ask. The shepherd watched the teacher with attention. The plumber listened. The mother held her daughter's hand. The crane, watching from the wagon, opened one eye, and then closed it again.
+
+      That summer the child judged the village fair. She watched the older boys jump from bridge to bridge, the red cat sit on the wooden bench, the man at the magic stall pull a rabbit from a black hat. She loved every minute. She put a foot in the cool stream, ate her bread on a small bed of moss, and laughed when the crane landed on her thumb. Her mother came back from the village with a full basket, and said: come home, my love. The page of the day, like every page, was already turning.
+
+      In the autumn, her brother taught her the names of the birds. She would learn the words of every singer that arrived: the warbler in the cedar, the heron at the river, the thrush whose song her mother said was earth itself. The teacher showed her how to write the words on paper, and the philosopher showed her how to speak them. The world turned, the season turned, and the girl turned with them, surer of herself with every word she heard.
+
+      The final winter, the music of the village had become something new. Letters arrived from far cities, written in a script that doubled no consonants, dropped no silent letters, and added the small marks for every breath of every word. The teacher read them aloud to the children. The plumber kept the letters in a box near the kitchen. The crane watched from the doorway. The mother said: he taught us to listen. The girl, who was no longer a girl, took the letters in her hands, and read them to herself, and answered each one in the same script. Every word she wrote came out exactly the way she said it.
+
+      Years later, on a small farm beyond the long river, the woman who had been the girl walked with her own daughter to the calm palm grove behind the warm yellow walls of the kitchen. The lot was full of wild salmon and old dogs and the small voice of every bird. She thought of the philosopher, of the teacher, of her mother, of all who had taught her how to read and how to listen. The boy at the door of the workshop said: father is calling. The woman bent down and kissed her daughter's hair, and walked into the soft light of the autumn yard, and answered the call with all the joy of a thought finally caught.
+
+      The crane was old by the time the daughter learned to read. She wanted to know the words of every song her mother had sung — the rhymes about roses and dishes and music in the kitchen, the prayers her grandmother had spoken in the autumn dawn. The dog watched the bird, and the bird watched the dog, and the woman watched both. The girl asked about gym class, about the syntax of her hymn book, about the symbol of her family crest. Her mother answered each question with the patience of one who has been listened to. Because every answer, in this script, came out exactly as it sounded — and every word she had ever heard was already there, waiting to be written.
