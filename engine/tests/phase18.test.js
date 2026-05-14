@@ -149,10 +149,10 @@ test('CRITICAL: queue — irregular alignment, accept whatever', () => {
   // — phoneme is /Y/, our u→w rule fires when phoneme is /W/, not /Y/.
   // So u stays. silent-e. u→uː (phase 8, when /UW/). silent-e.
   // Result: k + u + (silent) + uː + (silent) = "kuuː"
-  // Then phase 15 uː→juː (when /Y/) — but the Y is on a different pair!
+  // Then phase 15 uː→yuː (when /Y/) — but the Y is on a different pair!
   // Phase 15 looks at the pair where graphemes is "uː" and phonemes
   // contains /Y/. Here, the "uː" pair has phonemes [UW1], not [Y].
-  // So uː→juː doesn't fire. Final: "kuuː". This is just queue's
+  // So uː→yuː doesn't fire. Final: "kuuː". This is just queue's
   // weirdness; accept it.
   // Actually, let me just check what it produces and accept.
   const out = rewrite('queue').spelling;
@@ -174,6 +174,6 @@ test('the → ðə still holds', () => {
   assert.equal(rewrite('the').spelling, 'ðə');
 });
 
-test('music → mjuːzɪk still holds', () => {
-  assert.equal(rewrite('music').spelling, 'mjuːzɪk');
+test('music → myuːzɪk still holds', () => {
+  assert.equal(rewrite('music').spelling, 'myuːzɪk');
 });

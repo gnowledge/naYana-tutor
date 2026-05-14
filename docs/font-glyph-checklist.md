@@ -119,7 +119,7 @@ may want ligature treatment for some, but no new codepoints needed.
 | ɑː | /ɑː/ | fɑːðɚ | ɑ + ː |
 | ks | /ks/ | boks | k + s |
 | gz | /gz/ | ɛgzɪt | g + z |
-| juː | /juː/ | juːs | j + u + ː |
+| yuː | /juː/ | yuːs | y + u + ː |
 
 ---
 

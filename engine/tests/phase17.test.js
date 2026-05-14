@@ -1,7 +1,7 @@
 /**
  * Phase 17 acid tests — voicing and -ed cleanup.
  *
- *   s → z   (when /Z/)         dogs → dogz, was → wɑːz, music → mjuːzɪk
+ *   s → z   (when /Z/)         dogs → dogz, was → wɑːz, music → myuːzɪk
  *   ed → t  (when past-tense /T/)  walked → wɔːkt, kicked → kɪkt
  *   ss → ʃ  (when /SH/)        assurance → əʃʊrəns
  *   s → ∅   (silent)           mission → mɪʃən, science → saɪəns
@@ -66,8 +66,8 @@ test('rose → rouz (silent-e + o→ou + s→z)', () => {
   assert.equal(rewrite('rose').spelling, 'rouz');
 });
 
-test('CRITICAL: music → mjuːzɪk (resolves the lingering "mjuːsɪk")', () => {
-  assert.equal(rewrite('music').spelling, 'mjuːzɪk');
+test('CRITICAL: music → myuːzɪk (resolves the lingering "mjuːsɪk")', () => {
+  assert.equal(rewrite('music').spelling, 'myuːzɪk');
 });
 
 test('easy → iːziː (ea→iː + s→z + y→iː)', () => {

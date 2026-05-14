@@ -1711,20 +1711,22 @@ phases:
           - { before: "exam",     after: "ɪgzæm" }
           - { before: "example",  after: "ɪgzæmpəl" }
 
-      - name: "uː→juː (when /j/+/uː/)"
+      - name: "uː→yuː (when /j/+/uː/)"
         phoneme: "Y"
         from: "uː"
-        to: "juː"
+        to: "yuː"
         examples:
-          - { before: "use",   after: "juːs" }
-          - { before: "cute",  after: "kjuːt" }
-          - { before: "music", after: "mjuːzɪk" }
-          - { before: "few",   after: "fjuː" }
+          - { before: "use",   after: "yuːs" }
+          - { before: "cute",  after: "kyuːt" }
+          - { before: "music", after: "myuːzɪk" }
+          - { before: "few",   after: "fyuː" }
         notes: >
           Phase 8 converts u-as-/UW/ to 'uː'. For words where the u
           carries both /j/ and /uː/ (use, music, cute, huge, few),
-          this rule runs after phase 8 and inserts the j marker.
-          Resolves the use→us collision flagged since phase 8.
+          this rule runs after phase 8 and inserts the /j/ marker.
+          Per Nayana convention, /j/ is the consonant `y` (not `j`,
+          which only appears via the dʒ font ligature). Resolves the
+          use→us collision flagged since phase 8.
     demoText: |
       A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
 

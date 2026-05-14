@@ -4,7 +4,7 @@
  *   9 geminate-collapse rules:    mm nn ll tt pp ss ff rr dd → single
  *   4 silent-letter epsilon rules: t o w d
  *   2 multi-letter silent rules:  bt → t, mn → m
- *   5 small wins:                 f→v, wh→h, x→ks, x→gz, uː→juː
+ *   5 small wins:                 f→v, wh→h, x→ks, x→gz, uː→yuː
  *
  * Skipped (require future vowel intros): silent-l (walk, talk, half).
  */
@@ -44,7 +44,7 @@ test('phase 15 catalogue extends with 21 cleanup rules', () => {
   assert.ok(names.includes('wh→h (when /h/)'));
   assert.ok(names.includes('x→ks (when /k/)'));
   assert.ok(names.includes('x→gz (when /g/)'));
-  assert.ok(names.includes('uː→juː (when /j/+/uː/)'));
+  assert.ok(names.includes('uː→yuː (when /j/+/uː/)'));
   assert.equal(phase15Rules.length, 100, 'rule count = 79 prior + 21 new');
 });
 
@@ -182,27 +182,28 @@ test('exit → ɛgzɪt (x→gz AND e→ɛ AND i→ɪ)', () => {
   assert.equal(rewrite('exit').spelling, 'ɛgzɪt');
 });
 
-test('CRITICAL: use → juːs (uː→juː after phase 8)', () => {
+test('CRITICAL: use → yuːs (uː→yuː after phase 8)', () => {
   // alignment: u}Y|UW1 s}S e}∅
   // Phase 8 u→uː fires (UW present): graphemes "uː", phonemes still [Y, UW1].
-  // Phase 15 uː→juː fires (Y present): graphemes "juː".
+  // Phase 15 uː→yuː fires (Y present): graphemes "yuː".
   // Phase 6 silent-e drops trailing e.
-  // Result: juːs. Resolves the use/us collision flagged since phase 8.
-  assert.equal(rewrite('use').spelling, 'juːs');
+  // Result: yuːs. Resolves the use/us collision flagged since phase 8.
+  // (Per Nayana convention, /j/ is the consonant `y`, not `j`.)
+  assert.equal(rewrite('use').spelling, 'yuːs');
 });
 
-test('cute → kjuːt', () => {
-  assert.equal(rewrite('cute').spelling, 'kjuːt');
+test('cute → kyuːt', () => {
+  assert.equal(rewrite('cute').spelling, 'kyuːt');
 });
 
-test('few → fjuː (silent-e from phase 6, w→uː from phase 8, then uː→juː)', () => {
-  assert.equal(rewrite('few').spelling, 'fjuː');
+test('few → fyuː (silent-e from phase 6, w→uː from phase 8, then uː→yuː)', () => {
+  assert.equal(rewrite('few').spelling, 'fyuː');
 });
 
-test('music → mjuːsɪk (s stays s; future s→z phase will give mjuːzɪk)', () => {
-  // alignment: m}M u}Y|UW1 s}Z i}IH0 c}K — c→k, i→ɪ, uː→juː
+test('music → myuːsɪk (s stays s; future s→z phase will give myuːzɪk)', () => {
+  // alignment: m}M u}Y|UW1 s}Z i}IH0 c}K — c→k, i→ɪ, uː→yuː
   // s is /Z/ but no s→z rule yet.
-  assert.equal(rewrite('music').spelling, 'mjuːsɪk');
+  assert.equal(rewrite('music').spelling, 'myuːsɪk');
 });
 
 // ---- Cross-phase composition --------------------------------------------
