@@ -27,3 +27,11 @@ p|h}F i}IH0 l}L o}AA1 s}S o}AH0 p|h}F e|r}ER0
 
 # philander → fɪlændɚ (was: fəlændɚ)
 p|h}F i}IH0 l}L a}AE1 n}N d}D e|r}ER0
+
+# ---- "english" — drop visually-redundant g ----
+# CMUdict has two alignments for "english": one separates n}NG g}G (two
+# consonants, /ŋ/+/g/, accurate for spoken GA), one combines n|g}NG (one
+# /ŋ/ digraph, no extra g). Engine takes the first by default, producing
+# "ɪŋglɪʃ" which reads visually as having a doubled g (ŋ's b-tail + g).
+# Override to use the digraph alignment so output is "ɪŋlɪʃ".
+e}IH1 n|g}NG l}L i}IH0 s|h}SH
