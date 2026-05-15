@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nayana — IPA character inventory</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Per-page polish: tables that show each character side-by-side in
+     Nayana font + system fallback so codepoint correctness is visible
+     at a glance. */
+  main { max-width: 1100px; margin: 24px auto; padding: 16px; }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  h2 { font-size: 17px; margin: 28px 0 8px; padding-bottom: 4px;
+       border-bottom: 1px solid #d8d8d2; }
+  p.lead { color: #555; margin: 0 0 16px; max-width: 60em; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 12px; }
+  th, td { padding: 7px 10px; border-bottom: 1px solid #ececec;
+           text-align: left; vertical-align: middle; font-size: 13px; }
+  th { background: #f3f3ee; font-weight: 600; font-size: 11px;
+       text-transform: uppercase; letter-spacing: 0.04em; color: #555; }
+  td.cp   { font-family: ui-monospace, monospace; color: #777; }
+  td.name { color: #555; }
+  td.note { color: #777; font-size: 12px; }
+  td.nay {
+    font-family: 'Nayana', serif;
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 32px;
+    text-align: center;
+    width: 60px;
+    background: #fdf7e0;
+  }
+  td.sys {
+    font-family: system-ui, sans-serif;
+    font-size: 32px;
+    text-align: center;
+    width: 60px;
+    color: #888;
+  }
+  td.sample {
+    font-family: 'Nayana', serif;
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 22px;
+  }
+  td.eng { font-family: ui-monospace, monospace; font-size: 12px; color: #777; }
+  .legend { display: flex; gap: 20px; align-items: center;
+            font-size: 12px; color: #777; margin-bottom: 16px; }
+  .legend span { display: inline-block; padding: 4px 8px;
+                 border-radius: 3px; }
+  .legend .nay-color { background: #fdf7e0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Nayana IPA character inventory</h1>
+  <p class="lead">
+    Every Unicode codepoint the engine emits in Nayana-rewritten output, with
+    its IPA name, function, Nayana glyph rendering, and a sample word from the
+    engine. This page is both documentation and a visual test — if any cell
+    in the <em>Nayana</em> column shows a fallback shape (different from the
+    designed Nayana glyph), the font is missing a glyph at that codepoint.
+  </p>
+  <div class="legend">
+    <span class="nay-color">Nayana font (with ss01 + liga)</span>
+    <span>System font (for codepoint comparison)</span>
+  </div>
+
+  <h2>Latin lowercase — base alphabet (Comic Neue, with d → Δ)</h2>
+  <p class="lead">Most Latin lowercase stays as Comic Neue inherited from the source.
+  The lowercase <strong>d</strong> codepoint (U+0064) is reshaped as Greek capital Δ
+  per the b/d-mirror-avoidance design principle.</p>
+  <table>
+    <thead><tr><th>Char</th><th>Codepoint</th><th>Glyph name</th><th>Nayana</th><th>System</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>a</td><td class="cp">U+0061</td><td class="name">a</td><td class="nay">a</td><td class="sys">a</td><td class="note">Comic Neue</td></tr>
+      <tr><td>b</td><td class="cp">U+0062</td><td class="name">b</td><td class="nay">b</td><td class="sys">b</td><td class="note">Comic Neue</td></tr>
+      <tr><td>c</td><td class="cp">U+0063</td><td class="name">c</td><td class="nay">c</td><td class="sys">c</td><td class="note">Comic Neue (also: ligature target for tʃ via OT liga)</td></tr>
+      <tr><td>d</td><td class="cp">U+0064</td><td class="name">d</td><td class="nay">d</td><td class="sys">d</td><td class="note"><strong>Reshaped as Δ</strong> — engine never emits literal d-shape</td></tr>
+      <tr><td>e</td><td class="cp">U+0065</td><td class="name">e</td><td class="nay">e</td><td class="sys">e</td><td class="note">Comic Neue</td></tr>
+      <tr><td>f</td><td class="cp">U+0066</td><td class="name">f</td><td class="nay">f</td><td class="sys">f</td><td class="note">Comic Neue</td></tr>
+      <tr><td>g</td><td class="cp">U+0067</td><td class="name">g</td><td class="nay">g</td><td class="sys">g</td><td class="note">Comic Neue</td></tr>
+      <tr><td>h</td><td class="cp">U+0068</td><td class="name">h</td><td class="nay">h</td><td class="sys">h</td><td class="note">Comic Neue</td></tr>
+      <tr><td>i</td><td class="cp">U+0069</td><td class="name">i</td><td class="nay">i</td><td class="sys">i</td><td class="note">Comic Neue</td></tr>
+      <tr><td>j</td><td class="cp">U+006A</td><td class="name">j</td><td class="nay">j</td><td class="sys">j</td><td class="note">Comic Neue (also: ligature target for dʒ via OT liga)</td></tr>
+      <tr><td>k</td><td class="cp">U+006B</td><td class="name">k</td><td class="nay">k</td><td class="sys">k</td><td class="note">Comic Neue</td></tr>
+      <tr><td>l</td><td class="cp">U+006C</td><td class="name">l</td><td class="nay">l</td><td class="sys">l</td><td class="note">Comic Neue</td></tr>
+      <tr><td>m</td><td class="cp">U+006D</td><td class="name">m</td><td class="nay">m</td><td class="sys">m</td><td class="note">Comic Neue</td></tr>
+      <tr><td>n</td><td class="cp">U+006E</td><td class="name">n</td><td class="nay">n</td><td class="sys">n</td><td class="note">Comic Neue</td></tr>
+      <tr><td>o</td><td class="cp">U+006F</td><td class="name">o</td><td class="nay">o</td><td class="sys">o</td><td class="note">Comic Neue</td></tr>
+      <tr><td>p</td><td class="cp">U+0070</td><td class="name">p</td><td class="nay">p</td><td class="sys">p</td><td class="note">Comic Neue</td></tr>
+      <tr><td>r</td><td class="cp">U+0072</td><td class="name">r</td><td class="nay">r</td><td class="sys">r</td><td class="note">Comic Neue</td></tr>
+      <tr><td>s</td><td class="cp">U+0073</td><td class="name">s</td><td class="nay">s</td><td class="sys">s</td><td class="note">Comic Neue</td></tr>
+      <tr><td>t</td><td class="cp">U+0074</td><td class="name">t</td><td class="nay">t</td><td class="sys">t</td><td class="note">Comic Neue</td></tr>
+      <tr><td>u</td><td class="cp">U+0075</td><td class="name">u</td><td class="nay">u</td><td class="sys">u</td><td class="note">Comic Neue</td></tr>
+      <tr><td>v</td><td class="cp">U+0076</td><td class="name">v</td><td class="nay">v</td><td class="sys">v</td><td class="note">Comic Neue</td></tr>
+      <tr><td>w</td><td class="cp">U+0077</td><td class="name">w</td><td class="nay">w</td><td class="sys">w</td><td class="note">Comic Neue</td></tr>
+      <tr><td>y</td><td class="cp">U+0079</td><td class="name">y</td><td class="nay">y</td><td class="sys">y</td><td class="note">Comic Neue — represents /j/ in Nayana</td></tr>
+      <tr><td>z</td><td class="cp">U+007A</td><td class="name">z</td><td class="nay">z</td><td class="sys">z</td><td class="note">Comic Neue</td></tr>
+    </tbody>
+  </table>
+
+  <h2>IPA vowels</h2>
+  <table>
+    <thead><tr><th>Char</th><th>Codepoint</th><th>IPA name</th><th>Phonetic function</th><th>Nayana</th><th>System</th><th>Sample word</th><th>Engine output</th></tr></thead>
+    <tbody>
+      <tr><td>æ</td><td class="cp">U+00E6</td><td class="name">ash / latin ae</td><td class="note">/æ/ as in cat</td><td class="nay">æ</td><td class="sys">æ</td><td class="sample">kæt</td><td class="eng">cat</td></tr>
+      <tr><td>ɑ</td><td class="cp">U+0251</td><td class="name">latin alpha</td><td class="note">/ɑː/ open back unrounded</td><td class="nay">ɑ</td><td class="sys">ɑ</td><td class="sample">hɑːt</td><td class="eng">hot</td></tr>
+      <tr><td>ə</td><td class="cp">U+0259</td><td class="name">schwa</td><td class="note">/ə/ unstressed mid-central</td><td class="nay">ə</td><td class="sys">ə</td><td class="sample">əbaut</td><td class="eng">about</td></tr>
+      <tr><td>ʌ</td><td class="cp">U+028C</td><td class="name">turned v</td><td class="note">/ʌ/ stressed schwa</td><td class="nay">ʌ</td><td class="sys">ʌ</td><td class="sample">kʌp</td><td class="eng">cup</td></tr>
+      <tr><td>ɛ</td><td class="cp">U+025B</td><td class="name">latin epsilon</td><td class="note">/ɛ/ as in bed</td><td class="nay">ɛ</td><td class="sys">ɛ</td><td class="sample">bɛd</td><td class="eng">bed</td></tr>
+      <tr><td>ɪ</td><td class="cp">U+026A</td><td class="name">small-cap I</td><td class="note">/ɪ/ as in bit</td><td class="nay">ɪ</td><td class="sys">ɪ</td><td class="sample">bɪt</td><td class="eng">bit</td></tr>
+      <tr><td>ʊ</td><td class="cp">U+028A</td><td class="name">latin upsilon</td><td class="note">/ʊ/ as in book</td><td class="nay">ʊ</td><td class="sys">ʊ</td><td class="sample">bʊk</td><td class="eng">book</td></tr>
+      <tr><td>ɔ</td><td class="cp">U+0254</td><td class="name">open o</td><td class="note">/ɔː/ as in call</td><td class="nay">ɔ</td><td class="sys">ɔ</td><td class="sample">kɔːl</td><td class="eng">call</td></tr>
+      <tr><td>ɝ</td><td class="cp">U+025D</td><td class="name">reversed-r-with-hook schwa</td><td class="note">stressed r-coloured</td><td class="nay">ɝ</td><td class="sys">ɝ</td><td class="sample">bɝd</td><td class="eng">bird</td></tr>
+      <tr><td>ɚ</td><td class="cp">U+025A</td><td class="name">schwa-with-hook</td><td class="note">unstressed r-coloured</td><td class="nay">ɚ</td><td class="sys">ɚ</td><td class="sample">tiːtʃɚ</td><td class="eng">teacher</td></tr>
+    </tbody>
+  </table>
+
+  <h2>IPA consonants</h2>
+  <table>
+    <thead><tr><th>Char</th><th>Codepoint</th><th>IPA name</th><th>Phonetic function</th><th>Nayana</th><th>System</th><th>Sample word</th><th>Engine output</th></tr></thead>
+    <tbody>
+      <tr><td>ð</td><td class="cp">U+00F0</td><td class="name">eth</td><td class="note">voiced dental fricative /ð/</td><td class="nay">ð</td><td class="sys">ð</td><td class="sample">ðɪs</td><td class="eng">this</td></tr>
+      <tr><td>θ</td><td class="cp">U+03B8</td><td class="name">small theta</td><td class="note">voiceless dental fricative /θ/</td><td class="nay">θ</td><td class="sys">θ</td><td class="sample">θɪn</td><td class="eng">thin</td></tr>
+      <tr><td>ʃ</td><td class="cp">U+0283</td><td class="name">esh</td><td class="note">voiceless postalveolar /ʃ/</td><td class="nay">ʃ</td><td class="sys">ʃ</td><td class="sample">ʃɪp</td><td class="eng">ship</td></tr>
+      <tr><td>ʒ</td><td class="cp">U+0292</td><td class="name">ezh</td><td class="note">voiced postalveolar /ʒ/</td><td class="nay">ʒ</td><td class="sys">ʒ</td><td class="sample">vɪʒən</td><td class="eng">vision</td></tr>
+      <tr><td>ŋ</td><td class="cp">U+014B</td><td class="name">eng</td><td class="note">velar nasal /ŋ/</td><td class="nay">ŋ</td><td class="sys">ŋ</td><td class="sample">sɪŋ</td><td class="eng">sing</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Length marker</h2>
+  <table>
+    <thead><tr><th>Char</th><th>Codepoint</th><th>IPA name</th><th>Function</th><th>Nayana</th><th>System</th><th>Sample word</th><th>Engine output</th></tr></thead>
+    <tbody>
+      <tr><td>ː</td><td class="cp">U+02D0</td><td class="name">triangular colon</td><td class="note">marks long vowel</td><td class="nay">ː</td><td class="sys">ː</td><td class="sample">miːt</td><td class="eng">meet</td></tr>
+    </tbody>
+  </table>
+
+  <h2>OpenType ligatures (digraphs that render as a single glyph)</h2>
+  <p class="lead">Two IPA digraphs are common enough that the font ligates them via a
+  GSUB <code>liga</code> lookup. The underlying text still contains both
+  characters — only the visual rendering combines them.</p>
+  <table>
+    <thead><tr><th>Sequence</th><th>Codepoints</th><th>IPA</th><th>Renders as</th><th>Sample word</th><th>Engine output</th></tr></thead>
+    <tbody>
+      <tr><td>tʃ</td><td class="cp">U+0074 + U+0283</td><td class="note">/tʃ/ as in chip</td><td class="nay">tʃ</td><td class="sample">tʃɪp</td><td class="eng">chip</td></tr>
+      <tr><td>dʒ</td><td class="cp">U+0064 + U+0292</td><td class="note">/dʒ/ as in judge</td><td class="nay">dʒ</td><td class="sample">dʒʌdʒ</td><td class="eng">judge</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Diphthongs (Latin-letter compositions, no IPA codepoint)</h2>
+  <p class="lead">Nayana spells English diphthongs with two adjacent Latin letters
+  rather than as IPA digraphs (/aɪ/, /eɪ/, /oʊ/, /aʊ/). The visual run-on of
+  the vowel-marker stroke under each letter creates the diphthong feel.</p>
+  <table>
+    <thead><tr><th>Sequence</th><th>IPA</th><th>Nayana</th><th>Sample word</th><th>Engine output</th></tr></thead>
+    <tbody>
+      <tr><td>ai</td><td class="note">/aɪ/</td><td class="nay">ai</td><td class="sample">nait</td><td class="eng">night</td></tr>
+      <tr><td>ei</td><td class="note">/eɪ/</td><td class="nay">ei</td><td class="sample">feis</td><td class="eng">face</td></tr>
+      <tr><td>ou</td><td class="note">/oʊ/</td><td class="nay">ou</td><td class="sample">bout</td><td class="eng">boat</td></tr>
+      <tr><td>au</td><td class="note">/aʊ/</td><td class="nay">au</td><td class="sample">abaut</td><td class="eng">about</td></tr>
+      <tr><td>ɔɪ</td><td class="note">/ɔɪ/</td><td class="nay">ɔɪ</td><td class="sample">bɔɪ</td><td class="eng">boy</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Acid test 2 — IPA → audio reachability</h2>
+  <p class="lead">
+    Because every non-Latin character above sits at its canonical Unicode IPA
+    codepoint (per the project's IPA-encoding policy), the engine's output is
+    standards-compliant IPA — readable by any tool that consumes IPA. To verify
+    end-to-end that the encoding round-trips through audio synthesis:
+  </p>
+  <pre style="background:#f3f3ee;padding:12px;border-radius:4px;font-size:13px;">
+# 1) Install espeak-ng (one of several IPA-aware TTS engines)
+sudo apt install espeak-ng
+
+# 2) Run the validator script — extracts IPA from engine output,
+#    converts to X-SAMPA (espeak-ng's input format), and prints
+#    a ready-to-run espeak-ng command per word.
+node engine/scripts/validate-ipa-encoding.js "philosophy is interesting"
+
+# 3) Pipe through espeak-ng to produce a WAV file
+node engine/scripts/validate-ipa-encoding.js "philosophy is interesting" --tts /tmp/out.wav</pre>
+  <p class="lead">
+    A successful audio file proves: (a) every emitted character is a valid IPA
+    codepoint, (b) the codepoints are correctly identified by external IPA-aware
+    tooling, (c) downstream pipelines (TTS, screen readers, linguistic processing)
+    can consume Nayana output unmodified.
+  </p>
+</main>
+</body>
+</html>
