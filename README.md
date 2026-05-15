@@ -1,11 +1,17 @@
-# Nayana
+# Nayana for English
 
-**A phased phonetic reform of English orthography.**
+**A phased phonetic reform of English orthography.** v0.1 ships
+General American English; other English varieties (RP, Indian English)
+and other languages will follow as parallel projects. Each variety
+wants its own phonetic spelling because each variety has its own
+pronunciation — there's no universally "correct" Nayana spelling,
+only the spelling that matches how a particular variety actually sounds.
 
 Two halves of one project:
 
-- **A font** (`Nayana-Regular.otf`) that draws the eventual phonetic
-  glyphs, with phases enabled via OpenType feature toggles.
+- **A font** (`Nayana-Regular.otf`, family name *Nayana English*) that
+  draws the eventual phonetic glyphs, with phases enabled via OpenType
+  feature toggles.
 - **A preprocessor** that progressively rewrites English text using
   grapheme→phoneme alignment. Each phase is one new substitution rule.
 
