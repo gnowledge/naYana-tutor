@@ -336,6 +336,19 @@ function setupEvents() {
     document.body.classList.toggle('no-vowel-marker', !e.target.checked);
   });
 
+  // Highlight toggle — trained readers don't need the yellow underlay
+  // every changed word. Persist preference in localStorage.
+  const highlightToggle = $('#highlight-toggle');
+  const highlightPref = localStorage.getItem('nayanaHighlight');
+  if (highlightPref === 'off') {
+    highlightToggle.checked = false;
+    document.body.classList.add('no-highlight');
+  }
+  highlightToggle.addEventListener('change', (e) => {
+    document.body.classList.toggle('no-highlight', !e.target.checked);
+    localStorage.setItem('nayanaHighlight', e.target.checked ? 'on' : 'off');
+  });
+
   $('#process-text-btn').addEventListener('click', processText);
   $('#process-url-btn').addEventListener('click', processUrl);
   $('#prefs-button').addEventListener('click', resetPrefs);

@@ -291,6 +291,17 @@ body.no-vowel-marker .nayana-rewritten {
   font-feature-settings: "ss01" off;
 }
 
+/* Trained readers can disable the changed-word highlight via the
+   "Highlight changed words" toggle in the bar. The dotted underline on
+   words with alternates stays — that's a functional cue, not styling. */
+body.no-highlight .nayana-rewritten {
+  background: none;
+  padding: 0;
+}
+body.no-highlight .nayana-rewritten:hover {
+  background: none;
+}
+
 .nayana-rewritten:hover {
   background: linear-gradient(to bottom, transparent 65%, #fde68a 65%);
 }
