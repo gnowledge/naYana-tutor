@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nayana — IPA keyboard</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  main { max-width: 980px; margin: 24px auto; padding: 16px; }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  h2 { font-size: 16px; margin: 28px 0 8px; padding-bottom: 4px;
+       border-bottom: 1px solid #d8d8d2; color: #333; }
+  p.lead { color: #555; max-width: 60em; line-height: 1.5; }
+  .composer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .composer textarea {
+    width: 100%;
+    min-height: 140px;
+    font-family: 'Nayana', system-ui, sans-serif;
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 24px;
+    padding: 14px 16px;
+    border: 2px solid #c8d4c8;
+    border-radius: 6px;
+    background: #fcfdfc;
+    color: #1a1a1a;
+    resize: vertical;
+    line-height: 1.5;
+  }
+  .composer textarea:focus { outline: none; border-color: #5a8a5a; }
+  .meta { display: flex; gap: 24px; align-items: center; font-size: 13px; color: #666; }
+  .meta button {
+    font: inherit; padding: 4px 12px; cursor: pointer;
+    border: 1px solid #ccc; background: #fff; border-radius: 4px;
+  }
+  .meta button:hover { background: #f3f3ee; }
+  table.subs { border-collapse: collapse; width: 100%; }
+  table.subs th, table.subs td {
+    padding: 6px 12px; border-bottom: 1px solid #ececec;
+    text-align: left; font-size: 13px;
+  }
+  table.subs th {
+    background: #f3f3ee; font-weight: 600;
+    text-transform: uppercase; font-size: 11px; letter-spacing: 0.04em;
+  }
+  table.subs td.type { font-family: ui-monospace, monospace; color: #444; }
+  table.subs td.gives {
+    font-family: 'Nayana', system-ui, sans-serif;
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 22px;
+    text-align: center;
+    width: 60px;
+    background: #fdf7e0;
+  }
+  table.subs td.note { color: #777; font-size: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Nayana IPA keyboard</h1>
+  <p class="lead">
+    Type English-style digraphs and they become IPA characters in place.
+    No mode switch, no toggle — substitution fires whenever a known
+    pattern completes at the cursor. Underlying text is canonical
+    Unicode IPA, so anything you type here is searchable by Ctrl+F
+    (with the IPA character pasted into the find bar) and consumable
+    by any IPA-aware tool downstream.
+  </p>
+
+  <h2>Try it</h2>
+  <div class="composer">
+    <textarea id="ipa-input" placeholder='Type "thIs Iz @ test" — becomes ðɪs ɪz ə test as you type.&#10;Or compose new words: ng → ŋ, sh → ʃ, @r → ɚ, etc.'></textarea>
+    <div class="meta">
+      <button id="copy-btn">Copy to clipboard</button>
+      <button id="clear-btn">Clear</button>
+      <span id="status">Ready — IPA shortcuts active.</span>
+    </div>
+  </div>
+
+  <h2>Substitution table</h2>
+  <p class="lead">Always-on. Type the left column, get the right column. Multi-character patterns are checked longest-first, so <code>@r</code> wins over <code>@</code> alone.</p>
+  <table class="subs">
+    <thead><tr><th>Type</th><th>Gives</th><th>Codepoint</th><th>Used for</th></tr></thead>
+    <tbody id="subs-table"></tbody>
+  </table>
+
+  <h2>Notes</h2>
+  <ul style="line-height: 1.7; color: #444; font-size: 14px;">
+    <li><strong>Conflict:</strong> always-on means typing English words
+      with these patterns gets transformed. "thing" → "θɪng" → "θɪŋ".
+      For pure English authoring, paste pre-made text instead of
+      typing — paste doesn't trigger substitution at the cursor.</li>
+    <li><strong>Backspace:</strong> deletes the substituted character
+      whole. To undo a substitution, retype.</li>
+    <li><strong>Ctrl+F:</strong> the browser find bar searches for
+      literal characters. To find <span style="font-family:Nayana">ŋ</span>
+      in this page, copy the character from any cell and paste it
+      into Find. (For OS-level Unicode input on Linux:
+      <code>Ctrl+Shift+U</code> then the hex codepoint.)</li>
+    <li><strong>OS-level keyboard layout:</strong> a standalone .xkb /
+      .keylayout / .klc file with the same substitution table is
+      planned next, so the same shortcuts work in every application.</li>
+  </ul>
+</main>
+
+<script type="module">
+  import { attachIpaKeyboard, IPA_SUBSTITUTIONS } from './ipa-keyboard.js';
+
+  // Attach to the composer
+  const input = document.getElementById('ipa-input');
+  attachIpaKeyboard(input);
+  input.focus();
+
+  // Render the substitution table
+  const tbody = document.getElementById('subs-table');
+  for (const [src, dst, note] of IPA_SUBSTITUTIONS) {
+    const cp = [...dst].map((c) => 'U+' + c.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')).join(' + ');
+    const row = document.createElement('tr');
+    row.innerHTML = `<td class="type">${src.replace(/</g, '&lt;')}</td><td class="gives">${dst}</td><td class="type">${cp}</td><td class="note">${note}</td>`;
+    tbody.appendChild(row);
+  }
+
+  // Copy / clear buttons
+  document.getElementById('copy-btn').addEventListener('click', async () => {
+    if (!input.value) return;
+    try {
+      await navigator.clipboard.writeText(input.value);
+      const status = document.getElementById('status');
+      status.textContent = `Copied ${[...input.value].length} character(s).`;
+      setTimeout(() => { status.textContent = 'Ready — IPA shortcuts active.'; }, 2000);
+    } catch (e) {
+      document.getElementById('status').textContent = 'Copy failed (' + e.message + ').';
+    }
+  });
+  document.getElementById('clear-btn').addEventListener('click', () => {
+    input.value = '';
+    input.focus();
+  });
+</script>
+</body>
+</html>
