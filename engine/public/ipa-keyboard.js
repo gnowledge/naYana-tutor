@@ -19,33 +19,31 @@
 //
 // Order matters: longer patterns checked first so "ər" wins over "ə".
 //
-// Schwa note: lowercase `a` is the default schwa shortcut (single key,
-// no modifier — schwa is the most frequent vowel in English so it
-// deserves the easiest position). Follow-up rules `əi`/`əu`/`əe`/`ər`
-// rebuild the Nayana diphthongs and ash when the next key clarifies
-// intent. `@` kept for X-SAMPA muscle memory.
+// Three-way split for the "a" family:
+//   a → ə (schwa, most frequent vowel; default unshifted shortcut)
+//   q → a (literal Latin a; q is free because engine rewrites qu → kw)
+//   A → ɑ (IPA open back unrounded vowel)
+//
+// Consequence: diphthongs and ash type via the q route to keep schwa+vowel
+// sequences typeable literally. Type `qi` for /aɪ/, `qu` for /aʊ/, `qe` for æ.
+// Type `ai` (slow a-then-i) and you get literal "əi" — schwa followed by i.
 //
 // Length marker: `H` (capital) marks long vowels — `:` stays free as
-// punctuation. Long-vowel digraphs all use H now: iH, uH, OH, AH.
+// punctuation. Long-vowel digraphs: iH, uH, OH, AH.
 export const IPA_SUBSTITUTIONS = [
-  // ---- 2-char patterns (multi-codepoint outputs or compositions) ----
-  // Diphthong / ash recovery — fires when the next vowel clarifies
-  // that the leading `a` was meant as Latin a (diphthong) not schwa.
-  ['əi', 'ai',  'restores /aɪ/ diphthong after a→ə'],
-  ['əu', 'au',  'restores /aʊ/ diphthong after a→ə'],
-  ['əe', 'æ',   'ash — composed from a→ə + e (or paste of "ae")'],
-
-  // r-coloured schwa
-  ['ər', 'ɚ',   'rhotic schwa — fires after a→ə or @→ə when r is typed'],
+  // ---- 2-char patterns ----
+  // Rhotic schwa is single codepoint, so we always prefer ɚ over literal ər.
+  // (For literal Latin a+r, type `qr` → "ar".)
+  ['ər', 'ɚ',   'rhotic schwa — fires after a→ə when r is typed'],
   ['@r', 'ɚ',   'rhotic schwa — direct typing (X-SAMPA muscle memory)'],
 
   // affricate ligatures
   ['ch', 'tʃ',  'voiceless affricate — renders as Nayana c via liga'],
   ['jh', 'dʒ',  'voiced affricate — renders as Nayana j via liga (bare j stays /j/)'],
 
-  // ash digraph kept for paste-of-"ae" cases (single input event with
-  // both chars; gets matched here before per-char substitution)
-  ['ae', 'æ',   'ash — A is taken for ɑ; same as a then e'],
+  // ash digraph — fires when "ae" appears at cursor in one event
+  // (paste, or after typing `qe` which produces "a" then "ae")
+  ['ae', 'æ',   'ash — composed; same outcome as qe (q→a then e)'],
 
   // length-marked vowels (use H, the new length marker)
   ['iH', 'iː',  'long i (meet)'],
@@ -73,6 +71,7 @@ export const IPA_SUBSTITUTIONS = [
 
   // Special-character shortcuts
   ['a',  'ə',   'schwa — most frequent vowel; default lowercase shortcut'],
+  ['q',  'a',   'literal Latin a — for diphthongs (qi=ai, qu=au, qe=æ) and Latin ar (qr)'],
   ['@',  'ə',   'schwa — X-SAMPA convention (alternate)'],
   ['^',  'ʌ',   'wedge (cup)'],
 ];
