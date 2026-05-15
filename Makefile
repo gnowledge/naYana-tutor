@@ -11,13 +11,18 @@
 #   make download     Download source font(s) if missing
 #   make clean        Remove generated artifacts
 
-SRC_FONT     := fonts/source/ComicNeue-Regular.otf
-OUT_FONT     := fonts/output/Nayana-Regular.otf
-BUILD_SCRIPT := src/build.py
+# The SFD is the canonical source — hand-edits in FontForge / Glyphr Studio
+# land there. Comic Neue is kept around as a fallback / reference but is no
+# longer the build input.
+SRC_FONT       := fonts/source/Nayana-Regular.sfd
+COMIC_NEUE_SRC := fonts/source/ComicNeue-Regular.otf
+OUT_FONT       := fonts/output/Nayana-Regular.otf
+BUILD_SCRIPT   := src/build.py
 
-# Default phase set. Override on the command line:
-#   make build PHASES="vowel_marker schwa_marker"
-PHASES ?= vowel_marker ipa_glyphs ipa_ligatures
+# Default phase set. None — the SFD is taken as-is. Override on the
+# command line if a programmatic phase needs to run on top of the SFD:
+#   make build PHASES="some_new_phase"
+PHASES ?=
 
 COMIC_NEUE_URL := https://github.com/crozynski/comicneue/raw/master/Fonts/OTF/ComicNeue-Regular.otf
 
@@ -29,13 +34,13 @@ DIST_NAME := Nayana-$(VERSION)
 
 all: build
 
-download: $(SRC_FONT)
+download: $(COMIC_NEUE_SRC)
 
-$(SRC_FONT):
+$(COMIC_NEUE_SRC):
 	@mkdir -p fonts/source
-	@echo "Downloading Comic Neue Regular..."
-	@curl -L -o $(SRC_FONT) $(COMIC_NEUE_URL)
-	@echo "Downloaded to $(SRC_FONT)"
+	@echo "Downloading Comic Neue Regular (reference / fallback)..."
+	@curl -L -o $(COMIC_NEUE_SRC) $(COMIC_NEUE_URL)
+	@echo "Downloaded to $(COMIC_NEUE_SRC)"
 
 list-phases:
 	fontforge -script $(BUILD_SCRIPT) -i $(SRC_FONT) -o /tmp/_unused.otf --list-phases
@@ -44,10 +49,10 @@ build: $(OUT_FONT)
 
 $(OUT_FONT): $(BUILD_SCRIPT) $(SRC_FONT) $(wildcard src/nayana/*.py) $(wildcard src/nayana/phases/*.py)
 	@mkdir -p fonts/output
-	fontforge -script $(BUILD_SCRIPT) -i $(SRC_FONT) -o $(OUT_FONT) --phases $(PHASES)
+	fontforge -script $(BUILD_SCRIPT) -i $(SRC_FONT) -o $(OUT_FONT) $(if $(PHASES),--phases $(PHASES))
 	@echo ""
 	@echo "Built $(OUT_FONT)"
-	@echo "Phases applied: $(PHASES)"
+	@echo "Phases applied: $(if $(PHASES),$(PHASES),(none — pure SFD passthrough))"
 
 build-all: $(SRC_FONT)
 	@mkdir -p fonts/output

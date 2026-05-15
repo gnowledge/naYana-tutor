@@ -1,25 +1,22 @@
 """
 build.py — Nayana font builder
 
-Generic build entry point. Phases are pluggable modules in src/nayana/phases/.
-Each phase contributes glyph generators and GSUB rules. The CLI selects
-which phases to apply.
+Loads the canonical Nayana source (a FontForge SFD), applies any
+registered programmatic phases on top, sets metadata, and writes an OTF.
+
+The SFD at fonts/source/Nayana-Regular.sfd is the source of truth for
+glyph shapes, OT lookups (vowel-marker ss01, ipa_ligatures liga), and
+font metadata. Hand-edits land there directly.
+
+Programmatic phases are kept around for systematic transformations that
+are easier to express as code than as glyph-by-glyph editing — but right
+now, no phases are registered by default. The Phase infrastructure is
+preserved for future use (e.g. adding a new ligature class wholesale).
 
 Usage:
-    fontforge -script src/build.py --input INPUT.otf --output OUTPUT.otf \\
-              --phases vowel_marker [--phase-2 ...] [--all]
-
-    # Build with just the vowel marker phase (default for v0.1)
-    fontforge -script src/build.py -i Comic.otf -o Nayana.otf
-
-    # Build with multiple phases enabled
-    fontforge -script src/build.py -i Comic.otf -o Nayana.otf \\
-              --phases vowel_marker schwa_marker
-
-    # Build with all registered phases
-    fontforge -script src/build.py -i Comic.otf -o Nayana.otf --all
-
-Phases must be registered in src/nayana/phases/__init__.py.
+    fontforge -script src/build.py -i SOURCE.sfd -o OUTPUT.otf
+    fontforge -script src/build.py -i SOURCE.sfd -o OUTPUT.otf \\
+              --phases foo bar
 """
 
 import argparse
@@ -38,7 +35,6 @@ def build(input_path, output_path, phase_names):
     """Apply the named phases to the input font and write to output."""
     font = open_font(input_path)
 
-    # Apply each phase in registration order. Each phase mutates `font`.
     for name in phase_names:
         phase = get_phase(name)
         print(f"Applying phase: {name} (feature: {phase.feature_tag})")
@@ -47,22 +43,25 @@ def build(input_path, output_path, phase_names):
     set_metadata(font, family=FAMILY_NAME, name_prefix=FONT_NAME_PREFIX,
                  version=VERSION, phases=phase_names)
     save_font(font, output_path)
-    print(f"Wrote {output_path} (Nayana {VERSION}, phases: {phase_names})")
+    if phase_names:
+        print(f"Wrote {output_path} (Nayana {VERSION}, phases: {phase_names})")
+    else:
+        print(f"Wrote {output_path} (Nayana {VERSION}, no phases — pure SFD passthrough)")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Build a Nayana font derivative.",
+        description="Build the Nayana font from its SFD source.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=f"Available phases: {', '.join(REGISTRY.keys()) or '(none registered)'}"
+        epilog=f"Registered phases: {', '.join(REGISTRY.keys()) or '(none)'}"
     )
     parser.add_argument("-i", "--input", required=True,
-                        help="Path to source font (OTF/TTF)")
+                        help="Path to source font (SFD, OTF, or TTF)")
     parser.add_argument("-o", "--output", required=True,
-                        help="Path to write derivative font")
-    parser.add_argument("--phases", nargs="+",
-                        default=["vowel_marker", "ipa_glyphs", "ipa_ligatures"],
-                        help="Phases to apply (default: all three)")
+                        help="Path to write the OTF")
+    parser.add_argument("--phases", nargs="*", default=[],
+                        help="Programmatic phases to apply on top of the source "
+                             "(default: none — SFD is taken as-is)")
     parser.add_argument("--all", action="store_true",
                         help="Apply all registered phases (overrides --phases)")
     parser.add_argument("--list-phases", action="store_true",
@@ -71,7 +70,7 @@ def main():
 
     if args.list_phases:
         if not REGISTRY:
-            print("No phases registered.")
+            print("No phases registered. (SFD is the source of truth.)")
         else:
             print("Registered phases:")
             for name, cls in REGISTRY.items():
@@ -80,7 +79,6 @@ def main():
 
     phases = list(REGISTRY.keys()) if args.all else args.phases
 
-    # Validate
     unknown = [p for p in phases if p not in REGISTRY]
     if unknown:
         parser.error(f"Unknown phases: {unknown}. "

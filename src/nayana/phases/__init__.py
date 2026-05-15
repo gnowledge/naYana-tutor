@@ -19,17 +19,16 @@ each phase via CSS:
 """
 
 from nayana.phases.base import Phase
-from nayana.phases.vowel_marker import VowelMarkerPhase
-from nayana.phases.ipa_glyphs import IpaGlyphsPhase
-from nayana.phases.ipa_ligatures import IpaLigaturesPhase
 
-# Registry: maps phase name (CLI string) to phase class. Order matters
-# only for the --all CLI flag, which applies phases in registration order.
-REGISTRY = {
-    "vowel_marker": VowelMarkerPhase,
-    "ipa_glyphs": IpaGlyphsPhase,
-    "ipa_ligatures": IpaLigaturesPhase,
-}
+# All previously-programmatic phases (vowel_marker, ipa_glyphs, ipa_ligatures)
+# have been baked into fonts/source/Nayana-Regular.sfd, which is now the
+# canonical source. Their .py files are kept in this directory as a record
+# of how those shapes/lookups were originally produced — useful if anyone
+# ever needs to regenerate from Comic Neue + code, but not run by default.
+#
+# To register a new programmatic phase: import its class here and add it
+# to REGISTRY. The build will pick it up via --phases <name> or --all.
+REGISTRY = {}
 
 
 def get_phase(name):
