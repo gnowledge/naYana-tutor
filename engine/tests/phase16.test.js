@@ -236,8 +236,8 @@ test('CRITICAL: about still → əbaut (a is /AH0/ schwa)', () => {
 test('philosopher still → fəlosəfɚ', () => {
   // No /AO/ or /AA/ rules fire — the o in philosopher is /AA1/ wait
   // let me think. Actually it's `o}AA1` in the middle. So o→ɑː fires!
-  // Result: f + ə + l + ɑː + s + ə + f + ɚ = "fəlɑːsəfɚ"
-  assert.equal(rewrite('philosopher').spelling, 'fəlɑːsəfɚ');
+  // Result: f + ə + l + ɑː + s + ə + f + ɚ = "fɪlɑːsəfɚ"
+  assert.equal(rewrite('philosopher').spelling, 'fɪlɑːsəfɚ');
 });
 
 test('the → ðə still holds', () => {

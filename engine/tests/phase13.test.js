@@ -231,10 +231,10 @@ test('about → əbaut (phase 10 still holds)', () => {
   assert.equal(rewrite('about').spelling, 'əbaut');
 });
 
-test('philosophy → fəlosəfiː (still holds; no short-vowel rules fire)', () => {
+test('philosophy → fɪlosəfiː (still holds; no short-vowel rules fire)', () => {
   // alignment: ph}F i}AH0 l}L o}AA1 s}S o}AH0 ph}F y}IY0
   // First i is AH0 (already → ə by phase 10). o}AA1 not /AH+/, stays.
-  assert.equal(rewrite('philosophy').spelling, 'fəlosəfiː');
+  assert.equal(rewrite('philosophy').spelling, 'fɪlosəfiː');
 });
 
 test('English → eŋglɪʃ (init-cap dropped; i→ɪ)', () => {

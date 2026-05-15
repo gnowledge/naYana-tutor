@@ -209,8 +209,8 @@ test('music → myuːsɪk (s stays s; future s→z phase will give myuːzɪk)', 
 
 // ---- Cross-phase composition --------------------------------------------
 
-test('philosopher still → fəlosəfɚ at phase 15', () => {
-  assert.equal(rewrite('philosopher').spelling, 'fəlosəfɚ');
+test('philosopher still → fɪlosəfɚ at phase 15', () => {
+  assert.equal(rewrite('philosopher').spelling, 'fɪlosəfɚ');
 });
 
 test('the → ðə still holds', () => {

@@ -166,8 +166,8 @@ test('CRITICAL: penguin (u}W check) — penguin probably u}W, would u→w fire?'
 
 // ---- Cross-phase composition ------------------------------------------
 
-test('philosopher still → fəlɑːsəfɚ', () => {
-  assert.equal(rewrite('philosopher').spelling, 'fəlɑːsəfɚ');
+test('philosopher still → fɪlɑːsəfɚ', () => {
+  assert.equal(rewrite('philosopher').spelling, 'fɪlɑːsəfɚ');
 });
 
 test('the → ðə still holds', () => {

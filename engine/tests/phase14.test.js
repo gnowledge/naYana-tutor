@@ -112,9 +112,9 @@ test('summer → sʌmmɚ (u→ʌ + er→ɚ; mm stays doubled)', () => {
   assert.equal(rewrite('summer').spelling, 'sʌmmɚ');
 });
 
-test('CRITICAL: philosopher → fəlosəfɚ (the manifesto word, fully transformed)', () => {
+test('CRITICAL: philosopher → fɪlosəfɚ (the manifesto word, fully transformed)', () => {
   // alignment: ph}F i}AH0 l}L o}AA1 s}S o}AH0 ph}F er}ER0
-  assert.equal(rewrite('philosopher').spelling, 'fəlosəfɚ');
+  assert.equal(rewrite('philosopher').spelling, 'fɪlosəfɚ');
 });
 
 test('dollar → dollɚ (ar→ɚ; ll stays doubled — same as summer)', () => {
@@ -169,8 +169,8 @@ test('CRITICAL: door → dor (silent-o + o + r + nothing)', () => {
 
 test('philosopher unifies the manifesto motif', () => {
   // Phases combine: ph→f (×2), i→ə (first i is AH0), o→ə (third vowel),
-  // er→ɚ. Result: fəlosəfɚ. The o between is /AA1/ — stays as 'o'.
-  assert.equal(rewrite('philosopher').spelling, 'fəlosəfɚ');
+  // er→ɚ. Result: fɪlosəfɚ. The o between is /AA1/ — stays as 'o'.
+  assert.equal(rewrite('philosopher').spelling, 'fɪlosəfɚ');
 });
 
 test('the → ðə (phases 11+10 still hold)', () => {

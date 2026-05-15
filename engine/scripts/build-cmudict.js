@@ -49,6 +49,12 @@ const alignedText = fs.existsSync(alignedPath)
   ? fs.readFileSync(alignedPath, 'utf-8')
   : null;
 
+// Optional overrides file — corrects known-bad CMUdict entries.
+const OVERRIDES = path.join(ROOT, 'data', 'cmudict-overrides.txt');
+const overridesText = fs.existsSync(OVERRIDES)
+  ? fs.readFileSync(OVERRIDES, 'utf-8')
+  : null;
+
 console.log(`Building dictionary from ${path.basename(inputPath)}...`);
 if (alignedText) {
   console.log(`  with alignment from ${path.basename(alignedPath)}`);
@@ -56,7 +62,12 @@ if (alignedText) {
   console.log(`  (no alignment found at ${path.basename(alignedPath)} — phase 2+ rules will not fire)`);
 }
 const text = fs.readFileSync(inputPath, 'utf-8');
-const data = buildDictionaryData(text, alignedText);
+const data = buildDictionaryData(text, alignedText, overridesText);
+if (overridesText) {
+  const overrideCount = overridesText.split('\n')
+    .filter((l) => l.trim() && !l.startsWith('#')).length;
+  console.log(`  with ${overrideCount} entry overrides from cmudict-overrides.txt`);
+}
 
 fs.writeFileSync(outputPath, JSON.stringify(data));
 const wordCount = Object.keys(data.entries).length;

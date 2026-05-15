@@ -198,8 +198,8 @@ test('the → ðə still holds at phase 12', () => {
   assert.equal(rewrite('the').spelling, 'ðə');
 });
 
-test('philosopher → fəlosəfer (no ʃ/tʃ/ʒ/ŋ here)', () => {
-  assert.equal(rewrite('philosopher').spelling, 'fəlosəfer');
+test('philosopher → filosəfer (no ʃ/tʃ/ʒ/ŋ here)', () => {
+  assert.equal(rewrite('philosopher').spelling, 'filosəfer');
 });
 
 test('phase 12 still applies phase 10: about → əbaut', () => {

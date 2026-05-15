@@ -182,8 +182,8 @@ test('houses → hausəz (FIRST s stays /S/; e→ə; second s→z)', () => {
 
 // ---- Cross-phase composition -------------------------------------------
 
-test('philosopher still → fəlɑːsəfɚ (no s→z, no ed; phase 16 still holds)', () => {
-  assert.equal(rewrite('philosopher').spelling, 'fəlɑːsəfɚ');
+test('philosopher still → fɪlɑːsəfɚ (no s→z, no ed; phase 16 still holds)', () => {
+  assert.equal(rewrite('philosopher').spelling, 'fɪlɑːsəfɚ');
 });
 
 test('the → ðə still holds', () => {

@@ -1,0 +1,29 @@
+# CMUdict overrides — corrections for bad transcriptions in CMUdict.
+#
+# CMUdict has the occasional transcription that doesn't match how
+# speakers actually say a word. The most common case: an unstressed
+# /ɪ/ (short i) is recorded as AH0 (schwa), which makes the engine
+# render the syllable as ə when it should be ɪ.
+#
+# Format: same as data/aligned-cmudict.corpus — one alignment per
+# line, `g}p` tokens, multi-grapheme groups joined with `|`.
+# The word is implicit (reconstructed from graphemes).
+# Multiple lines for one word = alternate pronunciations (first wins).
+#
+# Each entry REPLACES whatever CMUdict has for that word — if the
+# original had alternate pronunciations you want to keep, list them
+# all here.
+
+# ---- "phil-" family — first vowel should be /ɪ/, not /ə/ ----
+# CMUdict's "phil" F IH1 L and "philadelphia" F IH2 L correctly use
+# IH; but "philosophy"/"philosopher"/"philander" got AH0. Fix here so
+# the engine renders the first syllable with ɪ rather than schwa.
+
+# philosophy → fɪlɑːsəfiː (was: fəlɑːsəfiː)
+p|h}F i}IH0 l}L o}AA1 s}S o}AH0 p|h}F y}IY0
+
+# philosopher → fɪlɑːsəfɚ (was: fəlɑːsəfɚ)
+p|h}F i}IH0 l}L o}AA1 s}S o}AH0 p|h}F e|r}ER0
+
+# philander → fɪlændɚ (was: fəlændɚ)
+p|h}F i}IH0 l}L a}AE1 n}N d}D e|r}ER0

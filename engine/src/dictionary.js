@@ -198,7 +198,7 @@ export function parseAlignedCorpus(text) {
  * If a pronunciation has no matching alignment (offline sample case for
  * a missing word), `pairs` is omitted.
  */
-export function buildDictionaryData(cmudictText, alignedCorpusText = null) {
+export function buildDictionaryData(cmudictText, alignedCorpusText = null, overridesText = null) {
   const entries = parseCmudictText(cmudictText);
   const alignments = alignedCorpusText ? parseAlignedCorpus(alignedCorpusText) : null;
   // Same prototype-pollution defense as parseCmudictText.
@@ -215,6 +215,24 @@ export function buildDictionaryData(cmudictText, alignedCorpusText = null) {
       return entry;
     });
   }
+
+  // Apply overrides: each overridden word's entire entry list is replaced
+  // by the override's pronunciations. Arpabet is recomputed from the
+  // override's phoneme columns to keep entry.arpabet in sync with pairs.
+  if (overridesText) {
+    const overrides = parseAlignedCorpus(overridesText);
+    for (const word of Object.keys(overrides)) {
+      data[word] = overrides[word].map((pairs) => {
+        const arpa = pairs.flatMap((p) => p.phonemes);
+        return {
+          arpabet: arpa,
+          ipa: arpabetToIpa(arpa),
+          pairs,
+        };
+      });
+    }
+  }
+
   return { version: 2, entries: data };
 }
 

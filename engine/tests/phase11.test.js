@@ -130,8 +130,8 @@ test('CRITICAL: mother is NOT touched by th→θ (phoneme is /DH/, not /TH/)', (
 
 // ---- Cross-phase composition --------------------------------------------
 
-test('philosophy → fəlosəfiː (no th, phase 10 still applies)', () => {
-  assert.equal(rewrite('philosophy').spelling, 'fəlosəfiː');
+test('philosophy → filosəfiː (no th, phase 10 still applies)', () => {
+  assert.equal(rewrite('philosophy').spelling, 'filosəfiː');
 });
 
 test('phase 11 still applies phase 10: about → əbaut', () => {
