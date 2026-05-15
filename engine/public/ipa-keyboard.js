@@ -19,21 +19,39 @@
 //
 // Order matters: longer patterns checked first so "ər" wins over "ə".
 //
-// Schwa note: typing `q` and typing `@` both produce ə. `q` is the
-// no-modifier shortcut (q is unused in Nayana output, so no conflict),
-// `@` is kept for X-SAMPA muscle memory. Either way, typing an `r` after
-// triggers the follow-up substitution `ər` → ɚ.
+// Schwa note: lowercase `a` is the default schwa shortcut (single key,
+// no modifier — schwa is the most frequent vowel in English so it
+// deserves the easiest position). Follow-up rules `əi`/`əu`/`əe`/`ər`
+// rebuild the Nayana diphthongs and ash when the next key clarifies
+// intent. `@` kept for X-SAMPA muscle memory.
+//
+// Length marker: `H` (capital) marks long vowels — `:` stays free as
+// punctuation. Long-vowel digraphs all use H now: iH, uH, OH, AH.
 export const IPA_SUBSTITUTIONS = [
   // ---- 2-char patterns (multi-codepoint outputs or compositions) ----
-  ['ər', 'ɚ',   'rhotic schwa — fires after q→ə or @→ə when r is typed next'],
-  ['@r', 'ɚ',   'rhotic schwa — direct typing'],
+  // Diphthong / ash recovery — fires when the next vowel clarifies
+  // that the leading `a` was meant as Latin a (diphthong) not schwa.
+  ['əi', 'ai',  'restores /aɪ/ diphthong after a→ə'],
+  ['əu', 'au',  'restores /aʊ/ diphthong after a→ə'],
+  ['əe', 'æ',   'ash — composed from a→ə + e (or paste of "ae")'],
+
+  // r-coloured schwa
+  ['ər', 'ɚ',   'rhotic schwa — fires after a→ə or @→ə when r is typed'],
+  ['@r', 'ɚ',   'rhotic schwa — direct typing (X-SAMPA muscle memory)'],
+
+  // affricate ligatures
   ['ch', 'tʃ',  'voiceless affricate — renders as Nayana c via liga'],
   ['jh', 'dʒ',  'voiced affricate — renders as Nayana j via liga (bare j stays /j/)'],
-  ['ae', 'æ',   'ash — A is taken for ɑ'],
-  ['i:', 'iː',  'long i (meet)'],
-  ['u:', 'uː',  'long u (food)'],
-  ['o:', 'ɔː',  'long open o (call)'],
-  ['a:', 'ɑː',  'long open a (hot)'],
+
+  // ash digraph kept for paste-of-"ae" cases (single input event with
+  // both chars; gets matched here before per-char substitution)
+  ['ae', 'æ',   'ash — A is taken for ɑ; same as a then e'],
+
+  // length-marked vowels (use H, the new length marker)
+  ['iH', 'iː',  'long i (meet)'],
+  ['uH', 'uː',  'long u (food)'],
+  ['OH', 'ɔː',  'long open o (call)'],
+  ['AH', 'ɑː',  'long open a (hot)'],
 
   // ---- 1-char patterns: capital letters → IPA characters ----
   // Consonants (capital matches the lowercase initial of the English digraph
@@ -44,6 +62,7 @@ export const IPA_SUBSTITUTIONS = [
   ['Z',  'ʒ',   'zh (vision)'],
   ['N',  'ŋ',   'ng (sing)'],
   ['R',  'ɝ',   'stressed r-coloured schwa'],
+  ['H',  'ː',   'length marker — frees `:` for punctuation'],
 
   // Short vowels (capital matches the IPA letter's lowercase visual)
   ['I',  'ɪ',   'short i (bit)'],
@@ -53,10 +72,9 @@ export const IPA_SUBSTITUTIONS = [
   ['A',  'ɑ',   'open a'],
 
   // Special-character shortcuts
-  ['q',  'ə',   'schwa — single keystroke, no modifier (q is unused in Nayana)'],
+  ['a',  'ə',   'schwa — most frequent vowel; default lowercase shortcut'],
   ['@',  'ə',   'schwa — X-SAMPA convention (alternate)'],
   ['^',  'ʌ',   'wedge (cup)'],
-  [':',  'ː',   'length marker — also fires inside vowel digraphs i:, u:, etc.'],
 ];
 
 const MAX_PATTERN_LEN = Math.max(...IPA_SUBSTITUTIONS.map(([s]) => s.length));
