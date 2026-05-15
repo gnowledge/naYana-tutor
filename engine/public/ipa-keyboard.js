@@ -17,10 +17,16 @@
 // Lowercase letters keep their Latin meaning so users can still spell
 // digraphs like ai, ei, ou, au (the Nayana diphthongs).
 //
-// Order matters: longer patterns checked first so "@r" wins over "@".
+// Order matters: longer patterns checked first so "ər" wins over "ə".
+//
+// Schwa note: typing `q` and typing `@` both produce ə. `q` is the
+// no-modifier shortcut (q is unused in Nayana output, so no conflict),
+// `@` is kept for X-SAMPA muscle memory. Either way, typing an `r` after
+// triggers the follow-up substitution `ər` → ɚ.
 export const IPA_SUBSTITUTIONS = [
   // ---- 2-char patterns (multi-codepoint outputs or compositions) ----
-  ['@r', 'ɚ',   'unstressed r-coloured schwa'],
+  ['ər', 'ɚ',   'rhotic schwa — fires after q→ə or @→ə when r is typed next'],
+  ['@r', 'ɚ',   'rhotic schwa — direct typing'],
   ['ch', 'tʃ',  'voiceless affricate — renders as Nayana c via liga'],
   ['jh', 'dʒ',  'voiced affricate — renders as Nayana j via liga (bare j stays /j/)'],
   ['ae', 'æ',   'ash — A is taken for ɑ'],
@@ -46,8 +52,9 @@ export const IPA_SUBSTITUTIONS = [
   ['O',  'ɔ',   'open o'],
   ['A',  'ɑ',   'open a'],
 
-  // Special-character shortcuts (X-SAMPA-ish)
-  ['@',  'ə',   'schwa (about)'],
+  // Special-character shortcuts
+  ['q',  'ə',   'schwa — single keystroke, no modifier (q is unused in Nayana)'],
+  ['@',  'ə',   'schwa — X-SAMPA convention (alternate)'],
   ['^',  'ʌ',   'wedge (cup)'],
   [':',  'ː',   'length marker — also fires inside vowel digraphs i:, u:, etc.'],
 ];
