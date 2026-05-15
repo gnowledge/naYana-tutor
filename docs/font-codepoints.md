@@ -1,31 +1,48 @@
 # Nayana font — codepoint and glyph-name reference
 
-A practical lookup table for editing Nayana glyphs in FontForge (or any
-font editor). Each row gives the IPA character, its Unicode codepoint, the
-FontForge glyph name (Adobe Glyph List where applicable, else our own
-private name), and the current build strategy.
+A practical lookup table for editing Nayana glyphs in any font editor
+(Glyphr Studio, FontForge, Birdfont, RoboFont, …). Each row gives the
+IPA character, its Unicode codepoint, the canonical glyph name (Adobe
+Glyph List where applicable, else our own private name), and the
+current build strategy.
 
 For deeper rationale on each shape choice see
 [`font-glyph-checklist.md`](./font-glyph-checklist.md). For the build
 pipeline that produces these glyphs see
 [`../src/nayana/phases/glyph_builders.py`](../src/nayana/phases/glyph_builders.py).
 
-## How to find a glyph in FontForge
+## How to find a glyph
 
-- **By codepoint**: `View → Goto…` (or `Ctrl+Shift+>`), then type the
-  codepoint as `uni0259` or paste the character `ə` directly.
-- **By glyph name**: `View → Goto…`, type the name from the table below
-  (`schwa`, `esh`, `eng`, etc.).
-- **By scrolling**: the glyphs we add land at their natural Unicode block
-  positions — IPA Extensions (U+0250–U+02AF) and Spacing Modifier Letters
-  (U+02B0–U+02FF). Custom shapes for Latin letters (`æ`, `ð`, `d`) sit in
-  Basic Latin / Latin-1 Supplement.
+Codepoints and glyph names are the same across editors; only the
+navigation UI differs.
+
+- **By codepoint**: paste the character (`ə`) into the editor's
+  goto/search field, or type the hex (`0259` / `U+0259` / `uni0259`).
+  - *FontForge*: `View → Goto…` (`Ctrl+Shift+>`).
+  - *Glyphr Studio*: `Edit Glyphs` page → the left-side glyph chooser
+    has a search box; type the character or codepoint.
+- **By glyph name**: type the name (`schwa`, `esh`, `eng`, …) into the
+  editor's name search.
+- **By scrolling Unicode blocks**:
+
+| Block                     | Range          | Nayana glyphs that live here                                  |
+|---------------------------|----------------|---------------------------------------------------------------|
+| Basic Latin               | U+0020–007F    | `d` (U+0064) — the only Basic Latin glyph we reshape          |
+| Latin-1 Supplement        | U+0080–00FF    | `æ` (U+00E6), `ð` (U+00F0)                                    |
+| Latin Extended-A          | U+0100–017F    | `ŋ` (U+014B)                                                  |
+| IPA Extensions            | U+0250–02AF    | `ɑ` 0251, `ɚ` 025A, `ɝ` 025D, `ə` 0259, `ʃ` 0283, `ʒ` 0292, `ʌ` 028C |
+| Spacing Modifier Letters  | U+02B0–02FF    | `ː` (U+02D0)                                                  |
+
+So if you're scrolling IPA Extensions looking for `æ` or `ð`, you won't
+find them there — they live in Latin-1 Supplement, where Unicode placed
+them in the original 1991 spec because they're also letters in Old
+English, Norwegian, Icelandic, etc.
 
 ## Shapes the engine emits
 
 ### Decided shapes (12 IPA codepoints + 1 Latin letter)
 
-| Symbol | Codepoint | Glyph name              | Current build strategy                                  | Designed shape                            |
+| Symbol | Codepoint | Glyph name              | Current build strategy                                                         | Designed shape                            |
 |--------|-----------|-------------------------|---------------------------------------------------------|-------------------------------------------|
 | æ      | U+00E6    | `ae`                    | clone of `a` splines                                    | Latin `a`                                 |
 | ð      | U+00F0    | `eth`                   | drawn: oval bowl + arching curl-stroke                  | Greek small `δ`                           |
@@ -51,8 +68,12 @@ only via the substitution.
 | `t` + `esh`     | `tesh.lig`        | clone of `c`            | Latin `c` (Sanskrit IAST)           |
 | `d` + `ezh`     | `dezh.lig`        | clone of `uni0237`      | dotless-j (Sanskrit IAST, dotless to avoid /ʒ/ collision) |
 
-To inspect the substitution in FontForge: `Element → Font Info → Lookups`,
-find the `liga` lookup, view the `ipa_ligatures_subtable`.
+To inspect the substitution:
+
+- *FontForge*: `Element → Font Info → Lookups`, find the `liga` lookup,
+  view the `ipa_ligatures_subtable`.
+- *Glyphr Studio*: `Ligatures` page lists every multi-glyph sequence with
+  its target glyph; the two Nayana entries are `t + esh` and `d + ezh`.
 
 ### Codepoints the engine emits but Nayana hasn't designed yet
 
@@ -107,14 +128,26 @@ IPA codepoint is the other. The current builders take the second path.
 
 ## Workflow for manual edits
 
-1. Open the built font in FontForge:
-   `fontforge fonts/output/Nayana-Regular.otf`
-2. Navigate to a glyph using the table above.
+1. Open the built font in your editor of choice:
+   - *Glyphr Studio* (browser): https://www.glyphrstudio.com/app/ —
+     `Open project → Load font from file` → pick
+     `fonts/output/Nayana-Regular.otf`.
+   - *FontForge* (desktop): `fontforge fonts/output/Nayana-Regular.otf`.
+2. Navigate to a glyph using the codepoint or name from the tables above.
 3. Edit the splines visually.
-4. `File → Generate Fonts…` to write a new OTF.
+4. Export an OTF (`Save & Export → OTF` in Glyphr Studio;
+   `File → Generate Fonts…` in FontForge).
 
-After manual edits, **rebuilding from source will overwrite your
-changes** — the build pipeline in `src/nayana/phases/glyph_builders.py`
-is the source of truth. To preserve a manual edit, port it back into the
-relevant builder function (or have the builder skip glyphs that already
-exist with the right shape).
+**Caveat — rebuilding from source overwrites manual edits.** The build
+pipeline in `src/nayana/phases/glyph_builders.py` is the source of
+truth: every `make build` re-applies the programmatic shapes on top of
+fresh Comic Neue. To make a hand-edit survive a rebuild, two options:
+
+1. **Port the shape back into the builder.** Open the manually-edited
+   glyph, read its splines (Glyphr Studio shows path data; FontForge
+   shows a contour list), and translate them into pen-API calls inside
+   the relevant `build_*` function. Most reliable.
+2. **Skip the builder for that glyph.** Comment out its line in
+   `IpaGlyphsPhase.BUILDERS` (in `ipa_glyphs.py`); place the
+   hand-edited OTF at a known path and adjust the build to start from
+   there. Brittle — easy to forget you've done it.
