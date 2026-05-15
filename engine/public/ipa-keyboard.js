@@ -11,36 +11,45 @@
  * shortcuts where X-SAMPA isn't friendly.
  */
 
+// Map design — IPA is caseless, so the Shift-key-pressed slots (which would
+// otherwise duplicate lowercase letters) carry the IPA character that's
+// "thematically related" to that letter. T → θ, D → ð, S → ʃ, etc.
+// Lowercase letters keep their Latin meaning so users can still spell
+// digraphs like ai, ei, ou, au (the Nayana diphthongs).
+//
 // Order matters: longer patterns checked first so "@r" wins over "@".
 export const IPA_SUBSTITUTIONS = [
-  // r-coloured + length (3-char patterns)
-  ['@r', 'ɚ',  'unstressed r-coloured schwa'],
-  ['3:', 'ɝ',  'stressed r-coloured schwa'],
+  // ---- 2-char patterns (multi-codepoint outputs or compositions) ----
+  ['@r', 'ɚ',   'unstressed r-coloured schwa'],
+  ['ch', 'tʃ',  'voiceless affricate — renders as Nayana c via liga'],
+  ['jh', 'dʒ',  'voiced affricate — renders as Nayana j via liga (bare j stays /j/)'],
+  ['ae', 'æ',   'ash — A is taken for ɑ'],
+  ['i:', 'iː',  'long i (meet)'],
+  ['u:', 'uː',  'long u (food)'],
+  ['o:', 'ɔː',  'long open o (call)'],
+  ['a:', 'ɑː',  'long open a (hot)'],
 
-  // consonant digraphs (2-char)
-  ['th', 'θ',  'voiceless th (think)'],
-  ['dh', 'ð',  'voiced th (this)'],
-  ['sh', 'ʃ',  'sh (ship)'],
-  ['zh', 'ʒ',  'zh (vision)'],
-  ['ng', 'ŋ',  'ng (sing)'],
-  ['ch', 'tʃ', 'ch (chip) — renders as ligature'],
-  ['jh', 'dʒ', 'j (judge) — renders as ligature; "j" alone stays /j/'],
+  // ---- 1-char patterns: capital letters → IPA characters ----
+  // Consonants (capital matches the lowercase initial of the English digraph
+  // it replaces — T for θ ("th"in), D for ð ("d"his), etc.)
+  ['T',  'θ',   'voiceless th (think)'],
+  ['D',  'ð',   'voiced th (this)'],
+  ['S',  'ʃ',   'sh (ship)'],
+  ['Z',  'ʒ',   'zh (vision)'],
+  ['N',  'ŋ',   'ng (sing)'],
+  ['R',  'ɝ',   'stressed r-coloured schwa'],
 
-  // vowel digraphs
-  ['ae', 'æ',  'short a (cat)'],
-  ['i:', 'iː', 'long i (meet)'],
-  ['u:', 'uː', 'long u (food)'],
-  ['o:', 'ɔː', 'long open o (call)'],
-  ['a:', 'ɑː', 'long open a (hot)'],
+  // Short vowels (capital matches the IPA letter's lowercase visual)
+  ['I',  'ɪ',   'short i (bit)'],
+  ['U',  'ʊ',   'short oo (book)'],
+  ['E',  'ɛ',   'short e (bed)'],
+  ['O',  'ɔ',   'open o'],
+  ['A',  'ɑ',   'open a'],
 
-  // single chars (X-SAMPA convention: caps for short vowels, special chars for schwa/wedge)
-  ['@',  'ə',  'schwa (about)'],
-  ['^',  'ʌ',  'wedge (cup)'],
-  ['I',  'ɪ',  'short i (bit)'],
-  ['U',  'ʊ',  'short oo (book)'],
-  ['E',  'ɛ',  'short e (bed)'],
-  ['O',  'ɔ',  'open o'],
-  ['A',  'ɑ',  'open a'],
+  // Special-character shortcuts (X-SAMPA-ish)
+  ['@',  'ə',   'schwa (about)'],
+  ['^',  'ʌ',   'wedge (cup)'],
+  [':',  'ː',   'length marker — also fires inside vowel digraphs i:, u:, etc.'],
 ];
 
 const MAX_PATTERN_LEN = Math.max(...IPA_SUBSTITUTIONS.map(([s]) => s.length));
