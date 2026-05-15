@@ -237,9 +237,8 @@ test('philosophy → fəlosəfiː (still holds; no short-vowel rules fire)', () 
   assert.equal(rewrite('philosophy').spelling, 'fəlosəfiː');
 });
 
-test('English → Eŋglɪʃ (i→ɪ now too)', () => {
-  // The i in 'English' is /IH/, so phase 13 i→ɪ fires.
-  assert.equal(rewrite('English').spelling, 'Eŋglɪʃ');
+test('English → eŋglɪʃ (init-cap dropped; i→ɪ)', () => {
+  assert.equal(rewrite('English').spelling, 'eŋglɪʃ');
 });
 
 test('thinking → θɪŋkɪŋ (think now adds i→ɪ; also -ing has its own i)', () => {

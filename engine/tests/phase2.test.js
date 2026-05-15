@@ -53,11 +53,11 @@ test('CRITICAL: cello is NOT rewritten (c aligns to /tʃ/, not /k/ or /s/)', () 
   assert.equal(rewrite('cello').spelling, 'cello');
 });
 
-test('Celtic → Seltik (CMUdict lists /s/ pronunciation first; first-wins)', () => {
+test('Celtic → seltik (CMUdict /s/ first-wins; init-cap dropped)', () => {
   // CMUdict has both /sɛltɪk/ (basketball team) and /kɛltɪk/ (everything else),
   // listed in that order. First-wins picks /s/. The alternate /k/ pronunciation
-  // would yield "Keltik" — to be surfaced as a footnote in the UI later.
-  assert.equal(rewrite('Celtic').spelling, 'Seltik');
+  // would yield "keltik" — surfaced as an alternate in the UI.
+  assert.equal(rewrite('Celtic').spelling, 'seltik');
 });
 
 test('CRITICAL: ocean is NOT rewritten (c aligns to /ʃ/)', () => {

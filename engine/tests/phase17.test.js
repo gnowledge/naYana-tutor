@@ -190,7 +190,7 @@ test('the → ðə still holds', () => {
   assert.equal(rewrite('the').spelling, 'ðə');
 });
 
-test('Wednesday → Wɛnzdiː (s→z resolves the lingering "Wɛnsdiː" from phase 15)', () => {
+test('Wednesday → wɛnzdiː (s→z resolves the lingering "wɛnsdiː" from phase 15; init-cap dropped)', () => {
   // alignment: w}W e}EH1 d}∅ n}N e}∅ s}Z d}D a}∅ y}IY0
-  assert.equal(rewrite('Wednesday').spelling, 'Wɛnzdiː');
+  assert.equal(rewrite('Wednesday').spelling, 'wɛnzdiː');
 });

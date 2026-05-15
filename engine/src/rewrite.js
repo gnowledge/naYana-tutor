@@ -119,21 +119,23 @@ export function rewriteWord(spelling, pairs, rules) {
 // ---- Helpers ---------------------------------------------------------------
 
 /**
- * Lift the original word's capitalization onto the rewritten lowercase form.
- *   ALL CAPS    → ALL CAPS  ("PHILOSOPHY" → "FILOSOFY")
- *   Capitalized → Capitalized ("Philosophy" → "Filosofy")
- *   lowercase   → lowercase ("philosophy" → "filosofy")
+ * Lift capitalization from the original word ONLY when it's an
+ * abbreviation (multi-letter all-caps token). Everything else lowercases.
  *
- * A single uppercase letter — like the pronoun "I" or a sentence-initial
- * "A" — is ambiguous (could be all-caps or could be initial-cap). We treat
- * it as initial-cap, so "I" → "Ai" rather than "AI".
+ *   ALL CAPS (len ≥ 2)  → preserved   ("USA" → "USA", "NASA" → "NASA")
+ *   Capitalized         → lowercased  ("Philosophy" → "filosofy", "The" → "ðə")
+ *   lowercase           → lowercased  ("philosophy" → "filosofy")
+ *   Single-letter caps  → lowercased  ("I" → "ai")
+ *
+ * Rationale: in a phonetic spelling reform, capital letters carry no
+ * pronunciation information. Sentence-initial caps and proper-noun caps
+ * are an English orthographic convention that Nayana lets go of. Only
+ * all-caps abbreviations are kept, since their letter-by-letter caps
+ * cue the reader to pronounce them as initialisms.
  */
 function applyCaseFromOriginal(original, lowered) {
   if (original.length > 1 && original === original.toUpperCase() && /[A-Z]/.test(original)) {
     return lowered.toUpperCase();
-  }
-  if (original[0] === original[0].toUpperCase() && /[A-Z]/.test(original[0])) {
-    return lowered[0].toUpperCase() + lowered.slice(1);
   }
   return lowered;
 }

@@ -123,10 +123,11 @@ test('door → dor (silent-o; second o stays AO1)', () => {
   assert.equal(rewrite('door').spelling, 'dor');
 });
 
-test('Wednesday → Wɛnsdiː (silent-d AND silent-e; s stays s pending future s→z)', () => {
+test('Wednesday → wɛnsdiː (silent-d AND silent-e; s stays s pending future s→z; init-cap dropped)', () => {
   // alignment: w}W e}EH1 d}∅ n}N e}∅ s}Z d}D a}∅ y}IY0
   // s is /Z/ but no s→z rule yet, so s stays.
-  assert.equal(rewrite('Wednesday').spelling, 'Wɛnsdiː');
+  // Per the no-caps rule, the leading W lowercases.
+  assert.equal(rewrite('Wednesday').spelling, 'wɛnsdiː');
 });
 
 test('handsome → hænsəm (silent-d)', () => {

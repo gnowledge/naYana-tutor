@@ -183,10 +183,9 @@ test('think → θiŋk (th→θ from phase 11 AND n→ŋ before k)', () => {
   assert.equal(rewrite('think').spelling, 'θiŋk');
 });
 
-test('English → Eŋgliʃ (capital preserved; n→ŋ before g AND sh→ʃ)', () => {
+test('English → eŋgliʃ (init-cap dropped per no-caps rule; n→ŋ before g AND sh→ʃ)', () => {
   // alignment: e}IH1 n}NG g}G l}L i}IH0 sh}SH → e + ŋ + g + l + i + ʃ
-  // Initial-cap E is preserved by the capitalization-lifting logic.
-  assert.equal(rewrite('English').spelling, 'Eŋgliʃ');
+  assert.equal(rewrite('English').spelling, 'eŋgliʃ');
 });
 
 test('finger → fiŋger (n→ŋ before g; er stays as ER cluster)', () => {

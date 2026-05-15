@@ -87,10 +87,11 @@ test('CRITICAL: sit is NOT rewritten', () => {
   assert.equal(rewrite('sit').spelling, 'sit');
 });
 
-test('CRITICAL: pronoun "I" → "Ai" (initial-cap, not all-caps "AI")', () => {
-  // A single uppercase letter is ambiguous between ALL-CAPS and Init-Cap;
-  // we treat it as initial-cap so the pronoun reads naturally.
-  assert.equal(rewrite('I').spelling, 'Ai');
+test('pronoun "I" → "ai" (single-letter cap is dropped)', () => {
+  // Per Nayana's no-caps-except-abbreviations rule, the pronoun "I"
+  // lowercases. (To keep it as "AI" you'd have to type "AI" — all-caps,
+  // length ≥ 2 is the only thing that survives.)
+  assert.equal(rewrite('I').spelling, 'ai');
 });
 
 // ---- y → ai (when /aɪ/) ----------------------------------------------------

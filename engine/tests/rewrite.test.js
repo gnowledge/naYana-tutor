@@ -71,16 +71,16 @@ test('CRITICAL: loophole is NOT rewritten', () => {
   assert.equal(rewrite('loophole').spelling, 'loophole');
 });
 
-test('preserves capitalization: Phone → Fone', () => {
-  assert.equal(rewrite('Phone').spelling, 'Fone');
+test('initial-cap is dropped: Phone → fone (Nayana phonetic spelling has no caps)', () => {
+  assert.equal(rewrite('Phone').spelling, 'fone');
 });
 
-test('preserves capitalization: PHONE → FONE', () => {
+test('all-caps preserved as abbreviation: PHONE → FONE', () => {
   assert.equal(rewrite('PHONE').spelling, 'FONE');
 });
 
-test('preserves capitalization: Philosophy → Filosofy', () => {
-  assert.equal(rewrite('Philosophy').spelling, 'Filosofy');
+test('initial-cap is dropped: Philosophy → filosofy', () => {
+  assert.equal(rewrite('Philosophy').spelling, 'filosofy');
 });
 
 test('unknown words pass through unchanged (no pairs available)', () => {
