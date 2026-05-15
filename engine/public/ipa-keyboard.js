@@ -37,9 +37,8 @@ export const IPA_SUBSTITUTIONS = [
   ['ər', 'ɚ',   'rhotic schwa — fires after a→ə when r is typed'],
   ['@r', 'ɚ',   'rhotic schwa — direct typing (X-SAMPA muscle memory)'],
 
-  // affricate ligatures
-  ['ch', 'tʃ',  'voiceless affricate — renders as Nayana c via liga'],
-  ['jh', 'dʒ',  'voiced affricate — renders as Nayana j via liga (bare j stays /j/)'],
+  // (affricate ligatures collapsed to single-letter shortcuts below —
+  // see "c" and "j" in the 1-char section)
 
   // ash digraph — fires when "ae" appears at cursor in one event
   // (paste, or after typing `qe` which produces "a" then "ae")
@@ -68,6 +67,14 @@ export const IPA_SUBSTITUTIONS = [
   ['E',  'ɛ',   'short e (bed)'],
   ['O',  'ɔ',   'open o'],
   ['A',  'ɑ',   'open a'],
+
+  // Affricate single-letter shortcuts. Lowercase c and j are free keys
+  // in Nayana — neither appears standalone in engine output (c only via
+  // tʃ ligature, j only via dʒ ligature). So they can directly produce
+  // the two-codepoint affricate sequences, which the font's `liga` GSUB
+  // then renders as the c-shape and dotless-j ligature glyphs.
+  ['c',  'tʃ',  'voiceless affricate — renders as Nayana c via liga'],
+  ['j',  'dʒ',  'voiced affricate — renders as Nayana j via liga (y types /j/)'],
 
   // Special-character shortcuts
   ['a',  'ə',   'schwa — most frequent vowel; default lowercase shortcut'],
