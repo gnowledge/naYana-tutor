@@ -20,7 +20,7 @@
  *   node engine/scripts/validate-ipa-encoding.js "<english text>" --tts out.wav
  */
 
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -154,13 +154,16 @@ function main() {
   console.log(`\nReady-to-run espeak-ng command:`);
   console.log(`  espeak-ng "${espeakInput.replace(/"/g, '\\"')}"`);
   if (ttsOutput) {
-    console.log(`  espeak-ng -w ${ttsOutput} "${espeakInput.replace(/"/g, '\\"')}"`);
-    try {
-      execSync(`espeak-ng -w "${ttsOutput}" "${espeakInput.replace(/"/g, '\\"')}"`, { stdio: 'pipe' });
-      console.log(`\n✓ Wrote ${ttsOutput} — IPA → audio acid test passed.`);
-    } catch (e) {
-      console.log(`\n✗ espeak-ng not available or failed: ${e.message.split('\n')[0]}`);
+    console.log(`  espeak-ng -w ${ttsOutput} '${espeakInput}'`);
+    // Use spawnSync with array args so backticks in X-SAMPA (e.g. @` for ɚ)
+    // are passed verbatim, not interpreted by a shell.
+    const r = spawnSync('espeak-ng', ['-w', ttsOutput, espeakInput],
+                        { stdio: 'pipe' });
+    if (r.error || r.status !== 0) {
+      console.log(`\n✗ espeak-ng failed: ${r.error?.message || r.stderr?.toString().trim() || `exit ${r.status}`}`);
       console.log(`  Install with: sudo apt install espeak-ng`);
+    } else {
+      console.log(`\n✓ Wrote ${ttsOutput} — IPA → audio acid test passed.`);
     }
   }
 }
