@@ -1,0 +1,40 @@
+# Keep the build context small + reproducible.
+
+# VCS
+.git
+.gitignore
+.github
+
+# Node — installed inside the container
+**/node_modules
+npm-debug.log
+yarn-error.log
+
+# Generated font/dict artefacts (rebuilt inside the container)
+fonts/output/*.otf
+fonts/output/*.ttf
+engine/data/cmudict.json
+engine/data/catalogue.json
+
+# Editor / OS clutter
+.vscode
+.idea
+.DS_Store
+
+# Local-only screenshots / scratch
+.screenshots
+build/
+dist/
+
+# Don't ship the python venv used for one-time alignment
+engine/.venv
+
+# Shouldn't be tracked anyway, but defence in depth
+.env
+.env.local
+*.tar.gz
+*.log
+
+# Local CLAUDE-only material
+CLAUDE.md
+.claude/
