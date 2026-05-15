@@ -52,6 +52,26 @@ phase rule system is in the preprocessor; the font supplies glyphs.
 others come later. Schwa (/ə/) and stressed schwa (/ʌ/) are distinct
 phonemes following CMUdict's distinction.
 
+**Script reflects pronunciation, not prescription.** Different English
+varieties pronounce the same word differently. Indian English speakers
+articulate /r/ where General American uses ɝ/ɚ, RP rounds vowels GA
+leaves unrounded, etc. Each variety wants its *own* Nayana spelling
+because each variety has its own pronunciation. There is no "correct"
+or "incorrect" Nayana spelling for English in the abstract — there is
+the spelling that matches how a particular variety actually sounds.
+
+The v1 engine ships GA because GA has the cleanest open phonetic
+data (CMUdict). Other varieties become parallel sub-projects that
+share the font and writing system but swap in their own dictionaries:
+"Nayana Indian English", "Nayana RP", etc. The font family name
+("Nayana English") flags this scope explicitly; future families will
+sit alongside it ("Nayana Hindi", "Nayana Telugu") rather than
+replacing it.
+
+**v1 ships English-only.** Deployment artefacts (font, tutor, browser
+plugin when it lands) all carry "English" in their name and metadata.
+Dialect/language expansion is post-v1.
+
 **`y` is the canonical letter for /j/. `j` is reserved for the dʒ
 ligature.** Two halves of one decision:
 

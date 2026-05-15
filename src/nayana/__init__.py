@@ -6,8 +6,15 @@ Font I/O helpers live in `nayana.font_io`.
 """
 
 # Single source of truth for project metadata. Update VERSION when releasing.
+#
+# Family name is "Nayana English" so the OS font picker and font-info dialogs
+# clearly show the dialect scope. v1 is English-only; future dialects/languages
+# (Indian English, RP, etc.) will ship as sibling families like "Nayana Hindi".
+# CSS @font-face references the file by URL and aliases it to whatever name
+# the stylesheet wants ('Nayana'), so this metadata change is non-breaking
+# for the harness pages.
 VERSION = "0.1.0"
-FAMILY_NAME = "Nayana"
+FAMILY_NAME = "Nayana English"
 FONT_NAME_PREFIX = "Nayana"
 
 # OFL 1.1 compliance: when building a derivative, this string is appended
