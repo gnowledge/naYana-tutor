@@ -24,3 +24,6 @@ venv/
 # Handoff bundles — should never be committed
 *.tar.gz
 *.patch
+
+# Piper TTS binary + voice model (downloaded via 'make piper')
+vendor/

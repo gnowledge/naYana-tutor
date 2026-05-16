@@ -18,11 +18,13 @@
 import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 import { parse as parseHtml } from 'node-html-parser';
 
 import { loadDictionary } from './dictionary.js';
 import { loadCatalogue, rulesForPhase, listPhases } from './catalogue.js';
 import { processHtml, processText_ } from './process.js';
+import { naYanaTextToEspeakInput, isPhonetic } from './xsampa.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -43,7 +45,13 @@ const lookup = (word) => dictionary.lookupAll(word);
 
 // Middleware
 app.use(express.json({ limit: '5mb' }));
-app.use(express.static(path.join(ROOT, 'public')));
+// Static files: send `Cache-Control: no-cache` so browsers always revalidate
+// before reusing a cached copy. Combined with express.static's default ETag
+// support this gives 304 Not Modified for unchanged files (fast) but picks
+// up edits to HTML/CSS/JS the moment they're saved (no stale-cache pain).
+app.use(express.static(path.join(ROOT, 'public'), {
+  setHeaders: (res) => res.setHeader('Cache-Control', 'no-cache'),
+}));
 
 // Clean URLs for top-level tutor pages — each maps /<slug> to public/<slug>.html
 // so users see /learn instead of /learn.html. Express.static still serves the
@@ -51,6 +59,7 @@ app.use(express.static(path.join(ROOT, 'public')));
 const TUTOR_PAGES = ['learn', 'type', 'read', 'download', 'faq', 'developer', 'harness'];
 for (const slug of TUTOR_PAGES) {
   app.get(`/${slug}`, (req, res) => {
+    res.set('Cache-Control', 'no-cache');
     res.sendFile(path.join(ROOT, 'public', `${slug}.html`), (err) => {
       if (err) res.status(404).send('Not found');
     });
@@ -63,6 +72,93 @@ app.get('/api/phases', (req, res) => {
     phases: listPhases(catalogue),
     maxPhase: catalogue.phases.length,
   });
+});
+
+// ---------- TTS endpoint --------------------------------------------------
+// Synthesise audio for a piece of text. Body: { text, engine?, voice?, speed? }.
+// Response: audio/wav stream.
+//
+// Engine routing:
+//   - If `engine` is provided, use it directly ('piper' | 'espeak').
+//   - Otherwise, auto-detect: text containing IPA codepoints → espeak-ng
+//     (it accepts phoneme input via [[…]]); plain English → Piper
+//     (neural, much more natural).
+//
+// Speech caching: synth takes ~30 ms (espeak) or ~150 ms (Piper) per word;
+// we cache by (engine|voice|speed|text) so repeat clicks are instant.
+const TTS_CACHE = new Map();
+const TTS_CACHE_MAX = 256;
+const TTS_MAX_TEXT_LEN = 800;
+
+// Piper paths — resolved relative to the repo root so they work regardless
+// of where Node is launched. Override with NAYANA_PIPER_BIN /
+// NAYANA_PIPER_VOICE if you want a different binary or voice model.
+const REPO_ROOT = path.join(ROOT, '..');
+const PIPER_BIN   = process.env.NAYANA_PIPER_BIN
+  || path.join(REPO_ROOT, 'vendor', 'piper', 'piper');
+const PIPER_VOICE = process.env.NAYANA_PIPER_VOICE
+  || path.join(REPO_ROOT, 'vendor', 'piper-voices', 'en_US-lessac-medium.onnx');
+
+app.post('/api/tts', (req, res) => {
+  const { text, engine: engineOverride, voice, speed = 130 } = req.body || {};
+  if (typeof text !== 'string' || !text.trim()) {
+    return res.status(400).json({ error: 'Provide non-empty text' });
+  }
+  if (text.length > TTS_MAX_TEXT_LEN) {
+    return res.status(400).json({ error: `text too long (max ${TTS_MAX_TEXT_LEN} chars)` });
+  }
+
+  const engine = engineOverride || (isPhonetic(text) ? 'espeak' : 'piper');
+  const effectiveVoice = voice || (engine === 'piper' ? 'lessac' : 'en-us');
+  const cacheKey = `${engine}|${effectiveVoice}|${speed}|${text}`;
+  if (TTS_CACHE.has(cacheKey)) {
+    res.set('Content-Type', 'audio/wav');
+    res.set('Cache-Control', 'no-cache');
+    return res.send(TTS_CACHE.get(cacheKey));
+  }
+
+  let r;
+  if (engine === 'piper') {
+    // Strip our verbatim markup so [[Nehru]] reads as "Nehru", not as the
+    // brackets too. Backticks already parse cleanly through Piper's
+    // text normaliser but we strip them for consistency.
+    const cleanText = text
+      .replace(/\[\[([^\]\n]+)\]\]/g, '$1')
+      .replace(/`([^`\n]+)`/g, '$1');
+    r = spawnSync(
+      PIPER_BIN,
+      ['--model', PIPER_VOICE, '--output_file', '-', '--quiet'],
+      // Pass input as Buffer so `encoding: 'buffer'` (which applies to
+      // both stdin and stdout) doesn't try to re-encode a string.
+      { input: Buffer.from(cleanText, 'utf8'), encoding: 'buffer' }
+    );
+  } else {
+    // espeak path — phonemic input via [[…]] wrappers
+    const espeakInput = naYanaTextToEspeakInput(text);
+    r = spawnSync(
+      'espeak-ng',
+      ['--stdout', '-v', String(effectiveVoice), '-s', String(speed), espeakInput],
+      { encoding: 'buffer' }
+    );
+  }
+
+  if (r.error || r.status !== 0) {
+    const msg = r.error?.message || r.stderr?.toString().trim() || `exit ${r.status}`;
+    return res.status(500).json({ error: `${engine} tts failed`, detail: msg });
+  }
+  if (!r.stdout || r.stdout.length === 0) {
+    return res.status(500).json({ error: `${engine} produced empty output` });
+  }
+
+  // Cache (FIFO eviction)
+  if (TTS_CACHE.size >= TTS_CACHE_MAX) {
+    TTS_CACHE.delete(TTS_CACHE.keys().next().value);
+  }
+  TTS_CACHE.set(cacheKey, r.stdout);
+
+  res.set('Content-Type', 'audio/wav');
+  res.set('Cache-Control', 'no-cache');
+  res.send(r.stdout);
 });
 
 app.post('/api/process', (req, res) => {

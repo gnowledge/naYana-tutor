@@ -53,11 +53,39 @@ RUN npm run build && \
     test -s data/cmudict.json && \
     test -s data/catalogue.json
 
+# ---- Stage 2b: Piper neural TTS (binary + voice model) ----
+# Piper provides natural-sounding neural TTS, used by /api/tts for
+# English text. About 90 MB total (binary ~50 MB + lessac voice ~63 MB
+# packed into ~26 MB tarball + 63 MB model).
+FROM debian:bookworm-slim AS piper-fetcher
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates curl \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /piper-build
+RUN curl -sL -o piper.tgz \
+      https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_x86_64.tar.gz \
+    && mkdir piper && tar -xzf piper.tgz -C . \
+    && rm piper.tgz \
+    && ls piper/
+RUN mkdir -p voices && \
+    curl -sL -o voices/en_US-lessac-medium.onnx \
+      https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx && \
+    curl -sL -o voices/en_US-lessac-medium.onnx.json \
+      https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json && \
+    ls -lh voices/
+
 # ---- Stage 3: runtime ----
 FROM node:20-slim AS runtime
 LABEL org.opencontainers.image.title="Nayana tutor (English)" \
       org.opencontainers.image.description="Phonetic spelling reform of English orthography. v0.1." \
       org.opencontainers.image.source="https://github.com/gnowledge/naYana-tutor"
+
+# espeak-ng powers the IPA-precise audio path (per-character demos in /learn,
+# fallback when only IPA is available). Piper handles natural-voice TTS
+# for plain English. Both are needed.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        espeak-ng \
+    && rm -rf /var/lib/apt/lists/*
 
 # Non-root user for security
 RUN groupadd -r nayana && useradd -r -g nayana -m -d /home/nayana nayana
@@ -76,11 +104,17 @@ COPY engine/public/ ./public/
 COPY --from=font-builder /build/fonts/output/Nayana-Regular.otf ./public/fonts/Nayana-Regular.otf
 COPY --from=font-builder /build/fonts/output/Nayana-Regular.otf ./public/manifesto/Nayana-Regular.otf
 
-RUN chown -R nayana:nayana /app
+# Piper binary + voice model from the dedicated fetcher stage.
+COPY --from=piper-fetcher /piper-build/piper   /opt/piper/
+COPY --from=piper-fetcher /piper-build/voices  /opt/piper-voices/
+
+RUN chown -R nayana:nayana /app /opt/piper /opt/piper-voices
 USER nayana
 
 ENV PORT=8080 \
-    NODE_ENV=production
+    NODE_ENV=production \
+    NAYANA_PIPER_BIN=/opt/piper/piper \
+    NAYANA_PIPER_VOICE=/opt/piper-voices/en_US-lessac-medium.onnx
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
