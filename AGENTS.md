@@ -252,30 +252,59 @@ expected phoneme. This handles tricky cases by construction:
 *shepherd* (alignment is `p}P h}_`, so `ph→f` does not fire) and
 *number* (alignment is `m}M b}B`, so `mb→m` does not fire).
 
-538 unit tests cover positives, exception cases, capitalization
-preservation, multi-rule composition, and the engine extensions.
+552 unit tests cover positives, exception cases, capitalization
+preservation, multi-rule composition, the engine extensions, and the
+verbatim-escape mechanism. (2 pre-existing failures in the "English"
+word case — engine drops a `g` between ŋ and l; tracked, not blocking.)
 
 The reform is functionally complete for everyday English text — every
 English phoneme that has an IPA glyph has been introduced. Remaining
 work is per-word edge cases (queue's odd alignment, dialectal variation,
 very rare loanwords) rather than systematic phoneme coverage.
 
-### Test harness (engine/public/)
-- Phase slider 0..N
-- Multi-pronunciation picker (click words with the `▾` marker)
-- Reader preferences persisted in `localStorage`
-- Per-phase demo text auto-loads on phase change (unless user has typed
-  their own)
-- Progression badge `★ phase N` tracks the highest phase the reader has
-  ever transformed at (`localStorage`)
-- URL fetch tab proxies through the server, strips nav/aside/footer
-  noise, processes article body
+### Verbatim-escape mechanism
+The engine accepts two equivalent escape syntaxes for preserving text
+as-typed (no phoneme lookup, no rewrite):
 
-### Manifesto
-- Published at `engine/public/manifesto/index.html`
-- Self-contained: HTML + markdown source + bundled font
-- Loaded at `/manifesto/` when the engine server runs
-- Designed to be uploaded as a static unit to any host
+- `` `text` `` — backtick pair, Markdown-style
+- `[[text]]` — double brackets, robust on keyboards where backtick is
+  a dead key (US-International, many EU layouts)
+
+Used for proper nouns whose CMUdict transcription is wrong, foreign
+loanwords, intentional IPA segments, code identifiers. Escaped text
+emerges as `<span class="nayana-verbatim">…</span>` and is also
+honoured by the TTS endpoint (brackets stripped before synth).
+
+### Tutor (public/) — production-ready
+- `/` — landing
+- `/learn` — nine-lesson pedagogical tour (re-ordered for ease of
+  learning, not engine-build order). Each lesson has a Why? box, per-
+  character intros, a Try-it comparison table with per-word 🔊 audio.
+- `/type` — two modes: (1) primary, type/paste English and watch it
+  become naYana word-by-word with a ▶ Play button for full-sentence
+  audio; (2) IPA composer for typing phonemes directly via shortcuts.
+- `/read` — sketch (parallel-text passages, toggleable views). Real
+  curated content is the post-deploy follow-up.
+- `/manifesto/` — published manifesto, bundled font.
+- `/download` — font download + per-OS install + upcoming-keyboard-layouts notice.
+- `/faq` — 14 Q&As with in-page TOC.
+- `/developer` — internal tools, acid tests, design philosophy.
+- `/harness` — engine debug rig (phase slider, multi-pron picker,
+  URL-fetch tab). Same as the original test harness, now under `/harness`.
+
+Persistent nav + footer injected by `site.js`; cache-control set to
+`no-cache` server-side so every reload always revalidates.
+
+### TTS (espeak-ng + Piper)
+- `POST /api/tts` returns `audio/wav`. Auto-routes by content: plain
+  English → Piper (neural, ~150 ms cold, ~13 ms cached); IPA → espeak-ng.
+- Piper binary + voice model (`en_US-lessac-medium`) live in `vendor/`
+  (gitignored). `make piper` downloads them locally. Dockerfile pulls
+  them at image build time via the dedicated `piper-fetcher` stage.
+- Override the voice via `NAYANA_PIPER_VOICE=/path/to/other.onnx`.
+- Per-word audio on `/learn` plays the row's English text through Piper
+  (natural voice with the correct pronunciation). Per-sentence audio on
+  `/type` plays the user's left-pane English input through Piper.
 
 ---
 
@@ -334,6 +363,176 @@ The font must be copied into `engine/public/fonts/Nayana-Regular.otf`
 for the harness to display Nayana's glyphs (otherwise harness still
 works, just renders in browser default sans). The manifesto's font is
 already bundled at `engine/public/manifesto/Nayana-Regular.otf`.
+
+For local audio playback during development:
+
+```bash
+make piper                       # downloads Piper binary + voice (~90 MB)
+```
+
+Without this, `/api/tts` returns 500 errors for English text (espeak-ng
+fallback still works for IPA-only requests).
+
+---
+
+## Deployment
+
+### Resource expectations
+- Container size: ~440 MB (font + engine + Piper + voice model)
+- Bare-metal disk: ~150 MB code + 90 MB Piper artefacts
+- RAM: ~250 MB at idle (CMUdict 130k words loaded into JS heap;
+  doesn't grow under load)
+- CPU: idle ~0%; one core for ~150 ms per Piper TTS request
+- Listens on `$PORT` (default 8080), all interfaces, HTTP only —
+  always front with a TLS-terminating reverse proxy
+
+### Build artefacts that must exist before image build
+The runtime image bundles compiled artefacts that take too long to
+build in CI. Run these once on a dev machine before `docker build`:
+
+```bash
+cd engine
+npm install
+npm run fetch-cmudict            # ~5 MB CMUdict download
+python3 -m venv .venv
+.venv/bin/pip install phonetisaurus
+npm run align-cmudict            # ~10–15 min — DO NOT do this in Docker
+```
+
+Both `engine/data/cmudict.txt` and `engine/data/aligned-cmudict.corpus`
+must be present in the build context. Without them the image still
+builds but falls back to the tiny sample dictionary (engine returns
+mostly-untranscribed words).
+
+### Docker (recommended)
+
+```bash
+docker build -t nayana-tutor .
+docker run -d --name nayana-tutor \
+  --restart unless-stopped \
+  -p 8080:8080 \
+  nayana-tutor
+```
+
+Four stages: `font-builder` (FontForge → .otf) · `engine-builder` (Node
++ cmudict.json compile) · `piper-fetcher` (downloads Piper binary +
+voice at build time) · `runtime` (node:20-slim + espeak-ng + everything
+above).
+
+### Bare-metal
+
+```bash
+# System dependencies
+apt-get install -y nodejs npm espeak-ng
+make piper                       # vendor/piper + voice
+cd engine && npm ci --omit=dev
+npm run build                    # cmudict.json + catalogue.json
+
+# Run
+PORT=8080 NODE_ENV=production node src/server.js
+```
+
+systemd unit (`/etc/systemd/system/nayana-tutor.service`):
+
+```ini
+[Unit]
+Description=naYana tutor
+After=network.target
+
+[Service]
+Type=simple
+User=nayana
+WorkingDirectory=/opt/nayana/engine
+Environment=PORT=8080
+Environment=NODE_ENV=production
+Environment=NAYANA_PIPER_BIN=/opt/nayana/vendor/piper/piper
+Environment=NAYANA_PIPER_VOICE=/opt/nayana/vendor/piper-voices/en_US-lessac-medium.onnx
+ExecStart=/usr/bin/node src/server.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### Reverse proxy alongside another service
+
+Pick a port that doesn't collide with the existing service (`ss -ltnp`
+to inventory). Two routing options:
+
+**Subdomain — recommended** (`nayana.example.com`). Cleanest URLs,
+no path-prefix bookkeeping. Every URL inside the tutor is rooted at
+`/` (`/learn`, `/api/tts`, `/fonts/Nayana-Regular.otf` …) so it just
+works.
+
+```nginx
+# /etc/nginx/sites-available/nayana
+server {
+    listen 80;
+    server_name nayana.example.com;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 443 ssl http2;
+    server_name nayana.example.com;
+
+    ssl_certificate     /etc/letsencrypt/live/nayana.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/nayana.example.com/privkey.pem;
+
+    # /api/tts can take ~2s for a long Piper sentence — bump the
+    # default 60s timeout only if you stream very large text.
+    proxy_read_timeout 30s;
+
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+Caddy alternative (auto-TLS):
+
+```
+nayana.example.com {
+    reverse_proxy 127.0.0.1:8080
+}
+```
+
+**Path prefix** (`example.com/nayana/`) is possible but currently
+requires rewriting every absolute URL in the tutor's HTML/JS to
+include the prefix. Subdomain avoids this entirely. If subdomain
+isn't an option, the work to support a base path lives in:
+`engine/src/server.js` (route declarations), `engine/public/site.js`
+(NAV_LINKS), and inline `fetch('/api/…')` calls in `type.html`.
+
+### TLS
+- Let's Encrypt with certbot: `certbot --nginx -d nayana.example.com`
+- Caddy handles TLS automatically, no extra config.
+
+### Health check
+- Container: `HEALTHCHECK` is in the Dockerfile (curls `/`).
+- Manual: `curl -fsS http://127.0.0.1:8080/ > /dev/null && echo OK`
+- Logs: `docker logs nayana-tutor` or `journalctl -u nayana-tutor`.
+
+### Common gotchas
+- **Audio broken, rest works** → Piper voice model missing or
+  `NAYANA_PIPER_VOICE` env wrong. Verify with
+  `echo hi | $NAYANA_PIPER_BIN --model $NAYANA_PIPER_VOICE -f /tmp/x.wav --quiet`
+- **Engine returns mostly untranscribed words** → `data/cmudict.json`
+  is the sample, not the full one. `npm run build` requires
+  `data/cmudict.txt` to exist.
+- **Server won't start, port collision** → `ss -ltnp | grep 8080`
+  to find the conflict, change `PORT`.
+- **Stale page in browser after redeploy** → server sends
+  `Cache-Control: no-cache` so a normal refresh always revalidates.
+  If a tab is stuck, hard-refresh once (Ctrl+Shift+R). Multiple Node
+  processes on different ports can leave a tab pointed at a stale
+  instance — `ss -ltnp | grep node` to see all listeners.
+- **OOM at startup** → CMUdict load needs ~250 MB heap. On a small
+  VPS, `--max-old-space-size=512` in the systemd `ExecStart` is safe.
 
 ---
 
