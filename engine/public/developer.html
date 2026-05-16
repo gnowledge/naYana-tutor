@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Developer — naYana</title>
+<meta name="description" content="Source code, internal tools, acid tests, deployment notes, and references for anyone working on or extending naYana.">
+<link rel="stylesheet" href="site.css">
+<style>
+  .dev-grid {
+    display: grid;
+    gap: var(--space-4);
+    margin: var(--space-5) 0;
+  }
+  @media (min-width: 760px) {
+    .dev-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .dev-card {
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .dev-card h3 {
+    margin: 0 0 var(--space-2);
+    font-size: 16px;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+  .dev-card h3 .small { font-size: 12px; font-weight: 400; color: var(--text-faint); }
+  .dev-card p { margin: 0 0 var(--space-3); color: var(--text-muted); font-size: 14px; }
+  .dev-card a { font-weight: 500; }
+  .dev-card code { font-size: 12px; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="container-narrow" style="padding-top: var(--space-6);">
+
+  <h1>Developer reference</h1>
+  <p class="lead">
+    Internal tools, source code, design docs, and acid tests for anyone
+    working on naYana — extending it to new English varieties, porting
+    it to other languages, contributing glyph designs, or just curious
+    about how the engine works.
+  </p>
+
+  <h2>Source</h2>
+  <p>
+    All code, font sources, and tutor pages live in one repository.
+    Pull requests welcome — especially from people working on other
+    English varieties (Indian English, RP, Australian, …) or other
+    languages with open pronunciation dictionaries.
+  </p>
+  <p>
+    <a class="btn btn-primary" href="https://github.com/gnowledge/naYana-tutor" target="_blank" rel="noopener">
+      → Source on GitHub
+    </a>
+  </p>
+
+  <h2>Interactive tools</h2>
+
+  <div class="dev-grid">
+
+    <div class="dev-card">
+      <h3>Engine harness <span class="small">developer view</span></h3>
+      <p>The phased English-to-naYana rewriter. Paste text, slide the phase
+        from 0 to 18, see each substitution rule applied progressively.
+        Originally built as the engine test rig — useful for diagnosing
+        word-level rewrite bugs or designing new phases.</p>
+      <a href="/harness">→ Open harness</a>
+    </div>
+
+    <div class="dev-card">
+      <h3>IPA character inventory</h3>
+      <p>Every Unicode codepoint the engine emits — IPA name, Nayana
+        rendering, system-font fallback for comparison, sample word, and
+        the keyboard shortcut that produces it. Visual proof of glyph
+        coverage in the font.</p>
+      <a href="/ipa-inventory.html">→ Inventory</a>
+    </div>
+
+    <div class="dev-card">
+      <h3>IPA keyboard reference</h3>
+      <p>The full substitution table used by the typing layer. Single
+        source of truth: same data drives the live composer and the
+        documentation page.</p>
+      <a href="/ipa-keyboard.html">→ Keyboard</a>
+    </div>
+
+    <div class="dev-card">
+      <h3>Glyph proof sheet <span class="small">internal</span></h3>
+      <p>Visual test page showing every designed naYana glyph at 84pt
+        next to a sample word. Used during font iteration to spot
+        weight/spacing issues at a glance.</p>
+      <a href="/glyph-test.html">→ Proof sheet</a>
+    </div>
+
+  </div>
+
+  <h2>Acid tests</h2>
+
+  <p>Two end-to-end tests prove the encoding contract — both runnable from
+    a clone of the repo.</p>
+
+  <div class="dev-grid">
+
+    <div class="dev-card">
+      <h3>Acid test 1 — codepoint correctness</h3>
+      <p>The IPA inventory page itself is the test: every cell in the
+        "Nayana" column shows the rendered glyph alongside the
+        system-font rendering of the same codepoint. If the Nayana cell
+        shows a fallback shape, that codepoint is missing from the font.</p>
+      <a href="/ipa-inventory.html">→ Open inventory</a>
+    </div>
+
+    <div class="dev-card">
+      <h3>Acid test 2 — IPA → audio round-trip</h3>
+      <p>Engine output is real IPA — provable by piping it through
+        <code>espeak-ng</code> to synthesize speech. The validator script
+        audits every character against the known IPA inventory, converts
+        to X-SAMPA, and writes a playable .wav.</p>
+      <p><code>node engine/scripts/validate-ipa-encoding.js "..." --tts out.wav</code></p>
+    </div>
+
+  </div>
+
+  <h2>Architecture</h2>
+
+  <div class="dev-grid">
+
+    <div class="dev-card">
+      <h3>Engine</h3>
+      <p>Node.js. CMUdict (~130k words) + Phonetisaurus alignment +
+        position-based grapheme→phoneme rules. 18 phases, 538 unit tests.
+        Pure JS — no Node-only deps in the rule modules, so it can be
+        ported to client-side or serverless when needed.</p>
+      <a href="https://github.com/gnowledge/naYana-tutor/blob/main/AGENTS.md" target="_blank" rel="noopener">→ AGENTS.md (handoff doc)</a>
+    </div>
+
+    <div class="dev-card">
+      <h3>Font</h3>
+      <p>OpenType (CFF). Source is a FontForge SFD file; build is a
+        passthrough — every shape decision is locked in the SFD. Family
+        name: <em>Nayana English</em>. Drawn over Comic Neue's Latin
+        skeleton with custom IPA glyphs.</p>
+      <a href="https://github.com/gnowledge/naYana-tutor/blob/main/docs/font-codepoints.md" target="_blank" rel="noopener">→ Codepoint reference</a>
+    </div>
+
+    <div class="dev-card">
+      <h3>Deployment</h3>
+      <p>Single multi-stage Docker image (~300 MB). Works on any container
+        host: Fly.io, Railway, Render, DigitalOcean App Platform, plain
+        VPS with Docker.</p>
+      <a href="https://github.com/gnowledge/naYana-tutor/blob/main/docs/deployment.md" target="_blank" rel="noopener">→ Deployment notes</a>
+    </div>
+
+    <div class="dev-card">
+      <h3>Override mechanism</h3>
+      <p>CMUdict has occasional wrong transcriptions. An overrides file
+        (<code>engine/data/cmudict-overrides.txt</code>) patches them on
+        a per-word basis without touching the upstream dictionary.</p>
+      <a href="https://github.com/gnowledge/naYana-tutor/blob/main/engine/data/cmudict-overrides.txt" target="_blank" rel="noopener">→ Current overrides</a>
+    </div>
+
+  </div>
+
+  <h2>Design philosophy</h2>
+
+  <p>Two principles the project commits to, recorded in AGENTS.md and
+    enforced through every design decision:</p>
+
+  <ul style="line-height: 1.8;">
+    <li><strong>IPA encoding is non-negotiable.</strong> Every phoneme
+      naYana emits uses its canonical IPA Unicode codepoint — same one
+      a phonetics textbook or a text-to-speech engine would consume. The
+      font draws those codepoints with friendlier shapes, but the
+      underlying text is standards-compliant IPA.</li>
+    <li><strong>Script reflects pronunciation, not prescription.</strong>
+      Different English varieties (Indian English, RP, Australian, GA)
+      pronounce the same word differently and so will have different
+      naYana spellings. There's no "correct" naYana spelling in the
+      abstract — only the spelling that matches how a particular variety
+      actually sounds.</li>
+  </ul>
+
+  <h2>Roadmap</h2>
+
+  <p>See the <a href="/faq#roadmap">FAQ roadmap entry</a> for the full
+    list. Short version: v0.2 adds audio playback to the tutor, v0.3
+    ships a browser plugin, v0.4 begins Indian English support, and
+    v0.5+ branches into other languages.</p>
+
+</main>
+
+<script src="site.js"></script>
+</body>
+</html>
