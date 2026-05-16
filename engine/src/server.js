@@ -45,6 +45,18 @@ const lookup = (word) => dictionary.lookupAll(word);
 app.use(express.json({ limit: '5mb' }));
 app.use(express.static(path.join(ROOT, 'public')));
 
+// Clean URLs for top-level tutor pages — each maps /<slug> to public/<slug>.html
+// so users see /learn instead of /learn.html. Express.static still serves the
+// .html paths too (and assets, fonts), so links remain flexible.
+const TUTOR_PAGES = ['learn', 'type', 'read', 'download', 'faq', 'harness'];
+for (const slug of TUTOR_PAGES) {
+  app.get(`/${slug}`, (req, res) => {
+    res.sendFile(path.join(ROOT, 'public', `${slug}.html`), (err) => {
+      if (err) res.status(404).send('Not found');
+    });
+  });
+}
+
 // API routes
 app.get('/api/phases', (req, res) => {
   res.json({

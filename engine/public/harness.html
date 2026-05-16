@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Nayana Engine — Test Harness</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-inner">
+    <div class="bar-title">
+      <strong>Nayana</strong>
+      <span class="bar-subtitle">English (v0.1) — test harness</span>
+    </div>
+    <div class="bar-controls">
+      <label class="phase-control">
+        Phase
+        <input type="range" id="phase-slider" min="0" max="1" value="1" step="1">
+        <span id="phase-value">1</span>
+      </label>
+      <label class="vowel-toggle">
+        <input type="checkbox" id="vowel-toggle" checked>
+        Vowel markers (ss01)
+      </label>
+      <label class="vowel-toggle">
+        <input type="checkbox" id="highlight-toggle" checked>
+        Highlight changed words
+      </label>
+      <button class="prefs-button" id="prefs-button" title="Saved word preferences. Click to reset.">
+        prefs <span id="prefs-count">0</span>
+      </button>
+    </div>
+    <div class="bar-status">
+      <a href="ipa-keyboard.html" class="status-pill" title="Type IPA characters via English-style digraphs">⌨ IPA keyboard</a>
+      <span id="phase-name" class="status-pill">ph → f</span>
+      <span id="phase-reached-badge" class="status-pill phase-reached" title="The highest phase you have used so far. Move the slider to advance.">★ phase 0</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="input-section">
+    <h2>Input</h2>
+    <div class="tabs">
+      <button class="tab active" data-tab="text">Paste text</button>
+      <button class="tab" data-tab="url">Fetch URL</button>
+    </div>
+
+    <div class="tab-panel" id="tab-text">
+      <textarea id="input-text" rows="10" placeholder="Paste English text here...">A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
+
+The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.</textarea>
+      <button class="primary" id="process-text-btn">Transform</button>
+    </div>
+
+    <div class="tab-panel hidden" id="tab-url">
+      <input type="url" id="input-url" placeholder="https://example.com/article">
+      <button class="primary" id="process-url-btn">Fetch and transform</button>
+      <p class="hint">The server fetches the URL and extracts the main article content (looking for &lt;article&gt;, then &lt;main&gt;, then &lt;body&gt;).</p>
+    </div>
+  </section>
+
+  <section class="output-section">
+    <div class="output-header">
+      <h2>Output</h2>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="output-area" id="output">
+      <p class="placeholder">Output will appear here. Hover any changed word to see the original. Words marked with a small ▾ have alternate pronunciations — click to pick which one Nayana should use.</p>
+    </div>
+  </section>
+
+  <section class="phase-info">
+    <h2>About this phase</h2>
+    <div id="phase-description"></div>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,85 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Nayana Engine — Test Harness</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nayana — Learn the International Phonetic Alphabet</title>
+<meta name="description" content="Nayana is a Latin-based way to read, type, and write English phonetically. Fully IPA + Unicode compliant. Learn the IPA in a few easy steps.">
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<header class="bar">
-  <div class="bar-inner">
-    <div class="bar-title">
-      <strong>Nayana</strong>
-      <span class="bar-subtitle">English (v0.1) — test harness</span>
-    </div>
-    <div class="bar-controls">
-      <label class="phase-control">
-        Phase
-        <input type="range" id="phase-slider" min="0" max="1" value="1" step="1">
-        <span id="phase-value">1</span>
-      </label>
-      <label class="vowel-toggle">
-        <input type="checkbox" id="vowel-toggle" checked>
-        Vowel markers (ss01)
-      </label>
-      <label class="vowel-toggle">
-        <input type="checkbox" id="highlight-toggle" checked>
-        Highlight changed words
-      </label>
-      <button class="prefs-button" id="prefs-button" title="Saved word preferences. Click to reset.">
-        prefs <span id="prefs-count">0</span>
-      </button>
-    </div>
-    <div class="bar-status">
-      <a href="ipa-keyboard.html" class="status-pill" title="Type IPA characters via English-style digraphs">⌨ IPA keyboard</a>
-      <span id="phase-name" class="status-pill">ph → f</span>
-      <span id="phase-reached-badge" class="status-pill phase-reached" title="The highest phase you have used so far. Move the slider to advance.">★ phase 0</span>
-    </div>
-  </div>
-</header>
+<main id="main">
 
-<main>
-
-  <section class="input-section">
-    <h2>Input</h2>
-    <div class="tabs">
-      <button class="tab active" data-tab="text">Paste text</button>
-      <button class="tab" data-tab="url">Fetch URL</button>
-    </div>
-
-    <div class="tab-panel" id="tab-text">
-      <textarea id="input-text" rows="10" placeholder="Paste English text here...">A young girl asked the philosopher about his work. The philosopher said: I study philosophy. The girl wrote it in her journal as "filosafi". The philosopher smiled — she had captured the phonetic truth that English spelling hides. Even the elephant in the photograph knows: phone the shepherd to ask, and he will graph the answer for you.
-
-The next morning, a Celtic shepherd from the city walked uphill carrying a cello. He sat beside the ocean, opened an account in his journal, and wrote of cats and cycles and the facade of every cliff he could climb.</textarea>
-      <button class="primary" id="process-text-btn">Transform</button>
-    </div>
-
-    <div class="tab-panel hidden" id="tab-url">
-      <input type="url" id="input-url" placeholder="https://example.com/article">
-      <button class="primary" id="process-url-btn">Fetch and transform</button>
-      <p class="hint">The server fetches the URL and extracts the main article content (looking for &lt;article&gt;, then &lt;main&gt;, then &lt;body&gt;).</p>
+  <section class="hero">
+    <div class="container-narrow">
+      <h1>Learn the International Phonetic Alphabet<br>in a few easy steps.</h1>
+      <p class="hero-tagline">
+        Nayana is a Latin-based way to <strong>read</strong>, <strong>type</strong>, and <strong>write</strong> English phonetically.
+        Fully IPA + Unicode compliant — not a new standard, just a friendlier way into one.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/learn">Start the tutorial</a>
+        <a class="btn" href="/manifesto/">Read the manifesto</a>
+      </div>
     </div>
   </section>
 
-  <section class="output-section">
-    <div class="output-header">
-      <h2>Output</h2>
-      <div class="stats" id="stats"></div>
-    </div>
-    <div class="output-area" id="output">
-      <p class="placeholder">Output will appear here. Hover any changed word to see the original. Words marked with a small ▾ have alternate pronunciations — click to pick which one Nayana should use.</p>
+  <section class="container">
+    <div class="card-grid">
+
+      <a class="card" href="/learn">
+        <div class="card-icon">θɪŋk</div>
+        <h3>Learn</h3>
+        <p>A short, structured tour through the IPA — vowel by vowel, consonant by consonant. Each lesson introduces a few characters and shows them in real English words.</p>
+      </a>
+
+      <a class="card" href="/type">
+        <div class="card-icon">qe → æ</div>
+        <h3>Type</h3>
+        <p>An IPA keyboard that just works. Type English-style shortcuts and they become real IPA codepoints — searchable, copyable, compatible with any IPA-aware tool.</p>
+      </a>
+
+      <a class="card" href="/read">
+        <div class="card-icon">ðə bɝd</div>
+        <h3>Read</h3>
+        <p>Curated passages in Nayana spelling, with English alongside. Try reading a paragraph and you'll surprise yourself with how much you already know.</p>
+      </a>
+
+      <a class="card" href="/manifesto/">
+        <div class="card-icon">naəYənə</div>
+        <h3>Manifesto</h3>
+        <p>Why this exists: English spelling is the largest unacknowledged tax on human attention. An essay that performs its own argument — the page itself reforms as you read.</p>
+      </a>
+
+      <a class="card" href="/download">
+        <div class="card-icon">⤓</div>
+        <h3>Download</h3>
+        <p>Install the Nayana font on your own machine to read IPA-spelled content in any application that supports Unicode. Free, OFL-licensed.</p>
+      </a>
+
+      <a class="card" href="/faq">
+        <div class="card-icon">?</div>
+        <h3>FAQ</h3>
+        <p>Why phonetic spelling? Why English first? What about other languages and varieties? Where does this go from here?</p>
+      </a>
+
     </div>
   </section>
 
-  <section class="phase-info">
-    <h2>About this phase</h2>
-    <div id="phase-description"></div>
+  <section class="container-narrow" style="margin-top: var(--space-7);">
+    <h2>What is Nayana, exactly?</h2>
+
+    <p class="lead">
+      Nayana is two things working together: <strong>a font</strong> that draws the
+      glyphs of the International Phonetic Alphabet in a friendly, Comic-Neue-inspired
+      style, and <strong>a small engine</strong> that rewrites English text using
+      grapheme-to-phoneme alignment from CMUdict.
+    </p>
+
+    <p>
+      The underlying spelling uses canonical IPA Unicode codepoints — the same
+      ones a phonetics textbook or a TTS engine would use. So anything you read
+      in Nayana is, technically, IPA. The difference is that you can already read
+      most of it, because most characters are familiar Latin letters with one or
+      two design touches.
+    </p>
+
+    <p>
+      A handful of IPA-specific characters (ə ʌ ɪ ʊ ɛ ɔ ð θ ʃ ʒ ŋ ɝ ɚ ː) replace
+      the spellings English uses to paper over its inconsistency. Five minutes
+      with the <a href="/learn">tutorial</a> and they stop looking strange.
+    </p>
+
+    <div class="notice">
+      <strong>Preview note.</strong> v0.1 is functional but unfinished.
+      Audio playback (hear what you type / read) lands in v0.2 — the underlying
+      pipeline already works, we're tuning voice quality before exposing it.
+      For now, the focus is on reading, typing, and understanding the script.
+    </div>
+
+    <h2>How it looks (one example)</h2>
+
+    <p>The opening line of the manifesto, in three scripts:</p>
+
+    <div class="card-grid" style="grid-template-columns: 1fr;">
+      <div class="card" style="border-left: 3px solid var(--accent);">
+        <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); margin: 0 0 var(--space-2);">English</h3>
+        <p style="font-size: 18px; color: var(--text); margin: 0;">
+          Reading is the most concentrated form of attention humans regularly perform.
+        </p>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent);">
+        <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); margin: 0 0 var(--space-2);">IPA (in any IPA font)</h3>
+        <p style="font-family: var(--font-mono); font-size: 18px; color: var(--text); margin: 0;">
+          ˈriːdɪŋ ɪz ðə moʊst ˈkɑnsənˌtreɪtɪd fɔrm əv əˈtɛnʃən ˈhjumənz ˈrɛɡjələrli pərˈfɔrm.
+        </p>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent); background: #fdfaf0;">
+        <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); margin: 0 0 var(--space-2);">Nayana <span style="color: var(--text-faint);">— same IPA codepoints, drawn in the Nayana font</span></h3>
+        <p class="nayana-text" style="font-size: 20px; color: var(--text); margin: 0;">
+          riːdɪŋ ɪz ðə moust kɑːnsəntreitəd fɔːrm əv ətɛnʃən hyuːmənz rɛgyələrliː pɚfɔːrm.
+        </p>
+      </div>
+    </div>
+
+    <p style="text-align: center; margin-top: var(--space-6);">
+      <a class="btn btn-primary" href="/learn">Start the 9-step tutorial →</a>
+    </p>
   </section>
 
 </main>
 
-<script src="app.js"></script>
-
+<script src="site.js"></script>
 </body>
 </html>

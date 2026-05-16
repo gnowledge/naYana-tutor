@@ -1,0 +1,346 @@
+/* ===========================================================================
+   site.css — shared layout, nav, typography for the public tutor.
+   Mobile-first. Pages opt in by linking this file + including the
+   <nav id="site-nav"></nav> + <footer id="site-footer"></footer>
+   placeholders (or omit them — site.js prepends them if missing).
+   Existing pages (style.css for the harness) can also include this for
+   the nav while keeping their own page-specific rules.
+   =========================================================================== */
+
+/* ---- Reset + tokens ---------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  /* Colour tokens */
+  --bg:            #fafaf7;
+  --bg-alt:        #f3f3ee;
+  --surface:       #ffffff;
+  --text:          #1a1a1a;
+  --text-muted:    #6a6a6a;
+  --text-faint:    #999;
+  --border:        #d8d8d2;
+  --border-faint:  #ececec;
+  --accent:        #2a6f4a;
+  --accent-hover:  #1e5538;
+  --accent-bg:     #eef4ee;
+  --highlight:     #fdf3c4;
+  --highlight-hover: #fde68a;
+  --warn:          #c46900;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  --font-nayana: 'Nayana', var(--font-sans);
+
+  /* Spacing scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Layout */
+  --container: 1100px;
+  --container-narrow: 760px;
+  --radius: 6px;
+  --shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Nayana font face (single source for all pages) ------------------- */
+@font-face {
+  font-family: 'Nayana';
+  src: url('fonts/Nayana-Regular.otf') format('opentype');
+  font-display: swap;
+}
+
+/* ---- Container + layout helpers --------------------------------------- */
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+.container-narrow {
+  max-width: var(--container-narrow);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+@media (min-width: 600px) {
+  .container, .container-narrow { padding: 0 var(--space-5); }
+}
+
+/* ---- Typography -------------------------------------------------------- */
+h1, h2, h3 { line-height: 1.25; margin: var(--space-6) 0 var(--space-3); }
+h1 { font-size: 28px; font-weight: 700; }
+h2 { font-size: 22px; font-weight: 600; }
+h3 { font-size: 18px; font-weight: 600; }
+@media (min-width: 720px) {
+  h1 { font-size: 36px; }
+  h2 { font-size: 26px; }
+  h3 { font-size: 20px; }
+}
+p { margin: 0 0 var(--space-4); }
+.lead { font-size: 17px; color: var(--text-muted); line-height: 1.6; }
+@media (min-width: 720px) { .lead { font-size: 19px; } }
+
+code { font-family: var(--font-mono); font-size: 0.92em; background: var(--bg-alt); padding: 1px 5px; border-radius: 3px; }
+pre { font-family: var(--font-mono); background: var(--bg-alt); padding: var(--space-3); border-radius: var(--radius); overflow-x: auto; }
+hr  { border: none; border-top: 1px solid var(--border); margin: var(--space-6) 0; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+/* ---- Top navigation --------------------------------------------------- */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: var(--space-3) 0;
+}
+.site-nav-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.site-nav-brand {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-right: auto;
+  text-decoration: none;
+}
+.site-nav-brand:hover { text-decoration: none; color: var(--accent); }
+.site-nav-brand-scope {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-faint);
+  margin-left: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Hamburger (mobile only) */
+.site-nav-burger {
+  display: block;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+.site-nav-burger:hover { background: var(--bg-alt); }
+
+/* Menu — hidden on mobile until burger toggled */
+.site-nav-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: var(--space-3) var(--space-4);
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.site-nav-menu.open { display: flex; }
+.site-nav-menu a {
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius);
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+}
+.site-nav-menu a:hover { background: var(--bg-alt); text-decoration: none; }
+.site-nav-menu a.active {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* Desktop: inline menu, no burger */
+@media (min-width: 720px) {
+  .site-nav-burger { display: none; }
+  .site-nav-menu {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    background: none;
+    border: none;
+    padding: 0;
+    gap: var(--space-1);
+  }
+  .site-nav-menu a {
+    padding: var(--space-2) var(--space-3);
+    font-size: 15px;
+  }
+}
+
+/* ---- Footer ----------------------------------------------------------- */
+.site-footer {
+  margin-top: var(--space-8);
+  padding: var(--space-6) 0 var(--space-7);
+  border-top: 1px solid var(--border);
+  background: var(--bg-alt);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.site-footer-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  display: grid;
+  gap: var(--space-5);
+}
+@media (min-width: 720px) {
+  .site-footer-inner {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-6);
+  }
+}
+.site-footer h4 {
+  margin: 0 0 var(--space-2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.site-footer ul { list-style: none; margin: 0; padding: 0; }
+.site-footer li { padding: 2px 0; }
+.site-footer a { color: var(--text-muted); }
+.site-footer a:hover { color: var(--accent); }
+.site-footer-meta { font-size: 13px; line-height: 1.6; }
+
+/* ---- Buttons + CTA cards (used by landing) ---------------------------- */
+.btn {
+  display: inline-block;
+  font: inherit;
+  font-weight: 500;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.btn:hover { background: var(--bg-alt); text-decoration: none; }
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.btn-primary:hover { background: var(--accent-hover); color: #fff; }
+
+/* Card grid for landing-page CTAs */
+.card-grid {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
+}
+@media (min-width: 600px) { .card-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .card-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.card {
+  display: block;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.card:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+.card-icon { font-family: var(--font-nayana); font-feature-settings: "ss01" on, "liga" on; font-size: 36px; line-height: 1; margin-bottom: var(--space-2); color: var(--accent); }
+.card h3 { margin: 0 0 var(--space-2); font-size: 18px; }
+.card p { color: var(--text-muted); margin: 0; font-size: 14px; }
+
+/* ---- Hero (used by landing) ------------------------------------------ */
+.hero {
+  padding: var(--space-7) 0 var(--space-6);
+  text-align: center;
+}
+@media (min-width: 720px) {
+  .hero { padding: var(--space-8) 0 var(--space-7); }
+}
+.hero h1 {
+  margin: 0 0 var(--space-3);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 720px) { .hero h1 { font-size: 48px; } }
+.hero-tagline {
+  font-size: 18px;
+  color: var(--text-muted);
+  max-width: 580px;
+  margin: 0 auto var(--space-5);
+}
+@media (min-width: 720px) { .hero-tagline { font-size: 22px; } }
+.hero-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---- Notice box (banners, callouts) ---------------------------------- */
+.notice {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--accent-bg);
+  border-left: 3px solid var(--accent);
+  margin: var(--space-4) 0;
+  font-size: 14px;
+}
+.notice-warn {
+  background: #fff8e8;
+  border-left-color: var(--warn);
+}
+
+/* ---- Nayana-text helper ---------------------------------------------- */
+.nayana-text {
+  font-family: var(--font-nayana);
+  font-feature-settings: "ss01" on, "liga" on;
+}
+
+/* ---- Skip-link for keyboard navigation ------------------------------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  padding: 8px 16px;
+  background: var(--text);
+  color: #fff;
+  border-radius: var(--radius);
+  z-index: 200;
+}
+.skip-link:focus { left: 8px; color: #fff; }
