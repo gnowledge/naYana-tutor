@@ -20,6 +20,17 @@
     font-display: swap;
   }
 
+  /* Comic Neue — the friendly hand-drawn parent that the naYana font
+     was built on. Used for the essay body so the page reads in the
+     same skeleton as the substitution spans (which switch to Nayana),
+     keeping the visual register consistent without forcing d→Δ on
+     every English `d` in the prose. OFL 1.1, by Craig Rozynski. */
+  @font-face {
+    font-family: 'Comic Neue';
+    src: url('/why/ComicNeue-Regular.otf') format('opentype');
+    font-display: swap;
+  }
+
   /* ---- Page foundation --------------------------------------------------- */
   :root {
     --text: #1d1d1b;
@@ -30,9 +41,10 @@
     --highlight-deep: #fde68a;
     --rule-bg: #f4f4ef;
     --rule-accent: #4a7eb8;
-    --serif: 'Nayana', Georgia, 'Times New Roman', serif;
+    --serif: 'Comic Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     --mono: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', monospace;
+    --nayana: 'Nayana', 'Comic Neue', sans-serif;
   }
 
   * { box-sizing: border-box; }
@@ -41,15 +53,35 @@
   body {
     background: var(--bg);
     color: var(--text);
+    /* Comic Neue for the prose body — the friendly hand-drawn
+       parent that the naYana font was built on. The Nayana font
+       (with the vowel marker, the d→Δ shape, and other design
+       choices) is reserved for the .changed substitution spans
+       so the reader can clearly see what the script actually
+       changes, while the surrounding prose stays in the same
+       comic-style skeleton without forcing d→Δ on every English
+       word from the first line. */
     font-family: var(--serif);
     font-size: 19px;
     line-height: 1.65;
-    /* The vowel-marker (ss01) feature is on for the whole document.
-       It is the "zero-cost" phase — the strokes appear under every Latin
-       vowel without any other change. */
-    font-feature-settings: "ss01" on;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Substitution spans — render in the Nayana font with vowel
+     marker + ligatures so the new shapes are visible exactly where
+     the essay is making the point. */
+  .changed {
+    font-family: var(--nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+  }
+
+  /* Inline Nayana-font showcase (no highlight) — used in the
+     phase-announce boxes to demonstrate a glyph: <span class="nayana">θ</span> */
+  .nayana {
+    font-family: var(--nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    color: var(--text);
   }
 
   /* ---- Layout ------------------------------------------------------------ */
@@ -237,6 +269,33 @@
     width: 0%;
   }
 
+  /* ---- "Curious? Keep going." closing aside --------------------------- */
+  .continue-aside {
+    margin-top: 48px;
+    padding: 20px 24px;
+    background: #fff;
+    border: 1px solid var(--rule-accent);
+    border-left-width: 3px;
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: #333;
+    line-height: 1.55;
+    font-feature-settings: normal;
+  }
+  .continue-aside h3 {
+    margin: 0 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--rule-accent);
+  }
+  .continue-aside ul { margin: 0; padding-left: 18px; }
+  .continue-aside li { padding: 2px 0; }
+  .continue-aside a { color: var(--rule-accent); text-decoration: underline; }
+  .continue-aside em { color: var(--text); }
+
   /* ---- Footnote / aside -------------------------------------------------- */
   .colophon {
     margin-top: 64px;
@@ -280,7 +339,7 @@
 <div class="phase-bar" id="phaseBar">
   <span><span class="label" id="phaseLabel">Phase 0</span> · <span id="phaseDesc">original English</span></span>
   <div class="progress"><div class="progress-fill" id="phaseFill"></div></div>
-  <span class="phase-meta" id="phaseMeta">0 / 12</span>
+  <span class="phase-meta" id="phaseMeta">0 / 5</span>
 </div>
 
 <article>
@@ -292,9 +351,9 @@
 
 <div class="preamble-note">
   <p><strong>Scope.</strong> This is naYana for English (v0.1) — specifically General American, since that's the dialect with the most reliable open phonetic data (CMUdict). Other English varieties (RP, Indian English) and other languages will ship as parallel projects sharing the same writing system; their phonetic spellings will differ because their pronunciations differ.</p>
-  <p><strong>About this version.</strong> This essay performs its own argument. Substitution rules are introduced in the text and then applied to the text itself. From the moment a rule is named, the writing changes. By the final paragraph, you are reading a fully phonetic script called <em>Latin naYana</em>.</p>
-  <p>Hover any underlined word to see its original spelling. The vowels carry a subtle baseline stroke throughout — that is the naYana font's <em>vowel marker</em>, the zero-cost first phase, which is always on. The phase indicator at the top of the page shows where in the substitution arc you currently are.</p>
-  <p><strong>Honest disclaimer:</strong> the substitutions you see were produced by hand to demonstrate what the naYana engine is designed to produce. Some rules (like <em>ti → sh</em> and full schwa marking) are still in development. Treat this as a preview, not as engine output. A companion plain-English version of this essay, with full citations, is available alongside this file.</p>
+  <p><strong>About this version.</strong> This essay performs its own argument. A handful of substitution rules are introduced one at a time as you read. From the moment a rule is named, every later word in the essay applies it. By the end you'll be reading naYana — five small steps, no quiz.</p>
+  <p>Hover any highlighted word to see its original spelling. The phase indicator at the top of the page tracks where in the arc you currently are.</p>
+  <p><strong>Honest disclaimer.</strong> The substitutions you'll see were produced by hand to demonstrate what the naYana engine produces. The engine itself works — try it on the <a href="/type">/type</a> page. This essay is the gentle reading-side preview.</p>
 </div>
 
 <section data-phase="0">
@@ -376,7 +435,7 @@
 </section>
 
 <div class="phase-announce" data-phase-mark="1">
-  <div><strong>Phase 1 turns on.</strong> From this point in the essay forward, the rule <em>ph → f</em> applies. Hover any underlined word to confirm the original spelling.</div>
+  <div><strong>Phase 1: drop the dead weight.</strong> Words like <em>philosophy</em> spell /f/ as <em>ph</em> because Greek scribes did. Words like <em>know</em>, <em>write</em>, <em>lamb</em>, <em>thought</em> carry letters that nobody pronounces — leftovers of word history. naYana stops writing them: <em>ph → f</em>, silent <em>k</em>/<em>w</em>/<em>b</em>/<em>gh</em> dropped. From here on, that's what you'll see. No new letters to learn.</div>
 </div>
 
 <section data-phase="1">
@@ -399,19 +458,19 @@
 
 <h2>IV. What this is for</h2>
 
-<div class="phase-announce" data-phase-mark="3">
-  <div><strong>Phases 2 and 3 turn on.</strong> Two more rules now apply: <em>c → k</em> or <em>s</em> (depending on pronunciation — the dictionary decides), and <em>qu → kw</em>. The letter <em>c</em> begins to disappear from the text, replaced by whichever letter matches the sound it was making.</div>
+<div class="phase-announce" data-phase-mark="2">
+  <div><strong>Phase 2: when <em>c</em> sounds like <em>k</em>, write <em>k</em>. When it sounds like <em>s</em>, write <em>s</em>.</strong> The letter <em>c</em> is doing two jobs in English (<em>cat</em> vs <em>city</em>) and neither of them is its own. naYana picks the letter that matches the actual sound. From here, the letter <em>c</em> begins to disappear from the page — replaced by whichever letter you were already saying.</div>
 </div>
 
-<section data-phase="3">
+<section data-phase="2">
 
-<p>We have built the first <span class="changed" data-original="phases">fazes</span> of this system. They work. A <span class="changed" data-original="child">kild</span> can install a font on her browser, slide a <span class="changed" data-original="control">kontrol</span> from 0 to 1, and see <em><span class="changed" data-original="philosophy">filosofy</span></em> appear in plase of <em>philosophy</em>. Slide it again, and <em>cat</em> <span class="changed" data-original="becomes">bekomes</span> <em><span class="changed" data-original="cat">kat</span></em>, <em>city</em> <span class="changed" data-original="becomes">bekomes</span> <em><span class="changed" data-original="city">sity</span></em>. Each slide is small. Each is named. Each is reversible. Over months, the slide can move from 0 to 20, and by the end, the <span class="changed" data-original="child">kild</span> is reading a <span class="changed" data-original="phonetic">fonetic</span> <span class="changed" data-original="script">skript</span> in <span class="changed" data-original="which">wich</span> every sound has <span class="changed" data-original="exactly">eksaktly</span> one spelling and every spelling has <span class="changed" data-original="exactly">eksaktly</span> one sound. The <span class="changed" data-original="script">skript</span> she is reading is not English. It is also not a new invention. It is the <span class="changed" data-original="actual">akchual</span> sounds of English, written down at last with the <span class="changed" data-original="consistency">konsistency</span> that every other major language in the world has long enjoyed.</p>
+<p>We have built the first <span class="changed" data-original="phases">fazes</span> of this system. They work. A child can install a font on her browser, slide a <span class="changed" data-original="control">kontrol</span> from 0 to 1, and see <em><span class="changed" data-original="philosophy">filosofy</span></em> appear in <span class="changed" data-original="place">plase</span> of <em>philosophy</em>. Slide it again, and <em>cat</em> <span class="changed" data-original="becomes">bekomes</span> <em><span class="changed" data-original="cat">kat</span></em>, <em>city</em> <span class="changed" data-original="becomes">bekomes</span> <em><span class="changed" data-original="city">sity</span></em>. Each slide is small. Each is named. Each is reversible. Over the arc of this essay, you'll cross five such slides, and by the end the child is reading a <span class="changed" data-original="phonetic">fonetic</span> <span class="changed" data-original="script">skript</span> in which every sound has exactly one spelling and every spelling has exactly one sound. The <span class="changed" data-original="script">skript</span> she is reading is not English. It is also not a new invention. It is the actual sounds of English, written down at last with the <span class="changed" data-original="consistency">konsistency</span> that every other major language in the world has long enjoyed.</p>
 
-<p>We do not believe this will be easy. We do not believe everyone will adopt it. We do not even believe most people will adopt it. What we believe is that the option should exist — that a <span class="changed" data-original="child">kild</span> should not be required, in the twenty-first <span class="changed" data-original="century">sentury</span>, to spend five years memorizing the <span class="changed" data-original="etymological">etymolojikal</span> <span class="changed" data-original="accidents">aksidents</span> of <em><span class="changed" data-original="receive">reseive</span></em> and <em>believe</em> when she could have been reading stories. The <span class="changed" data-original="choice">choise</span> should be hers, or her parents', or her teacher's. The <span class="changed" data-original="cost">kost</span> of <em>not</em> offering the <span class="changed" data-original="choice">choise</span> is the <span class="changed" data-original="continued">kontinued</span>, unmeasured loss of trillions of hours of human <span class="changed" data-original="childhood">kildhood</span> every year, forever, with no end and no audit.</p>
+<p>We do not believe this will be easy. We do not believe everyone will adopt it. We do not even believe most people will adopt it. What we believe is that the option should exist — that a child should not be required, in the twenty-first <span class="changed" data-original="century">sentury</span>, to spend five years memorizing the etymological <span class="changed" data-original="accidents">aksidents</span> of <em><span class="changed" data-original="receive">reseive</span></em> and <em>believe</em> when she could have been reading stories. The <span class="changed" data-original="choice">choise</span> should be hers, or her parents', or her teacher's. The <span class="changed" data-original="cost">kost</span> of <em>not</em> offering the <span class="changed" data-original="choice">choise</span> is the <span class="changed" data-original="continued">kontinued</span>, unmeasured loss of trillions of hours of human childhood every year, forever, with no end and no audit.</p>
 
-<p>That is the <span class="changed" data-original="case">kase</span> for naYana. It is not a manifesto. It is a proposal. The proposal is: let us build the rendering layer that makes <span class="changed" data-original="phonetic">fonetic</span> English available to anyone who wants it, without asking them to give up English; let us see whether <span class="changed" data-original="children">kildren</span> take to it; and let us measure whether the time saved is real.</p>
+<p>That is the <span class="changed" data-original="case">kase</span> for naYana. It is not a manifesto. It is a proposal. The proposal is: let us build the rendering layer that makes <span class="changed" data-original="phonetic">fonetic</span> English available to anyone who wants it, without asking them to give up English; let us see whether children take to it; and let us measure whether the time saved is real.</p>
 
-<p>If it works, the saved time is the answer to a <span class="changed" data-original="question">kweschun</span> humanity has been ignoring for five hundred years. If it does not, we will have spent some years and some money trying, <span class="changed" data-original="which">wich</span> is the smallest expense we could have made on a problem this size.</p>
+<p>If it works, the saved time is the answer to a question humanity has been ignoring for five hundred years. If it does not, we will have spent some years and some money trying, which is the smallest expense we could have made on a problem this size.</p>
 
 </section>
 
@@ -419,57 +478,67 @@
 
 <h2>V. The longer <span class="changed" data-original="arc">ark</span></h2>
 
-<div class="phase-announce" data-phase-mark="6">
-  <div><strong>Phases 4, 5, and 6 turn on.</strong> Silent letters in <em>kn-</em>, <em>wr-</em>, <em>-mb</em>, and <em>-gh</em> are dropped (since they correspond to no sound). The letter <em>s</em> becomes <em>z</em> wherever it is pronounced /z/ (plurals, <em>is</em>, <em>was</em>). And the letter <em>x</em> becomes <em>ks</em>.</div>
+<div class="phase-announce" data-phase-mark="3">
+  <div><strong>Phase 3: two Greek shapes for sounds English has been faking.</strong> English writes "th" for two completely different sounds — the hiss in <em>think</em> and the buzz in <em>this</em>. naYana gives them distinct characters: <strong><span class="nayana">θ</span></strong> for the hiss, <strong><span class="nayana">ð</span></strong> for the buzz. Greek lent us the shapes; they sit naturally in a Latin word.
+    Also: the letter <em>d</em> has been redesigned to avoid mirroring <em>b</em> and <em>p</em>. Where words are rendered fully in naYana, you'll see <strong><span class="nayana">d</span></strong> drawn as a Greek capital — for instance <span class="nayana">would</span>, <span class="nayana">design</span>, <span class="nayana">build</span>. From here on, words in highlight that contain "th" or "d" carry the new shapes.</div>
 </div>
 
-<section data-phase="6">
+<section data-phase="3">
 
-<p>The name <em>naYana</em> <span class="changed" data-original="is">iz</span> a Sanskrit word meaning "eye" or "guidance." It <span class="changed" data-original="echoes">echoz</span> the Nyāya <span class="changed" data-original="school">skool</span> of Indian <span class="changed" data-original="logic">lojik</span>, founded on the <span class="changed" data-original="principle">prinsipal</span> that careful seeing precedes <span class="changed" data-original="correct">korrekt</span> reasoning. The <span class="changed" data-original="script">skript</span> <span class="changed" data-original="is">iz</span> meant to guide the eye, gently, from the spelling it <span class="changed" data-original="knows">noz</span> to the spelling that <span class="changed" data-original="matches">matchez</span> the world.</p>
+<p>The name <em>naYana</em> is a Sanskrit word meaning "eye" or "guidance." It echoes the Nyāya <span class="changed" data-original="school">skool</span> of Indian <span class="changed" data-original="logic">logik</span>, founded on the principle <span class="changed" data-original="that">ðat</span> careful seeing precedes <span class="changed" data-original="correct">korrekt</span> reasoning. The <span class="changed" data-original="script">skript</span> is meant to guide the eye, gently, from the spelling it <span class="changed" data-original="knows">nos</span> to the spelling <span class="changed" data-original="that">ðat</span> matches the world.</p>
 
-<p>The name <span class="changed" data-original="is">iz</span> also a <span class="changed" data-original="phonetic">fonetic</span> palindrome. Read it forward: <em>n-a-Y-a-n-a</em>. Read it backward: <em>a-n-a-Y-a-n</em>. The <span class="changed" data-original="capitalized">kapitalized</span> Y in the middle <span class="changed" data-original="is">iz</span> the <span class="changed" data-original="axis">aksis</span> of symmetry. <span class="changed" data-original="This">Thiz</span> <span class="changed" data-original="was">waz</span> not an <span class="changed" data-original="accident">aksident</span>. A <span class="changed" data-original="script">skript</span> that works for English must, in <span class="changed" data-original="principle">prinsipal</span>, also work for languages that read <span class="changed" data-original="right">rite</span>-to-left like Arabic and Hebrew, or top-to-bottom like <span class="changed" data-original="classical">klassikal</span> <span class="changed" data-original="Chinese">Chineze</span> and <span class="changed" data-original="Japanese">Japaneze</span>. The palindrome marks the <span class="changed" data-original="script's">skript's</span> intent: <span class="changed" data-original="writing">riting</span> <span class="changed" data-original="is">iz</span> a recording of <span class="changed" data-original="speech">speech</span>, and <span class="changed" data-original="speech">speech</span> does not have a preferred direction. The orthography should not impose one.</p>
+<p>The name is also a <span class="changed" data-original="phonetic">fonetic</span> palindrome. Read it forward: <em>na-Ya-na</em>. Read it backward: <em>na-Ya-na</em>. The <span class="changed" data-original="capitalized">kapitalized</span> Y in the middle is the axis of symmetry. This was not an accident. A <span class="changed" data-original="script">skript</span> <span class="changed" data-original="that">ðat</span> works for English must, in principle, also work for languages that read <span class="changed" data-original="right">rite</span>-to-left like Arabic and Hebrew, or top-to-bottom like <span class="changed" data-original="classical">klassikal</span> Chinese and Japanese. The palindrome marks the <span class="changed" data-original="script's">skript's</span> intent: <span class="changed" data-original="writing">riting</span> is a recording of speech, and speech does not have a preferred direction. The orthography should not impose one.</p>
 
-<p>We are starting with English because English <span class="changed" data-original="is">iz</span> the language with the largest mismatch between its sounds and its <span class="changed" data-original="writing">riting</span> — and because English, as the global second language, <span class="changed" data-original="exports">eksports</span> that mismatch to every country where it <span class="changed" data-original="is">iz</span> taught. A <span class="changed" data-original="child">kild</span> in Maharashtra learning English does not just learn English; she learns to spend years of her <span class="changed" data-original="childhood">kildhood</span> on the same fossilized <span class="changed" data-original="irregularities">irregularitiz</span> that English-speaking <span class="changed" data-original="children">kildren</span> spend years on. The <span class="changed" data-original="cost">kost</span> <span class="changed" data-original="is">iz</span> global. The <span class="changed" data-original="fix">fiks</span> would be global.</p>
+<p>We are starting with English because English is the language with the largest mismatch between its sounds and its <span class="changed" data-original="writing">riting</span> — and because English, as the global second language, exports <span class="changed" data-original="that">ðat</span> mismatch to every country where it is taught. A child in Maharashtra learning English does not just learn English; she learns to spend years of her childhood on the same fossilized irregularities <span class="changed" data-original="that">ðat</span> English-speaking children spend years on. The <span class="changed" data-original="cost">kost</span> is global. The fix would be global.</p>
 
 </section>
 
-<div class="phase-announce" data-phase-mark="12">
-  <div><strong>Phase 12 turns on: schwa marking.</strong> The unstressed vowel sound <em>/ə/</em> — the most common sound in English — is now made visible as <em>ə</em>. It appears in nearly every multi-syllable word. The letter you see is the actual IPA character, the first non-Latin shape to enter the script. <em>The</em> becomes <em>thə</em>. <em>About</em> becomes <em>əbout</em>. <em>Children</em> becomes <em>kildrən</em>. The IPA has arrived, and it is welcome.</div>
+<div class="phase-announce" data-phase-mark="4">
+  <div><strong>Phase 4: three small steps toward IPA.</strong> Short <em>i</em> (as in <em>sit</em>, <em>this</em>, <em>with</em>) becomes <strong><span class="nayana">ɪ</span></strong> so it stops sharing a letter with long <em>i</em> (as in <em>kind</em>, <em>find</em>). The digraph <em>sh</em> becomes <strong><span class="nayana">ʃ</span></strong> — one sound, one letter. And word-final <em>ng</em> becomes <strong><span class="nayana">ŋ</span></strong>. Look at <em>English</em>: it has all three. <span class="nayana">Eŋglɪʃ</span>.</div>
 </div>
 
-<section data-phase="12">
+<section data-phase="4">
 
-<p>But <span class="changed" data-original="there">thər</span> <span class="changed" data-original="is">iz</span> no <span class="changed" data-original="reason">rezən</span> <span class="changed" data-original="the">thə</span> <span class="changed" data-original="script">skript</span> <span class="changed" data-original="needs">needz</span> <span class="changed" data-original="to">tə</span> stop at English. <span class="changed" data-original="The">Thə</span> IPA encoding <span class="changed" data-original="underneath">ʌndərneeth</span> naYana <span class="changed" data-original="is">iz</span> <span class="changed" data-original="universal">universəl</span>. <span class="changed" data-original="Any">Eny</span> language ever transcribed in IPA — French, Mandarin, Arabic, Yoruba, Tamil — can be rendered in naYana <span class="changed" data-original="shapes">shapez</span>. A <span class="changed" data-original="child">kild</span> who <span class="changed" data-original="learns">learnz</span> naYana <span class="changed" data-original="for">fər</span> English has also, without knowing it, learned <span class="changed" data-original="the">thə</span> <span class="changed" data-original="script">skript</span> <span class="changed" data-original="for">fər</span> every other language she might encounter. <span class="changed" data-original="The">Thə</span> literacy <span class="changed" data-original="is">iz</span> <span class="changed" data-original="transferable">transfərabəl</span> <span class="changed" data-original="the">thə</span> way no orthography in history has been.</p>
+<p>But there is no reason the <span class="changed" data-original="script">skript</span> needs to stop at English. The IPA encoding underneath naYana is universal. Any <span class="changed" data-original="language">laŋguage</span> ever transcribed in IPA — French, Mandarin, Arabic, Yoruba, Tamil — can be rendered in naYana shapes. A child who learns naYana for <span class="changed" data-original="English">Eŋglɪʃ</span> has also, without <span class="changed" data-original="knowing">nowɪŋ</span> it, learned the <span class="changed" data-original="script">skript</span> for every other <span class="changed" data-original="language">laŋguage</span> she might encounter. The literacy is transferable the way no orthography in history has been.</p>
 
-<p><span class="changed" data-original="This">Thiz</span> <span class="changed" data-original="is">iz</span> <span class="changed" data-original="the">thə</span> larger vision, stated as carefully as we can state it: that <span class="changed" data-original="the">thə</span> time stolen from <span class="changed" data-original="billions">billyənz</span> of <span class="changed" data-original="children">kildrən</span> by inconsistent <span class="changed" data-original="writing">riting</span> systems <span class="changed" data-original="is">iz</span> <span class="changed" data-original="recoverable">rekʌvərabəl</span>; that <span class="changed" data-original="the">thə</span> <span class="changed" data-original="recovery">rekʌvəry</span> <span class="changed" data-original="requires">rekwirez</span> no new laws, no government adoption, no schoolboard approval — only <span class="changed" data-original="a">ə</span> font, <span class="changed" data-original="an">ən</span> engine, and <span class="changed" data-original="the">thə</span> consent of one reader at <span class="changed" data-original="a">ə</span> time; and that <span class="changed" data-original="the">thə</span> human <span class="changed" data-original="capacity">kəpasity</span> for creative work, for cultural participation, for early entry into <span class="changed" data-original="the">thə</span> literate world, can be restored to its natural age of seven instead of being deferred to fourteen.</p>
+<p>This is the larger vision, stated as carefully as we can state it: <span class="changed" data-original="that">ðat</span> the time stolen from billions of <span class="changed" data-original="children">chɪldren</span> by inconsistent <span class="changed" data-original="writing">ritɪŋ</span> systems is recoverable; <span class="changed" data-original="that">ðat</span> the recovery requires no new laws, no government adoption, no schoolboard approval — only a font, an engine, and the consent of one reader at a time; and <span class="changed" data-original="that">ðat</span> the human capacity for creative work, for cultural participation, for early entry into the literate world, can be restored to its natural age of seven instead of being deferred to fourteen.</p>
 
-<p>What that early entry would mean, at scale, we do not know. We have never had it. Every literate adult alive today was educated under <span class="changed" data-original="the">thə</span> old system. Whole generations of <span class="changed" data-original="children">kildrən</span>, in every English-speaking country, have spent <span class="changed" data-original="the">thə</span> most plastic years of <span class="changed" data-original="their">thair</span> lives on <span class="changed" data-original="a">ə</span> problem we could have removed.</p>
+<p>What <span class="changed" data-original="that">ðat</span> early entry would mean, at scale, we do not know. We have never had it. Every literate adult alive today was educated under the old system. Whole generations of <span class="changed" data-original="children">chɪldren</span>, in every <span class="changed" data-original="English">Eŋglɪʃ</span>-speaking country, have spent the most plastic years of their lives on a problem we could have removed.</p>
 
-<p>It <span class="changed" data-original="is">iz</span> time to remove it.</p>
+<p>It is time to remove it.</p>
 
 </section>
 
 <hr>
 
-<div class="phase-announce" data-phase-mark="12">
-  <div><strong>The closing passage is rendered in full Latin naYana.</strong> All twelve substitution rules apply. The script you are reading uses Latin letters wherever Latin can be unambiguous, and one IPA character (<em>ə</em>) for the schwa. This is the planned milestone at which the reader can read every English word phonetically without ambiguity — using a script that took roughly fifteen minutes of exposure to learn.</div>
+<div class="phase-announce" data-phase-mark="5">
+  <div><strong>Phase 5: the most common sound in English finally gets its own letter.</strong> Listen to how you actually say <em>about</em>, <em>the</em>, <em>of</em>, <em>banana</em>. The unstressed vowels all collapse to one soft, neutral sound. English hides it behind five different letters (<em>a</em>, <em>e</em>, <em>i</em>, <em>o</em>, <em>u</em>). naYana shows it: <strong><span class="nayana">ə</span></strong>. The closing passage applies every substitution introduced so far.</div>
 </div>
 
-<section data-phase="12">
+<section data-phase="5">
 
-<p><em>naYana <span class="changed" data-original="is">iz</span> <span class="changed" data-original="an">ən</span> open <span class="changed" data-original="project">projekt</span>. <span class="changed" data-original="The">Thə</span> code, <span class="changed" data-original="the">thə</span> font, and <span class="changed" data-original="the">thə</span> engine are <span class="changed" data-original="public">publik</span>. <span class="changed" data-original="The">Thə</span> <span class="changed" data-original="script">skript</span> itself <span class="changed" data-original="is">iz</span> built on IPA and <span class="changed" data-original="is">iz</span> unowned. We invite contributors — <span class="changed" data-original="typographers">typografərz</span>, linguists, educators, software developers, parents, and <span class="changed" data-original="children">kildrən</span> — <span class="changed" data-original="to">tə</span> use it, test it, and improve it. <span class="changed" data-original="Particularly">Partikyulərly</span> <span class="changed" data-original="children">kildrən</span>. They will tell us, faster than <span class="changed" data-original="any">eny</span> study, whether what we have built <span class="changed" data-original="is">iz</span> worth using.</em></p>
+<p><em>naYana <span class="changed" data-original="is">ɪs</span> <span class="changed" data-original="an">ən</span> open <span class="changed" data-original="project">projekt</span>. <span class="changed" data-original="The">ðə</span> code, <span class="changed" data-original="the">ðə</span> font, and <span class="changed" data-original="the">ðə</span> engine are <span class="changed" data-original="public">publɪk</span>. <span class="changed" data-original="The">ðə</span> <span class="changed" data-original="script">skrɪpt</span> itself <span class="changed" data-original="is">ɪs</span> built on IPA and <span class="changed" data-original="is">ɪs</span> unowned. We invite contributors — typographers, linguists, educators, software developers, parents, and <span class="changed" data-original="children">chɪldrən</span> — <span class="changed" data-original="to">tə</span> use it, test it, and improve it. Particularly <span class="changed" data-original="children">chɪldrən</span>. They will tell us, faster than any study, whether what we have built <span class="changed" data-original="is">ɪs</span> worth using.</em></p>
 
-<p><em>If <span class="changed" data-original="a">ə</span> <span class="changed" data-original="child">kild</span> can <span class="changed" data-original="write">rite</span> </em>filosafi<em> and be understood, we have done nothing for her. If <span class="changed" data-original="a">ə</span> <span class="changed" data-original="child">kild</span> can <span class="changed" data-original="write">rite</span> </em>filosafi<em> and be <strong><span class="changed" data-original="right">rite</span></strong>, we have given her back her <span class="changed" data-original="childhood">kildhood</span>.</em></p>
+<p><em>If <span class="changed" data-original="a">ə</span> child can <span class="changed" data-original="write">rite</span> </em>filosafi<em> and be understood, we have done nothing for her. If <span class="changed" data-original="a">ə</span> child can <span class="changed" data-original="write">rite</span> </em>filosafi<em> and be <strong><span class="changed" data-original="right">rite</span></strong>, we have given her back her childhood.</em></p>
 
 </section>
 
 <div class="signoff">— for the gnowledge lab project, naYana for universal literacy</div>
 
 <div class="closing-note">
-  <p><strong>A note on this version.</strong> The substitutions you encountered were introduced in twelve named phases, drawn from the project's planned arc. Some are already shipped in the naYana engine; others are still in development. The complete demonstration requires features that have not yet been built — but the principle, you have just verified for yourself, works.</p>
-  <p>The script continues beyond what you have read. After Latin naYana come IPA characters for sounds Latin cannot represent unambiguously: <em>θ</em> for the <em>th</em> in <em>think</em>, <em>ð</em> for the <em>th</em> in <em>this</em>, <em>ʃ</em> for the <em>sh</em> in <em>ship</em>, <em>ʒ</em> for the middle sound of <em>vision</em>, <em>ŋ</em> for the <em>ng</em> in <em>sing</em>. Each is one new shape, one clear sound. They come in later phases, and they are where the naYana font's redesigned glyphs replace the IPA defaults with shapes drawn for learners rather than for linguists.</p>
+  <p><strong>A note on this version.</strong> The substitutions you just lived through were introduced in five named phases — a deliberately small slice of the project's planned arc, chosen because each one shows a piece of the script's design without overwhelming a first-time reader. The naYana engine ships substantially more (full schwa coverage, the long-vowel marker <em>ː</em>, the <em>ʒ</em> sound in <em>vision</em>, r-coloured vowels <em>ɝ</em>/<em>ɚ</em>, the <em>tʃ</em>/<em>dʒ</em> ligatures rendered as <em>c</em> and <em>j</em>). Those are the next handful of steps. Try the engine to meet them.</p>
   <p>You arrived here by reading. The next reader could too.</p>
 </div>
+
+<aside class="continue-aside">
+  <h3>Curious? Keep going.</h3>
+  <ul>
+    <li><a href="/learn">9-step tutor</a> — every character you just met, explained one at a time</li>
+    <li><a href="/type">/type</a> — paste English, watch it become naYana (with audio playback)</li>
+    <li><a href="/download">Download the font</a> — install <em>Nayana English</em> on your machine, free</li>
+    <li><a href="/faq">FAQ</a> — why English first? what about other languages? what about Hindi?</li>
+  </ul>
+</aside>
 
 <div class="colophon">
   <p><em>A plain-English version of this essay, with full citations, is available as a companion document. The naYana project is open and hosted at <a href="https://www.gnowledge.org/projects/naYana">gnowledge.org/projects/naYana</a>.</em></p>
@@ -484,10 +553,11 @@
 
   const phaseDescriptions = {
     0: "original English",
-    1: "ph → f",
-    3: "ph → f · c → k or s · qu → kw",
-    6: "above, plus silent letters · s → z · x → ks",
-    12: "Latin naYana (full)",
+    1: "ph → f · silent letters dropped",
+    2: "+ c → k or s",
+    3: "+ th → θ/ð · d → Δ",
+    4: "+ short i → ɪ · sh → ʃ · ng → ŋ",
+    5: "+ schwa ə",
   };
 
   const phaseFill = document.getElementById('phaseFill');
@@ -496,7 +566,7 @@
   const phaseMeta = document.getElementById('phaseMeta');
 
   const sections = document.querySelectorAll('section[data-phase]');
-  const MAX_PHASE = 12;
+  const MAX_PHASE = 5;
 
   function updatePhaseBar() {
     // Find the section closest to the top of the viewport but still in view
