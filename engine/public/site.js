@@ -15,7 +15,7 @@ const NAV_LINKS = [
   { href: '/learn',            label: 'Learn' },
   { href: '/type',             label: 'Type' },
   { href: '/read',             label: 'Read' },
-  { href: '/manifesto/',       label: 'Manifesto' },
+  { href: '/why/',             label: 'Why naYana?' },
   { href: '/download',         label: 'Download' },
   { href: '/developer',        label: 'Developer' },
 ];
@@ -31,7 +31,7 @@ const FOOTER_ABOUT_LINKS = [
   { href: 'https://www.gnowledge.org/projects/naYana', label: 'About the gnowledge lab', external: true },
   { href: 'https://github.com/gnowledge/naYana-tutor', label: 'Source on GitHub', external: true },
   { href: 'https://github.com/gnowledge/naYana-tutor/issues/new', label: 'Report a bug / suggest a feature', external: true },
-  { href: '/manifesto/', label: 'Read the manifesto' },
+  { href: '/why/', label: 'Read: Why naYana?' },
 ];
 
 function isActive(href) {

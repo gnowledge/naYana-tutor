@@ -18,8 +18,8 @@ Two halves of one project:
 Readers advance through phases at their own pace. The original spelling
 is always recoverable — hover any rewritten word in the test harness.
 
-→ **Read the manifesto:**
-[*Returning Time to the Reader — On naYana*](engine/public/manifesto/index.html)
+→ **Why naYana?**
+[*Returning Time to the Reader — On naYana*](engine/public/why/index.html)
 (self-contained HTML; ships with the font bundled)
 
 ---
@@ -112,7 +112,7 @@ nayana/
 ├── engine/                 The preprocessor (Node.js)
 │   ├── src/                Engine library
 │   ├── data/               Catalogue YAML + CMUdict + alignment
-│   ├── public/             Test harness UI + manifesto
+│   ├── public/             Test harness UI + tutor + Why naYana? essay
 │   ├── scripts/            Build/fetch/align scripts
 │   └── tests/              Unit tests, one file per phase
 ├── samples/                HTML test pages for the font
@@ -139,10 +139,10 @@ testing decides what comes next.
 
 - **Source code** (`src/`, `scripts/`, `tests/`, `engine/`): MIT.
   See `LICENSE-CODE`.
-- **Documentation** (`docs/`, READMEs, manifesto prose): CC BY 4.0.
+- **Documentation** (`docs/`, READMEs, essay prose): CC BY 4.0.
   See `LICENSE-DOCS`.
 - **Generated fonts** (`fonts/output/*.otf`,
-  `engine/public/manifesto/Nayana-Regular.otf`): SIL Open Font License
+  `engine/public/why/Nayana-Regular.otf`): SIL Open Font License
   1.1 (inherited from Comic Neue). See `fonts/output/OFL.txt`.
 
 ---

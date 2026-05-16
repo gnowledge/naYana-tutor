@@ -1,6 +1,6 @@
 /* ===========================================================================
    nav-block.css — self-contained nav + footer styles for pages that have
-   their own layout (manifesto, harness) and don't want site.css's broader
+   their own layout (Why-naYana essay, harness) and don't want site.css's broader
    page-level rules.
    No body/html resets, no typography overrides — only .site-nav and
    .site-footer rules are defined here. Safe to drop into any page.

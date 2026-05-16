@@ -2,7 +2,7 @@
    site.css — full page foundation (body, typography, containers, hero,
    cards, buttons) PLUS the nav + footer styling from nav-block.css.
    For pages without a fully custom layout (everything except the
-   manifesto and harness).
+   Why-naYana essay and harness).
    Pages with their own layout import nav-block.css instead.
    =========================================================================== */
 @import url('nav-block.css');

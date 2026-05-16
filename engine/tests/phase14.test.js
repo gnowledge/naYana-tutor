@@ -112,7 +112,7 @@ test('summer → sʌmmɚ (u→ʌ + er→ɚ; mm stays doubled)', () => {
   assert.equal(rewrite('summer').spelling, 'sʌmmɚ');
 });
 
-test('CRITICAL: philosopher → fɪlosəfɚ (the manifesto word, fully transformed)', () => {
+test('CRITICAL: philosopher → fɪlosəfɚ (the essay word, fully transformed)', () => {
   // alignment: ph}F i}AH0 l}L o}AA1 s}S o}AH0 ph}F er}ER0
   assert.equal(rewrite('philosopher').spelling, 'fɪlosəfɚ');
 });
@@ -167,7 +167,7 @@ test('CRITICAL: door → dor (silent-o + o + r + nothing)', () => {
 
 // ---- Cross-phase composition (the cumulative weight) -------------------
 
-test('philosopher unifies the manifesto motif', () => {
+test('philosopher unifies the essay motif', () => {
   // Phases combine: ph→f (×2), i→ə (first i is AH0), o→ə (third vowel),
   // er→ɚ. Result: fɪlosəfɚ. The o between is /AA1/ — stays as 'o'.
   assert.equal(rewrite('philosopher').spelling, 'fɪlosəfɚ');

@@ -102,7 +102,7 @@ COPY engine/public/ ./public/
 
 # Drop the font into both consumer paths
 COPY --from=font-builder /build/fonts/output/Nayana-Regular.otf ./public/fonts/Nayana-Regular.otf
-COPY --from=font-builder /build/fonts/output/Nayana-Regular.otf ./public/manifesto/Nayana-Regular.otf
+COPY --from=font-builder /build/fonts/output/Nayana-Regular.otf ./public/why/Nayana-Regular.otf
 
 # Piper binary + voice model from the dedicated fetcher stage.
 COPY --from=piper-fetcher /piper-build/piper   /opt/piper/

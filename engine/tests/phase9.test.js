@@ -202,7 +202,7 @@ test('machine → machin (silent-e drops, i stays, ch stays)', () => {
 test('phase 9 still applies phase 1: philosophy → filosofi (y→i too!)', () => {
   // Wait — philosophy ends with y. With phase 9 y→i it becomes
   // 'filosofiː' instead of 'filosofy'. The girl's filosafi finally
-  // matches phonetically — full circle to the manifesto.
+  // matches phonetically — full circle to the essay.
   assert.equal(rewrite('philosophy').spelling, 'filosofiː');
 });
 

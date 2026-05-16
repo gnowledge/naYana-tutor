@@ -179,7 +179,7 @@ nayana/                          (the repo)
 │   │   ├── cmudict-sample.txt   Tiny fallback for offline testing
 │   │   └── cmudict-sample.corpus      Aligned counterpart of the sample
 │   ├── public/                  Test harness web UI
-│   │   └── manifesto/           Published manifesto + bundled font
+│   │   └── why/                 Why naYana? essay + bundled font
 │   ├── scripts/                 fetch-cmudict, build-cmudict,
 │   │                            build-catalogue, build-aligned-cmudict
 │   └── tests/                   node:test suites (one file per phase)
@@ -285,7 +285,7 @@ honoured by the TTS endpoint (brackets stripped before synth).
   audio; (2) IPA composer for typing phonemes directly via shortcuts.
 - `/read` — sketch (parallel-text passages, toggleable views). Real
   curated content is the post-deploy follow-up.
-- `/manifesto/` — published manifesto, bundled font.
+- `/why/` — *Why naYana?* essay (the project's full motivation; bundled font).
 - `/download` — font download + per-OS install + upcoming-keyboard-layouts notice.
 - `/faq` — 14 Q&As with in-page TOC.
 - `/developer` — internal tools, acid tests, design philosophy.
@@ -361,8 +361,8 @@ PORT=5050 npm start              # serves test harness
 
 The font must be copied into `engine/public/fonts/Nayana-Regular.otf`
 for the harness to display Nayana's glyphs (otherwise harness still
-works, just renders in browser default sans). The manifesto's font is
-already bundled at `engine/public/manifesto/Nayana-Regular.otf`.
+works, just renders in browser default sans). The essay's font is
+already bundled at `engine/public/why/Nayana-Regular.otf`.
 
 For local audio playback during development:
 

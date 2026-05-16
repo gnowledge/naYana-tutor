@@ -19,8 +19,8 @@ complexity for a marginal cost saving.
 - Compiled dictionary (`cmudict.json`, ~46 MB) from CMUdict + alignment +
   overrides
 - Compiled phase catalogue (`catalogue.json`)
-- Engine source + public/ (manifesto, glyph inventory, IPA keyboard,
-  harness, scope test, word test, IPA inventory)
+- Engine source + public/ (tutor pages, Why-naYana essay, glyph inventory,
+  IPA keyboard, harness, scope test, word test, IPA inventory)
 
 Final image size: ~300 MB. Most of it is the dictionary.
 
@@ -54,8 +54,9 @@ About 90 seconds on a warm cache; first build ~3 minutes
 
 Open `http://localhost:8080`. Available pages:
 
-- `/` — interactive harness (English → Nayana with phase slider)
-- `/manifesto/` — published manifesto
+- `/` — tutor landing page
+- `/harness` — interactive harness (English → Nayana with phase slider)
+- `/why/` — Why naYana? essay
 - `/ipa-inventory.html` — every IPA codepoint with its glyph + keyboard shortcut
 - `/ipa-keyboard.html` — type IPA via English-style shortcuts
 - `/scope-test.html` — visual proof that Nayana font is scoped to rewritten spans
@@ -88,8 +89,8 @@ this automatically.
 
 ## Future: splitting static from dynamic
 
-When the tutor design has stabilised, the docs (manifesto, inventory,
-keyboard, FAQ) can move to GitHub Pages or Cloudflare Pages — they
+When the tutor design has stabilised, the static pages (Why-naYana essay,
+inventory, keyboard, FAQ) can move to GitHub Pages or Cloudflare Pages — they
 have no engine dependency, and CDN delivery is faster + cheaper than
 serving them from the Node container.
 

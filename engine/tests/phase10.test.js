@@ -175,7 +175,7 @@ test('CRITICAL: love → luv (o→AH1 stressed; silent-e drops; o stays)', () =>
 
 // ---- Cross-phase composition: the milestone ------------------------------
 
-test('philosophy → filosəfiː (the manifesto word, now with TWO schwas)', () => {
+test('philosophy → filosəfiː (the essay word, now with TWO schwas)', () => {
   // alignment: ph}F i}AH0 l}L o}AA1 s}S o}AH0 ph}F y}IY0
   // The first i is AH0 (schwa!), not IH1 — so phase 10 fires on it too.
   // Phase 1 ph→f x2, phase 10 i→ə + second-o→ə, phase 9 y→iː.
