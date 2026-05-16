@@ -46,8 +46,45 @@ const SKIP_TAGS = new Set([
  * type is 'word' for alphabetic sequences (possibly with apostrophes for
  * contractions like don't, it's), and 'other' for everything else.
  */
+// Verbatim escape: anything between matching delimiters is preserved
+// as-is — no phoneme lookup, no rewrite. Used for proper nouns whose
+// CMUdict transcription is wrong, foreign loanwords, intentional IPA
+// the author already typed, code identifiers, etc.
+//
+// Two equivalent syntaxes are supported:
+//
+//   `Nehru`        — backtick pair, like Markdown inline code.
+//   [[Nehru]]      — double square brackets, like a Wikipedia link.
+//
+// Both syntaxes exist because the backtick is a dead-key on several
+// keyboard layouts (US-International, many EU layouts), so it can be
+// awkward to type on those. Square brackets are universally easy.
+//
+// Examples:
+//   `Nehru` visited            →  Nehru visited
+//   the [[New York Times]]     →  the New York Times
+//   on `localhost:5050`        →  localhost:5050 preserved
+//
+// Unmatched delimiters pass through as literal characters.
+const VERBATIM_RE = /`([^`\n]+)`|\[\[([^\]\n]+)\]\]/g;
+
 export function tokenize(text) {
   const tokens = [];
+  let cursor = 0;
+  let m;
+  VERBATIM_RE.lastIndex = 0;
+  while ((m = VERBATIM_RE.exec(text)) !== null) {
+    if (m.index > cursor) tokenizeNormal(text.slice(cursor, m.index), tokens);
+    // Either the backtick group (m[1]) or the double-bracket group (m[2])
+    // matched — the other is undefined. Take whichever is present.
+    tokens.push({ type: 'verbatim', value: m[1] ?? m[2] });
+    cursor = m.index + m[0].length;
+  }
+  if (cursor < text.length) tokenizeNormal(text.slice(cursor), tokens);
+  return tokens;
+}
+
+function tokenizeNormal(text, tokens) {
   const re = /([A-Za-z]+(?:['’][A-Za-z]+)?|[^A-Za-z]+)/g;
   let match;
   while ((match = re.exec(text)) !== null) {
@@ -55,7 +92,6 @@ export function tokenize(text) {
     const type = /^[A-Za-z]/.test(value) ? 'word' : 'other';
     tokens.push({ type, value });
   }
-  return tokens;
 }
 
 /**
@@ -71,6 +107,14 @@ function processText(text, lookup, rules, stats, prefs) {
   for (const token of tokens) {
     if (token.type === 'other') {
       out.push(escapeHtml(token.value));
+      continue;
+    }
+    if (token.type === 'verbatim') {
+      // Backtick-escaped — emit as-is, wrapped so the client knows not
+      // to flag it as unknown.
+      out.push(
+        `<span class="nayana-verbatim" title="preserved verbatim">${escapeHtml(token.value)}</span>`
+      );
       continue;
     }
     stats.wordsTotal++;
