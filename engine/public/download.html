@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download Nayana — Install the font on your machine</title>
+<meta name="description" content="Free download of the Nayana English font (SIL Open Font License). Install on Windows, macOS, or Linux to render IPA content anywhere on your system.">
+<link rel="stylesheet" href="site.css">
+<style>
+  .download-hero {
+    text-align: center;
+    padding: var(--space-6) 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    margin: var(--space-5) 0 var(--space-7);
+  }
+  .download-hero .preview {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 56px;
+    color: var(--text);
+    margin: 0 0 var(--space-4);
+    line-height: 1;
+  }
+  @media (max-width: 600px) { .download-hero .preview { font-size: 44px; } }
+  .download-hero .filename {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: var(--space-2);
+  }
+  .download-btn {
+    font-size: 17px;
+    padding: var(--space-3) var(--space-6);
+  }
+
+  /* OS install card grid */
+  .install-grid {
+    display: grid;
+    gap: var(--space-4);
+    margin: var(--space-5) 0;
+  }
+  @media (min-width: 760px) {
+    .install-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .install-card {
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .install-card h3 {
+    margin: 0 0 var(--space-3);
+    font-size: 16px;
+    color: var(--accent);
+  }
+  .install-card ol { margin: 0; padding-left: var(--space-5); font-size: 14px; }
+  .install-card li { padding: 3px 0; }
+  .install-card code { font-size: 12px; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="container-narrow" style="padding-top: var(--space-6);">
+
+  <h1>Download Nayana for English</h1>
+  <p class="lead">Install the Nayana font on your machine to render IPA-spelled content in any application that supports Unicode — text editors, word processors, browsers, terminal emulators, anywhere.</p>
+
+  <div class="download-hero">
+    <p class="preview">naəYənə</p>
+    <a class="btn btn-primary download-btn" href="/fonts/Nayana-Regular.otf" download="Nayana-Regular.otf">
+      ⤓ Download Nayana-Regular.otf
+    </a>
+    <p class="filename">~50 KB · OpenType/CFF · OFL 1.1 · v0.1.0</p>
+  </div>
+
+  <h2>Install</h2>
+
+  <div class="install-grid">
+
+    <div class="install-card">
+      <h3>macOS</h3>
+      <ol>
+        <li>Double-click <code>Nayana-Regular.otf</code></li>
+        <li>Click <strong>Install Font</strong> in Font Book</li>
+        <li>Done. The font appears as <em>Nayana English</em> in any application's font picker.</li>
+      </ol>
+    </div>
+
+    <div class="install-card">
+      <h3>Windows</h3>
+      <ol>
+        <li>Right-click <code>Nayana-Regular.otf</code></li>
+        <li>Select <strong>Install</strong> (or <strong>Install for all users</strong>)</li>
+        <li>Done. Font appears in Word, Notepad, browsers, anywhere fonts are listed.</li>
+      </ol>
+    </div>
+
+    <div class="install-card">
+      <h3>Linux</h3>
+      <ol>
+        <li>Copy the file to your fonts directory:
+          <br><code>mkdir -p ~/.local/share/fonts</code>
+          <br><code>cp Nayana-Regular.otf ~/.local/share/fonts/</code></li>
+        <li>Refresh the font cache:
+          <br><code>fc-cache -f -v</code></li>
+        <li>Done. Pick "Nayana English" in any application.</li>
+      </ol>
+    </div>
+
+  </div>
+
+  <h2>What you can do with it installed</h2>
+
+  <ul style="line-height: 1.8;">
+    <li><strong>Read IPA content anywhere.</strong> Dictionaries, linguistics papers, Wikipedia pronunciation guides — all the <code>ə</code>, <code>ʃ</code>, <code>ð</code>, <code>ŋ</code> characters that usually render as tofu or generic IPA glyphs now appear in the friendlier Nayana style.</li>
+    <li><strong>Take notes in IPA.</strong> Use the <a href="/type">IPA keyboard</a> in this site to copy phonetic text, paste it into any editor, and read it back in Nayana.</li>
+    <li><strong>Set it as your editor / IDE font.</strong> If you spend a lot of time around IPA (language teaching, phonetics research, conlanging), having every IPA character rendered with the same friendly grammar is a real readability win.</li>
+    <li><strong>Demo it to a class.</strong> Open a PDF dictionary entry in Adobe Reader with Nayana as the default font — the pronunciation column suddenly becomes legible to non-linguists.</li>
+  </ul>
+
+  <h2>License</h2>
+
+  <p>Released under the <strong>SIL Open Font License 1.1</strong> — free for personal and commercial use, free to redistribute, free to modify (with the caveat that derivative fonts can't be sold standalone). Full licence text included with the source.</p>
+  <p>Nayana is derived from <a href="https://github.com/crozynski/comicneue" target="_blank" rel="noopener">Comic Neue</a> by Craig Rozynski, which is itself OFL-licensed. The original Comic Neue copyright is preserved in the Nayana font's metadata.</p>
+
+  <h2>Source</h2>
+
+  <p>The font sources (FontForge SFD), the engine that produces Nayana spellings from English, and the tutor pages all live in one repository:
+    <a href="https://github.com/gnowledge/naYana-tutor" target="_blank" rel="noopener">github.com/gnowledge/naYana-tutor</a>.
+  Pull requests welcome.</p>
+
+  <div class="notice" style="margin-top: var(--space-6);">
+    <strong>Heads up.</strong> Nayana English is v0.1 — the glyph shapes are still being refined.
+    A small set of design improvements (better ŋ tail, tighter spacing on some characters,
+    audio playback in the tutor) will land in v0.2. If you install v0.1 today, you can
+    update the file later by re-downloading and re-installing — same filename, same family name.
+  </div>
+
+</main>
+
+<script src="site.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ — Nayana</title>
+<meta name="description" content="Why Nayana exists, what it does and doesn't do, where it goes from here.">
+<link rel="stylesheet" href="site.css">
+<style>
+  .faq h2 {
+    font-size: 18px;
+    color: var(--text);
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-faint);
+  }
+  .faq h2:first-of-type { border-top: none; padding-top: 0; }
+  .faq .anchor { color: var(--text-faint); text-decoration: none; margin-right: var(--space-2); font-weight: 400; }
+  .faq .anchor:hover { color: var(--accent); }
+  .toc {
+    background: var(--bg-alt);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius);
+    margin: var(--space-5) 0 var(--space-7);
+  }
+  .toc h3 { margin: 0 0 var(--space-2); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .toc ol { margin: 0; padding-left: var(--space-5); }
+  .toc li { padding: 3px 0; font-size: 14px; }
+  .toc a { color: var(--text); }
+  .toc a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="container-narrow" style="padding-top: var(--space-6);">
+
+  <h1>Frequently asked questions</h1>
+  <p class="lead">What Nayana is for, what it isn't, and where it goes from here. Updated as questions come in.</p>
+
+  <nav class="toc" aria-label="Questions">
+    <h3>On this page</h3>
+    <ol>
+      <li><a href="#what-is-this">What is Nayana, in one sentence?</a></li>
+      <li><a href="#replace-english">Is this trying to replace English spelling?</a></li>
+      <li><a href="#why-latin">Why Latin letters and not pure IPA?</a></li>
+      <li><a href="#why-english">Why English first?</a></li>
+      <li><a href="#dialects">What about Indian English, RP, Australian, other varieties?</a></li>
+      <li><a href="#other-languages">What about other languages — Hindi, Tamil, Spanish, Mandarin?</a></li>
+      <li><a href="#new-standard">Is this a new standard I have to memorise?</a></li>
+      <li><a href="#previous-reforms">How is this different from previous spelling reforms?</a></li>
+      <li><a href="#audio">Why doesn't audio work yet?</a></li>
+      <li><a href="#capitalization">Why do some words still have capital letters?</a></li>
+      <li><a href="#install">Can I install the font and use it in my own apps?</a></li>
+      <li><a href="#open-source">Is this open source?</a></li>
+      <li><a href="#roadmap">What's the roadmap?</a></li>
+      <li><a href="#who">Who is behind this?</a></li>
+    </ol>
+  </nav>
+
+  <section class="faq">
+
+    <h2 id="what-is-this"><a class="anchor" href="#what-is-this">#</a> What is Nayana, in one sentence?</h2>
+    <p>A friendly, Latin-based way to write English using the International Phonetic Alphabet — so a learner who already reads Latin can pick up IPA in a few hours instead of a few months.</p>
+
+    <h2 id="replace-english"><a class="anchor" href="#replace-english">#</a> Is this trying to replace English spelling?</h2>
+    <p>No. Nayana is a <em>learning tool</em> and an <em>alternative rendering</em>. The original English spelling stays where it is — books, signs, screens. Nayana sits alongside it for anyone who wants a phonetic reading of the same text. The point is not "everyone switches to Nayana"; the point is "anyone who wants to read English the way it actually sounds, can".</p>
+
+    <h2 id="why-latin"><a class="anchor" href="#why-latin">#</a> Why Latin letters and not pure IPA?</h2>
+    <p>IPA's existing glyphs were chosen by linguists, for linguists. Many of them are visually similar to letters they don't actually correspond to (the IPA <code>ə</code> looks like a rotated <code>e</code>, the IPA <code>ʌ</code> looks like a rotated <code>v</code>) — handy if you know phonetics, confusing if you don't. Nayana keeps every IPA codepoint exactly where IPA puts it (so anything you read here is real IPA), but draws those codepoints with friendlier shapes — fewer rotations, fewer mirror traps, and reuse of unused Latin letter slots where the visual is unambiguous. The result reads like English-plus-a-handful-of-new-letters instead of like a textbook.</p>
+
+    <h2 id="why-english"><a class="anchor" href="#why-english">#</a> Why English first?</h2>
+    <p>Because English has CMUdict — a high-quality, public-domain pronunciation dictionary with about 130,000 words. The engine that powers Nayana's rewrites looks up each word's pronunciation in CMUdict and applies its substitution rules from there. No equivalent open-data dictionary exists yet for many other languages — they'll need separate sub-projects with their own data sources.</p>
+    <p>Also: English has by far the worst gap between spelling and pronunciation among major languages. It's the place where a phonetic alternative makes the biggest practical difference.</p>
+
+    <h2 id="dialects"><a class="anchor" href="#dialects">#</a> What about Indian English, RP, Australian, other varieties?</h2>
+    <p>v0.1 ships <strong>General American</strong> — that's what CMUdict transcribes. Other varieties pronounce things differently and so will have different Nayana spellings. The rhotic schwa (the <code>ɚ</code> sound at the end of "teacher") doesn't exist in Indian English, where speakers fully articulate the /r/ — so an Indian-English Nayana wouldn't use the <code>ɚ</code> codepoint at all. "Teacher" would render as <span class="nayana-text">tiːtʃər</span>, not <span class="nayana-text">tiːtʃɚ</span>.</p>
+    <p>Each variety becomes its own parallel project, sharing the font and writing system but swapping in its own dictionary: <em>Nayana for Indian English</em>, <em>Nayana for RP</em>, and so on. There's no "correct" Nayana spelling in the abstract — only the spelling that matches how a particular variety actually sounds. That follows from the script's core idea: <strong>spelling represents pronunciation, not prescription</strong>.</p>
+
+    <h2 id="other-languages"><a class="anchor" href="#other-languages">#</a> What about other languages?</h2>
+    <p>The same approach works for any language with a pronunciation dictionary. We expect natural next targets to be Hindi, Spanish, Tamil, and Mandarin — languages spoken by a large population where the gap between spelling and sound creates real friction. Each will ship as a sibling family: <em>Nayana Hindi</em>, <em>Nayana Spanish</em>, etc. The font's glyph designs apply across the board because they're IPA-keyed; only the rules and dictionary change.</p>
+
+    <h2 id="new-standard"><a class="anchor" href="#new-standard">#</a> Is this a new standard I have to memorise?</h2>
+    <p>No. Nayana <em>is</em> IPA — every character it uses has been a standard part of the IPA chart since 1888, with a fixed Unicode codepoint since 1991. You're not learning a new system; you're learning IPA, with a font and tooling that don't punish you for not having a phonetics background. Once you can read Nayana, you can read any IPA transcription in any dictionary or linguistics paper.</p>
+
+    <h2 id="previous-reforms"><a class="anchor" href="#previous-reforms">#</a> How is this different from previous spelling reforms?</h2>
+    <p>Previous reforms (Shavian, Deseret, Webster, Cut Spelling, &amp;c.) tried to replace English orthography wholesale — a political problem more than a typographic one, and they've all failed for the same reason: every reader has to agree to switch at once, and they won't. Nayana sidesteps that. It's reader-side, not writer-side: the document stays in English, and any individual reader who installs the font and a browser plugin gets the phonetic rendering. No coordination needed. No publisher needs to do anything.</p>
+    <p>Also: Nayana commits to IPA Unicode rather than inventing a new script. So Nayana-rendered text is also valid IPA, consumable by every IPA-aware tool (TTS engines, screen readers, linguistic processors). Previous reforms introduced fresh codepoints that nothing else knew how to read.</p>
+
+    <h2 id="audio"><a class="anchor" href="#audio">#</a> Why doesn't audio work yet?</h2>
+    <p>The pipeline works — Nayana output passes through a converter to X-SAMPA, then through espeak-ng, and produces a playable WAV. We verified this end-to-end. What's missing is wiring it into the typing-practice page and choosing the right voice. espeak-ng's default voice is robotic; we'd rather ship with a voice that's actually pleasant to listen to. Audio in the tutor is planned for v0.2.</p>
+
+    <h2 id="capitalization"><a class="anchor" href="#capitalization">#</a> Why do some words still have capital letters?</h2>
+    <p>Because they're abbreviations. <em>USA</em>, <em>DVD</em>, <em>NASA</em> stay capitalised in Nayana output — the capitals cue you to pronounce them letter-by-letter rather than as a single phonetic word. Everything else lowercases, including sentence-initial caps. Capital letters carry no phonetic information, so a phonetic spelling has no use for them outside the abbreviation case.</p>
+    <p>The font also draws capitals as scaled-up versions of the lowercase glyphs (1.25× the lowercase height), not as Comic Neue's distinct capital shapes. One shape per letter, size signals "abbreviation".</p>
+
+    <h2 id="install"><a class="anchor" href="#install">#</a> Can I install the font and use it in my own apps?</h2>
+    <p>Yes — see the <a href="/download">download page</a>. The font is released under the SIL Open Font License 1.1. Install it on your machine and any application that supports Unicode IPA (most modern text editors, word processors, browsers) will render IPA content in the Nayana style. Useful if you take notes in IPA, work with phonetic transcriptions, or just want IPA characters to look like something other than tofu.</p>
+
+    <h2 id="open-source"><a class="anchor" href="#open-source">#</a> Is this open source?</h2>
+    <p>Yes. The font is OFL 1.1 (a permissive licence designed specifically for open fonts). The engine and tutor code are released under the MIT licence. CMUdict is public domain. <a href="https://github.com/gnowledge/naYana-tutor" target="_blank" rel="noopener">Source on GitHub</a> — pull requests welcome, especially from people working on other English varieties or other languages.</p>
+
+    <h2 id="roadmap"><a class="anchor" href="#roadmap">#</a> What's the roadmap?</h2>
+    <p>v0.1 (now) ships English-only tutoring with the font and the engine. Roughly in order, after that:</p>
+    <ul>
+      <li><strong>v0.2 — Audio.</strong> Hook the existing X-SAMPA→espeak-ng pipeline into the typing-practice page; user types a word, hears the pronunciation back. Voice quality tuning.</li>
+      <li><strong>v0.3 — Browser plugin.</strong> A Chrome/Firefox extension that renders any English webpage in Nayana, with a phase slider for how aggressive the rewriting is. Reader-side, no website needs to opt in.</li>
+      <li><strong>v0.4 — Indian English.</strong> First non-GA variety. Different dictionary, slightly different rules (no rhotic schwa, different vowel inventory). Same font.</li>
+      <li><strong>v0.5+ — Other languages.</strong> Hindi, Spanish, Tamil, Mandarin — each as its own dictionary + rule set, all using the shared IPA-keyed font.</li>
+      <li><strong>Eventually — Mobile apps.</strong> Once the browser-based experience is mature and there's clear demand for native mobile.</li>
+    </ul>
+
+    <h2 id="who"><a class="anchor" href="#who">#</a> Who is behind this?</h2>
+    <p>Nayana is a project of the <a href="https://www.gnowledge.org" target="_blank" rel="noopener">gnowledge lab</a> at HBCSE/TIFR Mumbai. The lab builds open educational tools where the design idea is shareable, the code is open source, and the underlying data uses public standards. Other lab projects sit at <a href="https://www.gnowledge.org" target="_blank" rel="noopener">gnowledge.org</a>.</p>
+
+  </section>
+
+  <p style="text-align: center; margin-top: var(--space-7);">
+    <a class="btn btn-primary" href="/learn">Start the tutorial</a>
+    &nbsp;
+    <a class="btn" href="/manifesto/">Read the manifesto</a>
+  </p>
+
+</main>
+
+<script src="site.js"></script>
+</body>
+</html>
