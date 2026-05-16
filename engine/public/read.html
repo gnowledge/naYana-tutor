@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Read — naYana</title>
+<meta name="description" content="Curated English passages rendered in naYana spelling, side-by-side with the original. Try reading a paragraph and surprise yourself with how much you already know.">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* Passage index card */
+  .passage-card {
+    display: block;
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    margin-bottom: var(--space-3);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .passage-card:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-1px); }
+  .passage-card h3 { margin: 0 0 var(--space-1); font-size: 18px; }
+  .passage-card .meta {
+    color: var(--text-muted);
+    font-size: 13px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .passage-card .preview {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 18px;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Passage view — two-column English / naYana */
+  .passage-view {
+    margin-top: var(--space-7);
+    padding: var(--space-5);
+    background: var(--bg-alt);
+    border-radius: var(--radius);
+    border: 1px dashed var(--border);
+  }
+  .passage-view h2 { margin-top: 0; }
+  .passage-controls {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin: var(--space-3) 0;
+    font-size: 14px;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+  .passage-controls button {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-1) var(--space-3);
+    font: inherit;
+    cursor: pointer;
+  }
+  .passage-controls button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .paragraph-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border-faint);
+  }
+  .paragraph-pair:last-child { border-bottom: none; }
+  .paragraph-pair .english {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .paragraph-pair .nayana {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .paragraph-pair .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    margin-bottom: var(--space-1);
+  }
+  @media (max-width: 600px) {
+    .paragraph-pair { grid-template-columns: 1fr; }
+  }
+
+  /* Single-column mode */
+  body.read-naYana-only .paragraph-pair { grid-template-columns: 1fr; }
+  body.read-naYana-only .paragraph-pair .english { display: none; }
+  body.read-english-only .paragraph-pair { grid-template-columns: 1fr; }
+  body.read-english-only .paragraph-pair .nayana { display: none; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="container-narrow" style="padding-top: var(--space-6);">
+
+  <h1>Read naYana</h1>
+  <p class="lead">
+    Curated English passages rendered in naYana spelling, paragraph-by-paragraph
+    alongside the original. Toggle the view to read in either script alone, or
+    keep both side-by-side as a reading trainer.
+  </p>
+
+  <div class="notice notice-warn">
+    <strong>Sketch.</strong> One example passage is shown below to demonstrate the
+    layout. v0.1 will ship 5–8 curated passages (manifesto excerpt, Aesop fables,
+    a Lincoln speech, recipe, news article). All pre-rendered at build time —
+    no engine call when reading.
+  </div>
+
+  <h2>Passages</h2>
+
+  <a class="passage-card" href="#example-passage">
+    <h3>Returning Time to the Reader — opening</h3>
+    <div class="meta">
+      <span>Essay · 6 paragraphs · 4 min read</span>
+      <span>Uses: schwa, long vowels, ʃ, ŋ, ɝ, ɚ</span>
+    </div>
+    <p class="preview">riːdɪŋ ɪz ðə moust kɑːnsəntreitəd fɔːrm əv ətɛnʃən hyuːmənz rɛgyələrliː pɚfɔːrm…</p>
+  </a>
+
+  <a class="passage-card" href="#">
+    <h3>Aesop — The North Wind and the Sun</h3>
+    <div class="meta">
+      <span>Fable · 3 paragraphs · 2 min read</span>
+      <span>Classic phonetics sample — used as a reference passage in IPA studies</span>
+    </div>
+    <p class="preview">ðə nɔːrθ wɪnd ən ðə sʌn wɝ dɪspyuːtɪŋ wɪtʃ wəz ðə stroŋgɝ…</p>
+  </a>
+
+  <a class="passage-card" href="#">
+    <h3>Lincoln — Gettysburg Address (extract)</h3>
+    <div class="meta">
+      <span>Speech · 1 paragraph · 1 min read</span>
+      <span>Familiar text — easy first read with all-known content</span>
+    </div>
+    <p class="preview">fɔːr skɔːr ən sɛvən yɪrz əgou aur fɑːðɚz brɔːt fɔːrθ on ðɪs kɑːntənənt…</p>
+  </a>
+
+  <a class="passage-card" href="#">
+    <h3>BBC headline — sample news</h3>
+    <div class="meta">
+      <span>Headline + lede · 2 paragraphs · 1 min read</span>
+      <span>Mixed register — proper nouns, numbers</span>
+    </div>
+    <p class="preview">[placeholder — short modern English news extract]</p>
+  </a>
+
+  <a class="passage-card" href="#">
+    <h3>Recipe — simple bread</h3>
+    <div class="meta">
+      <span>Instructional · 1 paragraph · 1 min read</span>
+      <span>Imperative voice, everyday vocabulary</span>
+    </div>
+    <p class="preview">[placeholder — bread recipe in naYana]</p>
+  </a>
+
+  <!-- ============================================================
+       Example passage — sketches the two-column reading view
+       ============================================================ -->
+  <section class="passage-view" id="example-passage">
+
+    <h2>Returning Time to the Reader — opening</h2>
+
+    <div class="passage-controls">
+      <span>View:</span>
+      <button class="active" data-view="both">Both</button>
+      <button data-view="naYana">naYana only</button>
+      <button data-view="english">English only</button>
+      <span style="margin-left: auto;">— Sketch; toggle works on this page</span>
+    </div>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">Reading is the most concentrated form of attention humans regularly perform. It is also the activity our writing system makes hardest. We spell wonder as if it were rhymed with wander.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">riːdɪŋ ɪz ðə moust kɑːnsəntreitəd fɔːrm əv ətɛnʃən hyuːmənz rɛgyələrliː pɚfɔːrm. ɪt ɪz ɔːlsou ðə æktɪvətiː aur raitɪŋ sɪstəm meiks hɑːrdəst. wiː spɛl wʌndɚ æz ɪf ɪt wɝ raimd wɪð wɑːndɚ.</p>
+      </div>
+    </div>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">A child who is "learning to read" is, almost entirely, learning to decode the orthographic ambiguities of English. The cognitive load of that work is huge, and it is concentrated in the years when the brain is most plastic — and most easily discouraged.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">ə tʃaild huː ɪz "lɝnɪŋ tə riːd" ɪz, ɔːlmoust ɛntairliː, lɝnɪŋ tə diːkoud ðə ɔːrθəgræfɪk æmbɪgyuːətiːz əv ɪŋlɪʃ. ðə kɑːgnətɪv loud əv ðæt wɝk ɪz hyuːdʒ, ən ɪt ɪz kɑːnsəntreitəd ɪn ðə yɪrz wɛn ðə brein ɪz moust plæstɪk — ən moust iːzəliː dɪskɝɪdʒd.</p>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+  // Toggle view modes on the example passage
+  const buttons = document.querySelectorAll('.passage-controls button[data-view]');
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      buttons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      const v = btn.getAttribute('data-view');
+      document.body.classList.remove('read-naYana-only', 'read-english-only');
+      if (v === 'naYana') document.body.classList.add('read-naYana-only');
+      if (v === 'english') document.body.classList.add('read-english-only');
+    });
+  });
+</script>
+<script src="site.js"></script>
+</body>
+</html>

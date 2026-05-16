@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learn — naYana</title>
+<meta name="description" content="A short, structured tour through the International Phonetic Alphabet using naYana. Nine lessons, each introduces a few characters and shows them in real English words.">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* Lesson index card */
+  .lesson-card {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .lesson-card:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-1px); }
+  .lesson-card .num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .lesson-card .num .n {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .lesson-card h3 { margin: 0 0 4px; font-size: 17px; }
+  .lesson-card p { margin: 0; color: var(--text-muted); font-size: 14px; }
+  .lesson-card .chars {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 22px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  @media (max-width: 600px) {
+    .lesson-card { grid-template-columns: 48px 1fr; }
+    .lesson-card .chars { grid-column: 1 / -1; text-align: center; padding-top: var(--space-2); }
+  }
+
+  /* Example lesson block (sketches the per-lesson layout) */
+  .lesson-example {
+    margin-top: var(--space-7);
+    padding: var(--space-5);
+    background: var(--bg-alt);
+    border-radius: var(--radius);
+    border: 1px dashed var(--border);
+  }
+  .lesson-example h2 { margin-top: 0; }
+  .lesson-example .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--space-2);
+  }
+  .char-intro {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-faint);
+    align-items: center;
+  }
+  .char-intro:last-child { border-bottom: none; }
+  .char-intro .glyph {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--accent);
+    text-align: center;
+  }
+  .char-intro h4 { margin: 0 0 4px; font-size: 16px; }
+  .char-intro p { margin: 0; color: var(--text-muted); font-size: 14px; }
+  .char-intro .examples {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 20px;
+    color: var(--text);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="container-narrow" style="padding-top: var(--space-6);">
+
+  <h1>Learn naYana</h1>
+  <p class="lead">
+    Nine short lessons. Each introduces a few new characters and shows them
+    in real English words. Total time: under an hour.
+  </p>
+
+  <div class="notice notice-warn">
+    <strong>Sketch.</strong> The lesson index and per-lesson layout below are
+    placeholders that show how the tutorial will be structured. Actual lesson
+    content and the audio playback land in the next iteration.
+  </div>
+
+  <h2>Lessons</h2>
+
+  <div style="display: grid; gap: var(--space-3); margin: var(--space-4) 0;">
+
+    <a class="lesson-card" href="#example-lesson-1">
+      <div class="num">Lesson<span class="n">1</span></div>
+      <div>
+        <h3>The vowel marker</h3>
+        <p>Every vowel gets a small baseline stroke. The reform's free first phase — nothing to memorise.</p>
+      </div>
+      <div class="chars">a e i o u</div>
+    </a>
+
+    <a class="lesson-card" href="#">
+      <div class="num">Lesson<span class="n">2</span></div>
+      <div>
+        <h3>Silent letters and quick wins</h3>
+        <p>ph → f, ck → k, kn → n, wr → r — fixing the easy English inconsistencies.</p>
+      </div>
+      <div class="chars">f k n r</div>
+    </a>
+
+    <a class="lesson-card" href="#">
+      <div class="num">Lesson<span class="n">3</span></div>
+      <div>
+        <h3>Long vowels</h3>
+        <p>iː uː ɔː ɑː — one new character (ː) and a habit of writing what you hear.</p>
+      </div>
+      <div class="chars">iː uː ɔː ɑː</div>
+    </a>
+
+    <a class="lesson-card" href="#">
+      <div class="num">Lesson<span class="n">4</span></div>
+      <div>
+        <h3>Schwa</h3>
+        <p>The most frequent vowel in English finally has its own letter. ə.</p>
+      </div>
+      <div class="chars">ə</div>
+    </a>
+
+    <a class="lesson-card" href="#">
+      <div class="num">Lesson<span class="n">5</span></div>
+      <div>
+        <h3>Short vowels</h3>
+        <p>ɪ ʊ ɛ ɔ ʌ — five new characters that replace the spellings English uses to fake them.</p>
+      </div>
+      <div class="chars">ɪ ʊ ɛ ɔ ʌ</div>
+    </a>
+
+    <a class="lesson-card" href="#">
+      <div class="num">Lesson<span class="n">6</span></div>
+      <div>
+        <h3>R-coloured vowels</h3>
+        <p>ɝ ɚ — the vowels of "bird" and "teacher".</p>
+      </div>
+      <div class="chars">ɝ ɚ</div>
+    </a>
+
+    <a class="lesson-card" href="#">
+      <div class="num">Lesson<span class="n">7</span></div>
+      <div>
+        <h3>The fricatives</h3>
+        <p>θ ð ʃ ʒ — the th/sh/zh sounds with their own characters.</p>
+      </div>
+      <div class="chars">θ ð ʃ ʒ</div>
+    </a>
+
+    <a class="lesson-card" href="#">
+      <div class="num">Lesson<span class="n">8</span></div>
+      <div>
+        <h3>The nasal and the affricates</h3>
+        <p>ŋ (sing), tʃ (chip), dʒ (judge) — the last three consonants you need.</p>
+      </div>
+      <div class="chars">ŋ tʃ dʒ</div>
+    </a>
+
+    <a class="lesson-card" href="#">
+      <div class="num">Lesson<span class="n">9</span></div>
+      <div>
+        <h3>Putting it together</h3>
+        <p>Reading a paragraph from the manifesto. By the end you'll surprise yourself.</p>
+      </div>
+      <div class="chars">naYana</div>
+    </a>
+
+  </div>
+
+  <!-- ============================================================
+       Example lesson, sketched inline so you can see the layout
+       a per-lesson page will use.
+       ============================================================ -->
+  <section class="lesson-example" id="example-lesson-1">
+
+    <span class="tag">Lesson 1 — sketch</span>
+    <h2>The vowel marker</h2>
+
+    <p class="lead">
+      The first thing the naYana font does is draw a small horizontal stroke
+      under every vowel. That's it — no new characters, no new sounds.
+      Just a visual cue so your eye knows where the vowels are.
+    </p>
+
+    <h3>The five vowels</h3>
+
+    <div>
+      <div class="char-intro">
+        <div class="glyph">a</div>
+        <div>
+          <h4>a</h4>
+          <p>Same letter as English "a", with a stroke underneath.</p>
+          <p class="examples">cat, hand, that</p>
+        </div>
+      </div>
+
+      <div class="char-intro">
+        <div class="glyph">e</div>
+        <div>
+          <h4>e</h4>
+          <p>Same letter as English "e", with a stroke underneath.</p>
+          <p class="examples">bed, met, ten</p>
+        </div>
+      </div>
+
+      <div class="char-intro">
+        <div class="glyph">i</div>
+        <div>
+          <h4>i</h4>
+          <p>Same letter as English "i".</p>
+          <p class="examples">it, sit, hit</p>
+        </div>
+      </div>
+
+      <div class="char-intro">
+        <div class="glyph">o</div>
+        <div>
+          <h4>o</h4>
+          <p>Same letter as English "o".</p>
+          <p class="examples">on, hot, top</p>
+        </div>
+      </div>
+
+      <div class="char-intro">
+        <div class="glyph">u</div>
+        <div>
+          <h4>u</h4>
+          <p>Same letter as English "u".</p>
+          <p class="examples">up, run, but</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Practice</h3>
+    <p>
+      In a finished lesson, this section will have a short interactive
+      check — a few words shown in English, you click which vowels they
+      contain, the page tells you if you got it right and (when audio
+      lands in v0.2) plays the word back to you.
+    </p>
+
+    <div style="display: flex; justify-content: space-between; margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border);">
+      <a class="btn" href="#">← (Index)</a>
+      <a class="btn btn-primary" href="#">Next: Silent letters →</a>
+    </div>
+
+  </section>
+
+</main>
+
+<script src="site.js"></script>
+</body>
+</html>

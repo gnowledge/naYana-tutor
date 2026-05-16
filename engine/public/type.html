@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Type — naYana</title>
+<meta name="description" content="Practice typing the International Phonetic Alphabet via English-style shortcuts. Free, browser-based, no install. Output is canonical IPA Unicode you can copy anywhere.">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* Composer */
+  .composer textarea {
+    width: 100%;
+    min-height: 160px;
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 26px;
+    line-height: 1.5;
+    padding: var(--space-4) var(--space-4);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    background: #fcfdfc;
+    color: var(--text);
+    resize: vertical;
+  }
+  .composer textarea:focus { outline: none; }
+  .composer-controls {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    margin-top: var(--space-3);
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  /* Shortcuts grid (cheatsheet) */
+  .shortcuts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-2);
+    margin: var(--space-4) 0;
+  }
+  .shortcut {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border-faint);
+    border-radius: 4px;
+    background: var(--surface);
+    font-size: 14px;
+  }
+  .shortcut kbd {
+    display: inline-block;
+    min-width: 24px;
+    padding: 2px 6px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text);
+    text-align: center;
+  }
+  .shortcut .out {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 18px;
+    color: var(--accent);
+  }
+  .shortcut .note { color: var(--text-faint); font-size: 11px; margin-left: auto; }
+
+  /* Practice card */
+  .practice {
+    margin-top: var(--space-7);
+    padding: var(--space-5);
+    background: var(--bg-alt);
+    border-radius: var(--radius);
+    border: 1px dashed var(--border);
+  }
+  .practice h2 { margin-top: 0; }
+  .practice-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--border-faint);
+    align-items: center;
+  }
+  .practice-item:last-child { border-bottom: none; }
+  .practice-item .english { font-size: 18px; font-weight: 500; }
+  .practice-item .expected {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 20px;
+    color: var(--text-faint);
+  }
+  .practice-item .input {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 18px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--surface);
+    min-width: 120px;
+  }
+  @media (max-width: 600px) {
+    .practice-item { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="container" style="padding-top: var(--space-6); max-width: 960px;">
+
+  <h1>Type naYana</h1>
+  <p class="lead">
+    Type English-style shortcuts; they become canonical IPA characters as
+    you type. Underlying text is real Unicode IPA — copy it into any
+    application that supports IPA and it'll just work.
+  </p>
+
+  <div class="notice notice-warn">
+    <strong>Sketch.</strong> The composer below is functional today (same engine
+    as the <a href="/ipa-keyboard.html">IPA keyboard reference</a>). The
+    practice section + audio feedback is the v0.2 plan — sketch only here.
+  </div>
+
+  <h2>Composer</h2>
+  <div class="composer">
+    <textarea id="ipa-input" placeholder='Type "DIs Iz a test" — becomes ðɪs ɪz ə test as you type. Try "naYana", "TInk", "judj", "bard".'></textarea>
+    <div class="composer-controls">
+      <button class="btn" id="copy-btn">Copy</button>
+      <button class="btn" id="clear-btn">Clear</button>
+      <span id="status">Ready — IPA shortcuts active</span>
+    </div>
+  </div>
+
+  <h2>Shortcut cheatsheet</h2>
+  <p class="lead" style="font-size: 15px;">
+    The most useful entries; full table on the
+    <a href="/ipa-keyboard.html">keyboard reference page</a>.
+  </p>
+
+  <div class="shortcuts" id="cheatsheet">
+    <!-- Populated by JS from IPA_SUBSTITUTIONS so this is a single source of truth -->
+  </div>
+
+  <!-- ============================================================
+       Practice section — sketch of the v0.2 exercise mode
+       ============================================================ -->
+  <section class="practice">
+
+    <h2>Practice — sketch</h2>
+    <p>
+      In v0.2 this section will give you a queue of English words and a place
+      to type each one's naYana spelling. The page checks your answer character
+      by character, shows a green tick for correct, and (with audio) plays the
+      pronunciation back so you can compare what you typed against what you'd say.
+    </p>
+
+    <div>
+
+      <div class="practice-item">
+        <div class="english">bird</div>
+        <div class="expected">expected: bɝd</div>
+        <input class="input" type="text" placeholder="type here" disabled>
+      </div>
+
+      <div class="practice-item">
+        <div class="english">English</div>
+        <div class="expected">expected: ɪŋlɪʃ</div>
+        <input class="input" type="text" placeholder="type here" disabled>
+      </div>
+
+      <div class="practice-item">
+        <div class="english">judge</div>
+        <div class="expected">expected: dʒʌdʒ</div>
+        <input class="input" type="text" placeholder="type here" disabled>
+      </div>
+
+      <div class="practice-item">
+        <div class="english">philosophy</div>
+        <div class="expected">expected: fɪlɑːsəfiː</div>
+        <input class="input" type="text" placeholder="type here" disabled>
+      </div>
+
+    </div>
+
+    <p style="margin-top: var(--space-4); color: var(--text-muted); font-size: 14px;">
+      Scoring, randomised queue, difficulty levels, and audio playback all land
+      together in v0.2.
+    </p>
+
+  </section>
+
+</main>
+
+<script type="module">
+  import { attachIpaKeyboard, IPA_SUBSTITUTIONS } from './ipa-keyboard.js';
+
+  // Wire the composer
+  const input = document.getElementById('ipa-input');
+  attachIpaKeyboard(input);
+  input.focus();
+
+  // Build cheatsheet
+  const cheat = document.getElementById('cheatsheet');
+  for (const [src, dst, note] of IPA_SUBSTITUTIONS) {
+    const div = document.createElement('div');
+    div.className = 'shortcut';
+    div.innerHTML = `<kbd>${src.replace(/</g, '&lt;')}</kbd> <span class="out">${dst}</span>`;
+    cheat.appendChild(div);
+  }
+
+  // Copy/clear
+  document.getElementById('copy-btn').addEventListener('click', async () => {
+    if (!input.value) return;
+    await navigator.clipboard.writeText(input.value);
+    const s = document.getElementById('status');
+    s.textContent = `Copied ${[...input.value].length} character(s)`;
+    setTimeout(() => { s.textContent = 'Ready — IPA shortcuts active'; }, 2000);
+  });
+  document.getElementById('clear-btn').addEventListener('click', () => {
+    input.value = ''; input.focus();
+  });
+</script>
+<script src="site.js"></script>
+</body>
+</html>
