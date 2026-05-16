@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Learn — naYana</title>
-<meta name="description" content="A short, structured tour through the International Phonetic Alphabet using naYana. Nine lessons, each introduces a few characters and shows them in real English words.">
+<title>Learn naYana — nine short lessons</title>
+<meta name="description" content="A pedagogical tour through the naYana script. Nine lessons, each introduces a few characters with the reason for the change and real English examples.">
 <link rel="stylesheet" href="site.css">
 <style>
-  /* Lesson index card */
+  /* ---------- Lesson index ---------- */
   .lesson-card {
     display: grid;
     grid-template-columns: 64px 1fr auto;
@@ -39,7 +39,7 @@
     line-height: 1;
   }
   .lesson-card h3 { margin: 0 0 4px; font-size: 17px; }
-  .lesson-card p { margin: 0; color: var(--text-muted); font-size: 14px; }
+  .lesson-card p  { margin: 0; color: var(--text-muted); font-size: 14px; }
   .lesson-card .chars {
     font-family: var(--font-nayana);
     font-feature-settings: "ss01" on, "liga" on;
@@ -52,16 +52,14 @@
     .lesson-card .chars { grid-column: 1 / -1; text-align: center; padding-top: var(--space-2); }
   }
 
-  /* Example lesson block (sketches the per-lesson layout) */
-  .lesson-example {
-    margin-top: var(--space-7);
-    padding: var(--space-5);
-    background: var(--bg-alt);
-    border-radius: var(--radius);
-    border: 1px dashed var(--border);
+  /* ---------- Lesson body ---------- */
+  .lesson {
+    margin: var(--space-8) 0;
+    padding: var(--space-6) 0 var(--space-4);
+    border-top: 2px solid var(--border);
   }
-  .lesson-example h2 { margin-top: 0; }
-  .lesson-example .tag {
+  .lesson:first-of-type { border-top: none; }
+  .lesson .tag {
     display: inline-block;
     padding: 2px 8px;
     background: var(--accent-bg);
@@ -73,6 +71,25 @@
     letter-spacing: 0.04em;
     margin-bottom: var(--space-2);
   }
+  .lesson h2 { margin-top: 0; }
+  .lesson .why {
+    margin: var(--space-4) 0;
+    padding: var(--space-3) var(--space-5);
+    border-left: 3px solid var(--accent);
+    background: var(--bg-alt);
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+  .lesson .why h4 {
+    margin: 0 0 var(--space-2);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .lesson .why p { margin: 0; }
+  .lesson .why p + p { margin-top: var(--space-2); }
+
+  /* Character introduction blocks */
   .char-intro {
     display: grid;
     grid-template-columns: 80px 1fr;
@@ -91,13 +108,91 @@
     text-align: center;
   }
   .char-intro h4 { margin: 0 0 4px; font-size: 16px; }
-  .char-intro p { margin: 0; color: var(--text-muted); font-size: 14px; }
+  .char-intro p  { margin: 0; color: var(--text-muted); font-size: 14px; }
   .char-intro .examples {
-    font-family: var(--font-nayana);
-    font-feature-settings: "ss01" on, "liga" on;
-    font-size: 20px;
+    /* English example words — render as plain Latin so the reader
+       can recognise the word. The Nayana spellings live in the
+       "Try it" table further down each lesson. */
+    font-family: var(--font-sans);
+    font-feature-settings: normal;
+    font-size: 15px;
     color: var(--text);
     margin-top: 4px;
+    font-style: italic;
+  }
+  .char-intro .examples::before {
+    content: "e.g. ";
+    color: var(--text-faint);
+    font-style: normal;
+  }
+
+  /* English / naYana side-by-side reading sample */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-4) 0;
+  }
+  .compare-table th {
+    text-align: left;
+    padding: var(--space-2) var(--space-3);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .compare-table td {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--border-faint);
+    vertical-align: middle;
+  }
+  .compare-table td.eng { color: var(--text-muted); width: 40%; }
+  .compare-table td.nay {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 22px;
+  }
+  .compare-table td.note {
+    color: var(--text-faint);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  /* Inline naYana preview spans */
+  .nay {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    color: var(--accent);
+  }
+
+  /* Lesson navigation footer */
+  .lesson-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-faint);
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .lesson-nav .btn { font-size: 14px; }
+
+  /* Closing wrap-up box */
+  .wrap-up {
+    margin-top: var(--space-7);
+    padding: var(--space-5) var(--space-6);
+    background: var(--accent-bg);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+  }
+  .wrap-up h3 { margin-top: 0; color: var(--accent); }
+  .wrap-up .sample {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 22px;
+    line-height: 1.55;
+    margin: var(--space-3) 0;
   }
 </style>
 </head>
@@ -108,184 +203,901 @@
 
   <h1>Learn naYana</h1>
   <p class="lead">
-    Nine short lessons. Each introduces a few new characters and shows them
-    in real English words. Total time: under an hour.
+    Nine short lessons, each introducing one idea and a handful of new
+    characters. Roughly an hour end-to-end. The order is chosen for ease
+    of learning, not the order the engine was built in — so you'll meet
+    the most useful characters first and the rare ones last.
   </p>
 
-  <div class="notice notice-warn">
-    <strong>Sketch.</strong> The lesson index and per-lesson layout below are
-    placeholders that show how the tutorial will be structured. Actual lesson
-    content and the audio playback land in the next iteration.
-  </div>
+  <!-- ============================================================
+       Lesson index
+       ============================================================ -->
+  <h2>The nine lessons</h2>
 
-  <h2>Lessons</h2>
+  <div style="display: grid; gap: var(--space-3); margin: var(--space-4) 0 var(--space-7);">
 
-  <div style="display: grid; gap: var(--space-3); margin: var(--space-4) 0;">
-
-    <a class="lesson-card" href="#example-lesson-1">
+    <a class="lesson-card" href="#l1">
       <div class="num">Lesson<span class="n">1</span></div>
       <div>
-        <h3>The vowel marker</h3>
-        <p>Every vowel gets a small baseline stroke. The reform's free first phase — nothing to memorise.</p>
+        <h3>How to read this script</h3>
+        <p>Two visual rules to recognise: the stroke under vowels, and capitals as bigger lowercase shapes.</p>
       </div>
-      <div class="chars">a e i o u</div>
+      <div class="chars">a A · e E</div>
     </a>
 
-    <a class="lesson-card" href="#">
+    <a class="lesson-card" href="#l2">
       <div class="num">Lesson<span class="n">2</span></div>
       <div>
-        <h3>Silent letters and quick wins</h3>
-        <p>ph → f, ck → k, kn → n, wr → r — fixing the easy English inconsistencies.</p>
+        <h3>Drop the silent letters</h3>
+        <p>ph → f, ck → k, kn → n, wr → r — write only what you say.</p>
       </div>
       <div class="chars">f k n r</div>
     </a>
 
-    <a class="lesson-card" href="#">
+    <a class="lesson-card" href="#l3">
       <div class="num">Lesson<span class="n">3</span></div>
       <div>
-        <h3>Long vowels</h3>
-        <p>iː uː ɔː ɑː — one new character (ː) and a habit of writing what you hear.</p>
+        <h3>Long vowels and the length marker</h3>
+        <p>One new character — ː — replaces the silent-e and double-letter tricks for marking long vowels.</p>
       </div>
       <div class="chars">iː uː ɔː ɑː</div>
     </a>
 
-    <a class="lesson-card" href="#">
+    <a class="lesson-card" href="#l4">
       <div class="num">Lesson<span class="n">4</span></div>
       <div>
-        <h3>Schwa</h3>
-        <p>The most frequent vowel in English finally has its own letter. ə.</p>
+        <h3>Schwa — the most common sound in English</h3>
+        <p>One letter for the sound every unstressed vowel reduces to.</p>
       </div>
       <div class="chars">ə</div>
     </a>
 
-    <a class="lesson-card" href="#">
+    <a class="lesson-card" href="#l5">
       <div class="num">Lesson<span class="n">5</span></div>
       <div>
-        <h3>Short vowels</h3>
-        <p>ɪ ʊ ɛ ɔ ʌ — five new characters that replace the spellings English uses to fake them.</p>
+        <h3>The short vowels you've been faking</h3>
+        <p>Four new characters so "bit" and "bite" stop sharing the same letter.</p>
       </div>
-      <div class="chars">ɪ ʊ ɛ ɔ ʌ</div>
+      <div class="chars">ɪ ʊ ɛ ɔ</div>
     </a>
 
-    <a class="lesson-card" href="#">
+    <a class="lesson-card" href="#l6">
       <div class="num">Lesson<span class="n">6</span></div>
       <div>
-        <h3>R-coloured vowels</h3>
-        <p>ɝ ɚ — the vowels of "bird" and "teacher".</p>
+        <h3>When schwa is stressed</h3>
+        <p>The vowel of "cup" — same family as schwa, but louder.</p>
       </div>
-      <div class="chars">ɝ ɚ</div>
+      <div class="chars">ʌ</div>
     </a>
 
-    <a class="lesson-card" href="#">
+    <a class="lesson-card" href="#l7">
       <div class="num">Lesson<span class="n">7</span></div>
       <div>
-        <h3>The fricatives</h3>
-        <p>θ ð ʃ ʒ — the th/sh/zh sounds with their own characters.</p>
+        <h3>The two TH sounds</h3>
+        <p>"thin" and "this" are as different as p and b. They get different letters.</p>
       </div>
-      <div class="chars">θ ð ʃ ʒ</div>
+      <div class="chars">θ ð</div>
     </a>
 
-    <a class="lesson-card" href="#">
+    <a class="lesson-card" href="#l8">
       <div class="num">Lesson<span class="n">8</span></div>
       <div>
-        <h3>The nasal and the affricates</h3>
-        <p>ŋ (sing), tʃ (chip), dʒ (judge) — the last three consonants you need.</p>
+        <h3>Sh, zh, and ng</h3>
+        <p>Three single sounds that English writes as digraphs.</p>
       </div>
-      <div class="chars">ŋ tʃ dʒ</div>
+      <div class="chars">ʃ ʒ ŋ</div>
     </a>
 
-    <a class="lesson-card" href="#">
+    <a class="lesson-card" href="#l9">
       <div class="num">Lesson<span class="n">9</span></div>
       <div>
-        <h3>Putting it together</h3>
-        <p>Reading a paragraph from the manifesto. By the end you'll surprise yourself.</p>
+        <h3>Affricates and the r-coloured vowels</h3>
+        <p>Ch, j, and the vowels of "bird" and "teacher".</p>
       </div>
-      <div class="chars">naYana</div>
+      <div class="chars">tʃ dʒ ɝ ɚ</div>
     </a>
 
   </div>
 
   <!-- ============================================================
-       Example lesson, sketched inline so you can see the layout
-       a per-lesson page will use.
+       Lesson 1 — How to read this script
        ============================================================ -->
-  <section class="lesson-example" id="example-lesson-1">
+  <section class="lesson" id="l1">
 
-    <span class="tag">Lesson 1 — sketch</span>
-    <h2>The vowel marker</h2>
+    <span class="tag">Lesson 1</span>
+    <h2>How to read this script</h2>
 
     <p class="lead">
-      The first thing the naYana font does is draw a small horizontal stroke
-      under every vowel. That's it — no new characters, no new sounds.
-      Just a visual cue so your eye knows where the vowels are.
+      Before any new characters, two visual rules. Once you can recognise
+      these, the rest of the lessons are about which sounds to write — not
+      how the script behaves.
     </p>
 
-    <h3>The five vowels</h3>
+    <h3>Rule 1: a small stroke under every vowel</h3>
 
-    <div>
-      <div class="char-intro">
-        <div class="glyph">a</div>
-        <div>
-          <h4>a</h4>
-          <p>Same letter as English "a", with a stroke underneath.</p>
-          <p class="examples">cat, hand, that</p>
-        </div>
-      </div>
-
-      <div class="char-intro">
-        <div class="glyph">e</div>
-        <div>
-          <h4>e</h4>
-          <p>Same letter as English "e", with a stroke underneath.</p>
-          <p class="examples">bed, met, ten</p>
-        </div>
-      </div>
-
-      <div class="char-intro">
-        <div class="glyph">i</div>
-        <div>
-          <h4>i</h4>
-          <p>Same letter as English "i".</p>
-          <p class="examples">it, sit, hit</p>
-        </div>
-      </div>
-
-      <div class="char-intro">
-        <div class="glyph">o</div>
-        <div>
-          <h4>o</h4>
-          <p>Same letter as English "o".</p>
-          <p class="examples">on, hot, top</p>
-        </div>
-      </div>
-
-      <div class="char-intro">
-        <div class="glyph">u</div>
-        <div>
-          <h4>u</h4>
-          <p>Same letter as English "u".</p>
-          <p class="examples">up, run, but</p>
-        </div>
-      </div>
-    </div>
-
-    <h3>Practice</h3>
     <p>
-      In a finished lesson, this section will have a short interactive
-      check — a few words shown in English, you click which vowels they
-      contain, the page tells you if you got it right and (when audio
-      lands in v0.2) plays the word back to you.
+      Open any English word in naYana and you'll see that the vowels —
+      <span class="nay">a e i o u</span> — each carry a small horizontal
+      stroke at the baseline. The consonants don't. That's the only
+      visual difference between a naYana letter and the equivalent Latin
+      letter you already know.
     </p>
 
-    <div style="display: flex; justify-content: space-between; margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border);">
-      <a class="btn" href="#">← (Index)</a>
-      <a class="btn btn-primary" href="#">Next: Silent letters →</a>
+    <div class="why">
+      <h4>Why?</h4>
+      <p>The vowels carry the music of every word — they're the syllable
+      cores, the rhythm, the part you sing. Marking them visually lets
+      your eye find the word's rhythm at a glance, before you've finished
+      decoding the consonants. Reading speed goes up.</p>
+      <p>It also costs you nothing. There are no new characters to memorise,
+      no rules to apply — just a stroke that the font draws for you.</p>
     </div>
 
+    <h3>Rule 2: capitals are just bigger lowercase shapes</h3>
+
+    <p>
+      naYana has no separate capital letters. When you write a name, the
+      start of a sentence, or an abbreviation, the letter is the
+      <em>same shape</em> as its lowercase form, just drawn larger.
+      <span class="nay">A</span> is a bigger <span class="nay">a</span>.
+      <span class="nay">N</span> is a bigger <span class="nay">n</span>.
+    </p>
+
+    <div class="why">
+      <h4>Why?</h4>
+      <p>Latin uses two completely different shapes for the same letter
+      (compare <strong>A</strong> and <strong>a</strong>, or <strong>G</strong>
+      and <strong>g</strong>) for historical reasons — they evolved as
+      separate scripts that later fused. A phonetic script doesn't need
+      that. The same sound should be the same letter.</p>
+      <p>Size alone is plenty to flag a name, a sentence boundary, or an
+      acronym. One shape per letter; one less thing to memorise.</p>
+    </div>
+
+    <h3>Try it</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>English</th><th>naYana</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">cat</td>     <td class="nay">cat</td>      <td class="note">three letters; vowel marker visible under <span class="nay">a</span></td></tr>
+        <tr><td class="eng">Anna</td>    <td class="nay">Anna</td>     <td class="note">capital <span class="nay">A</span> is a larger <span class="nay">a</span></td></tr>
+        <tr><td class="eng">naYana</td>  <td class="nay">naYana</td>   <td class="note">the project name — three syllables, capital marks the middle</td></tr>
+        <tr><td class="eng">NASA</td>    <td class="nay">NASA</td>     <td class="note">all-caps abbreviation kept as-is</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      Everything else in this tutorial is about <em>which sounds get which
+      letters</em>. The script itself you've already learned.
+    </p>
+
+    <div class="lesson-nav">
+      <a class="btn" href="#main">↑ Index</a>
+      <a class="btn btn-primary" href="#l2">Lesson 2: Drop the silent letters →</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Lesson 2 — Drop the silent letters
+       ============================================================ -->
+  <section class="lesson" id="l2">
+
+    <span class="tag">Lesson 2</span>
+    <h2>Drop the silent letters</h2>
+
+    <p class="lead">
+      English keeps a lot of letters around for historical reasons that
+      nobody pronounces. naYana drops them. The first batch of changes
+      doesn't introduce any new letters — it just stops writing the ones
+      you weren't saying anyway.
+    </p>
+
+    <div class="why">
+      <h4>Why?</h4>
+      <p>"Phone" is spelled with <strong>ph</strong> because it came from
+      Greek, where <em>phi</em> (φ) was a single sound. English borrowed
+      the spelling but said it as <em>f</em>. "Knot" had a real <em>k</em>
+      a thousand years ago; the sound dropped but the letter stayed.
+      "Write" had a real <em>w</em>. "Lamb" had a real <em>b</em>.</p>
+      <p>Etymological spellings are a kind of historical museum. Useful if
+      you're a linguist; an obstacle if you're a five-year-old learning
+      to read. naYana's rule: write what you say.</p>
+    </div>
+
+    <h3>Six common substitutions</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Pattern</th><th>Becomes</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng"><strong>ph</strong> (Greek φ)</td>      <td><span class="nay">f</span></td>  <td><span class="eng">phone</span> → <span class="nay">fon</span></td></tr>
+        <tr><td class="eng"><strong>ck</strong></td>                 <td><span class="nay">k</span></td>  <td><span class="eng">back</span> → <span class="nay">bak</span></td></tr>
+        <tr><td class="eng"><strong>kn</strong> (silent k)</td>      <td><span class="nay">n</span></td>  <td><span class="eng">knot</span> → <span class="nay">not</span></td></tr>
+        <tr><td class="eng"><strong>wr</strong> (silent w)</td>      <td><span class="nay">r</span></td>  <td><span class="eng">write</span> → <span class="nay">rait</span></td></tr>
+        <tr><td class="eng"><strong>mb</strong> (silent b at end)</td><td><span class="nay">m</span></td>  <td><span class="eng">lamb</span> → <span class="nay">lam</span></td></tr>
+        <tr><td class="eng"><strong>gh</strong> (silent in many words)</td><td>(dropped)</td>            <td><span class="eng">light</span> → <span class="nay">lait</span></td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      The engine doesn't apply these mechanically — it checks the sound
+      first. "Number" still has a real <em>b</em>, so the <em>mb → m</em>
+      rule doesn't fire. "Shepherd" still has a real <em>p</em> followed
+      by <em>h</em> (separate syllables), so <em>ph → f</em> doesn't fire
+      either. You don't have to think about it; the dictionary does.
+    </p>
+
+    <h3>Try it</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>English</th><th>naYana</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">photo</td>       <td class="nay">foto</td>     <td class="note">ph → f</td></tr>
+        <tr><td class="eng">knee</td>        <td class="nay">ni</td>       <td class="note">silent k dropped (long-i covered in lesson 3)</td></tr>
+        <tr><td class="eng">wrong</td>       <td class="nay">roŋ</td>      <td class="note">silent w dropped (ŋ in lesson 8)</td></tr>
+        <tr><td class="eng">comb</td>        <td class="nay">kom</td>      <td class="note">silent b dropped</td></tr>
+        <tr><td class="eng">though</td>      <td class="nay">ðo</td>       <td class="note">silent gh dropped (ð in lesson 7)</td></tr>
+        <tr><td class="eng">philosophy</td>  <td class="nay">filɑːsəfi</td><td class="note">two ph→f substitutions in one word</td></tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-nav">
+      <a class="btn" href="#l1">← Lesson 1</a>
+      <a class="btn btn-primary" href="#l3">Lesson 3: Long vowels →</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Lesson 3 — Long vowels
+       ============================================================ -->
+  <section class="lesson" id="l3">
+
+    <span class="tag">Lesson 3</span>
+    <h2>Long vowels and the length marker</h2>
+
+    <p class="lead">
+      English uses three different tricks to mark a long vowel. naYana
+      uses one — write the vowel and add a small marker after it.
+    </p>
+
+    <div class="why">
+      <h4>Why?</h4>
+      <p>To say "this <em>i</em> is long," English might add a silent
+      <em>e</em> at the end (<em>bite</em>), or double the vowel
+      (<em>meet</em>), or just rely on luck (<em>find</em>). Three tricks
+      for one job.</p>
+      <p>The IPA does it with one character: <strong>ː</strong>, a
+      triangular colon that means "the previous vowel is held longer."
+      naYana adopts it. <span class="nay">i</span> is short,
+      <span class="nay">iː</span> is long. Same letter, length marker
+      added.</p>
+    </div>
+
+    <h3>The new character</h3>
+
+    <div class="char-intro">
+      <div class="glyph">ː</div>
+      <div>
+        <h4>ː — the length marker</h4>
+        <p>Two small triangles stacked. Always written immediately after
+        a vowel. Means "hold this vowel longer."</p>
+      </div>
+    </div>
+
+    <h3>The four long vowels you'll meet first</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Sound</th><th>naYana</th><th>Examples</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">long ee (as in "see")</td>   <td class="nay">iː</td> <td><span class="eng">meet</span> → <span class="nay">miːt</span>, <span class="eng">tree</span> → <span class="nay">triː</span></td></tr>
+        <tr><td class="eng">long oo (as in "food")</td>  <td class="nay">uː</td> <td><span class="eng">food</span> → <span class="nay">fuːd</span>, <span class="eng">moon</span> → <span class="nay">muːn</span></td></tr>
+        <tr><td class="eng">long aw (as in "ball")</td>  <td class="nay">ɔː</td> <td><span class="eng">ball</span> → <span class="nay">bɔːl</span>, <span class="eng">law</span> → <span class="nay">lɔː</span></td></tr>
+        <tr><td class="eng">long ah (as in "father")</td><td class="nay">ɑː</td> <td><span class="eng">father</span> → <span class="nay">fɑːðɚ</span>, <span class="eng">car</span> → <span class="nay">kɑːr</span></td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      Two of those (ɔ and ɑ) are characters you haven't formally met yet —
+      they get a closer look in lesson 5. For now, just note that the
+      <strong>ː</strong> is what makes them long.
+    </p>
+
+    <h3>Try it</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>English</th><th>naYana</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">see</td>   <td class="nay">siː</td>  <td class="note">silent <em>e</em> in English; ː in naYana</td></tr>
+        <tr><td class="eng">root</td>  <td class="nay">ruːt</td> <td class="note">double <em>oo</em> in English; ː in naYana</td></tr>
+        <tr><td class="eng">talk</td>  <td class="nay">tɔːk</td> <td class="note">silent <em>l</em> dropped; ɔ + length</td></tr>
+        <tr><td class="eng">park</td>  <td class="nay">pɑːrk</td><td class="note">long ah</td></tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-nav">
+      <a class="btn" href="#l2">← Lesson 2</a>
+      <a class="btn btn-primary" href="#l4">Lesson 4: Schwa →</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Lesson 4 — Schwa
+       ============================================================ -->
+  <section class="lesson" id="l4">
+
+    <span class="tag">Lesson 4</span>
+    <h2>Schwa — the most common sound in English</h2>
+
+    <p class="lead">
+      One new character. It's the sound English speakers make for almost
+      every unstressed vowel — and it's everywhere.
+    </p>
+
+    <div class="why">
+      <h4>Why?</h4>
+      <p>Say "about" out loud, slowly. The <em>a</em> at the start isn't
+      really an "ah" or an "ay" — it's a vague, neutral, throat-relaxed
+      sound. That sound is called <strong>schwa</strong>, written
+      <strong>ə</strong> in IPA.</p>
+      <p>Now say "sofa", "banana", "the", "problem", "lemon". The
+      unstressed vowels in all of those — written variously as
+      <em>a</em>, <em>e</em>, <em>i</em>, <em>o</em>, <em>u</em> — flatten
+      to the same schwa. English hides this fact behind five different
+      spellings. naYana shows it with one character.</p>
+      <p>Schwa is, by some counts, the most frequent vowel sound in
+      English. It deserves its own letter.</p>
+    </div>
+
+    <h3>The new character</h3>
+
+    <div class="char-intro">
+      <div class="glyph">ə</div>
+      <div>
+        <h4>ə — schwa</h4>
+        <p>The relaxed, neutral vowel of unstressed syllables. The
+        baseline-level shape signals "this is a quiet vowel" — visually
+        smaller than the stressed vowels nearby.</p>
+        <p class="examples">about, sofa, banana, problem, the</p>
+      </div>
+    </div>
+
+    <h3>Try it</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>English</th><th>naYana</th><th>What changed</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">about</td>     <td class="nay">əbaut</td>    <td class="note">unstressed <em>a</em> → ə</td></tr>
+        <tr><td class="eng">sofa</td>      <td class="nay">soufə</td>    <td class="note">final <em>a</em> → ə</td></tr>
+        <tr><td class="eng">banana</td>    <td class="nay">bənænə</td>   <td class="note">two <em>a</em>'s → ə (æ in lesson 5)</td></tr>
+        <tr><td class="eng">problem</td>   <td class="nay">prɑːbləm</td> <td class="note">unstressed <em>e</em> → ə</td></tr>
+        <tr><td class="eng">lemon</td>     <td class="nay">lɛmən</td>    <td class="note">unstressed <em>o</em> → ə</td></tr>
+        <tr><td class="eng">the</td>       <td class="nay">ðə</td>       <td class="note">the most common English word; ð in lesson 7</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      Try this experiment: pick any paragraph and count the schwas in the
+      naYana version. Most paragraphs hit 15-20% schwa. It's that frequent.
+    </p>
+
+    <div class="lesson-nav">
+      <a class="btn" href="#l3">← Lesson 3</a>
+      <a class="btn btn-primary" href="#l5">Lesson 5: Short vowels →</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Lesson 5 — Short vowels
+       ============================================================ -->
+  <section class="lesson" id="l5">
+
+    <span class="tag">Lesson 5</span>
+    <h2>The short vowels you've been faking</h2>
+
+    <p class="lead">
+      English spells "bit" and "bite" with the same vowel letter even
+      though they're different sounds. Lesson 3 already gave the long
+      versions a length marker. Now the short versions get their own
+      letters.
+    </p>
+
+    <div class="why">
+      <h4>Why?</h4>
+      <p>"Bit" and "bite" sound nothing alike. Same with "full" vs "fool",
+      "bed" vs "bead", "cot" vs "caught". English writes the long version
+      with a trick (silent <em>e</em>, doubled letter, extra letter) and
+      the short version with the bare vowel.</p>
+      <p>Lesson 3 fixed the long versions: <span class="nay">iː uː ɔː ɑː</span>.
+      Now the short versions get distinct letters too:
+      <span class="nay">ɪ ʊ ɛ ɔ</span>. One sound, one letter.</p>
+    </div>
+
+    <h3>Four new characters</h3>
+
+    <div class="char-intro">
+      <div class="glyph">ɪ</div>
+      <div>
+        <h4>ɪ — the vowel of "bit"</h4>
+        <p>Short i. A capital-I-shape with the vowel marker.</p>
+        <p class="examples">sit, bit, English</p>
+      </div>
+    </div>
+
+    <div class="char-intro">
+      <div class="glyph">ʊ</div>
+      <div>
+        <h4>ʊ — the vowel of "book"</h4>
+        <p>Short u. Different from "boot", which uses <span class="nay">uː</span>.</p>
+        <p class="examples">book, put, would</p>
+      </div>
+    </div>
+
+    <div class="char-intro">
+      <div class="glyph">ɛ</div>
+      <div>
+        <h4>ɛ — the vowel of "bed"</h4>
+        <p>Short e. The Greek epsilon shape, a clear cousin of Latin <em>e</em>.</p>
+        <p class="examples">bed, met, friend</p>
+      </div>
+    </div>
+
+    <div class="char-intro">
+      <div class="glyph">ɔ</div>
+      <div>
+        <h4>ɔ — the vowel of "law" (without length) and "cot" in some dialects</h4>
+        <p>Short open-o. With the length marker becomes <span class="nay">ɔː</span> from lesson 3.</p>
+        <p class="examples">often, on, dog</p>
+      </div>
+    </div>
+
+    <h3>Why "æ" too</h3>
+
+    <p>
+      You'll also start seeing <span class="nay">æ</span> — the vowel of
+      "cat", "hand", "back". This is technically a fifth short-vowel
+      character, but it acts like the others: short, distinct, gets its
+      own letter so it doesn't have to share with anyone else.
+    </p>
+
+    <div class="char-intro">
+      <div class="glyph">æ</div>
+      <div>
+        <h4>æ — the vowel of "cat"</h4>
+        <p>An <em>a</em> and an <em>e</em> joined into one shape — the
+        IPA's idea, kept here. It's shorter and brighter than the
+        <span class="nay">ɑː</span> of "father".</p>
+        <p class="examples">cat, hand, back</p>
+      </div>
+    </div>
+
+    <h3>Try it</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>English</th><th>naYana</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">sit / seat</td>    <td><span class="nay">sɪt</span> / <span class="nay">siːt</span></td>  <td class="note">short ɪ vs long iː</td></tr>
+        <tr><td class="eng">full / fool</td>   <td><span class="nay">fʊl</span> / <span class="nay">fuːl</span></td>  <td class="note">short ʊ vs long uː</td></tr>
+        <tr><td class="eng">bed / bead</td>    <td><span class="nay">bɛd</span> / <span class="nay">biːd</span></td>  <td class="note">short ɛ vs long iː</td></tr>
+        <tr><td class="eng">cat</td>           <td class="nay">kæt</td>     <td class="note">æ for the bright open <em>a</em></td></tr>
+        <tr><td class="eng">English</td>       <td class="nay">ɪŋlɪʃ</td>   <td class="note">two ɪ's; ŋ and ʃ in lesson 8</td></tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-nav">
+      <a class="btn" href="#l4">← Lesson 4</a>
+      <a class="btn btn-primary" href="#l6">Lesson 6: Stressed schwa →</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Lesson 6 — Stressed schwa
+       ============================================================ -->
+  <section class="lesson" id="l6">
+
+    <span class="tag">Lesson 6</span>
+    <h2>When schwa is stressed (ʌ)</h2>
+
+    <p class="lead">
+      One new character — and it's a close cousin of the schwa from
+      lesson 4.
+    </p>
+
+    <div class="why">
+      <h4>Why?</h4>
+      <p>Say "cup". The vowel is short and central, just like schwa — but
+      it's <em>stressed</em>. Your voice rises on it. Compare with the
+      schwa in "the", which is the same shape of sound but said quietly
+      and quickly.</p>
+      <p>Phoneticians treat these as two distinct vowels, with two
+      distinct symbols: <span class="nay">ə</span> for the unstressed one,
+      <span class="nay">ʌ</span> for the stressed one. naYana follows.
+      The shapes are visually related, so once you've learned one, the
+      other is easy.</p>
+    </div>
+
+    <h3>The new character</h3>
+
+    <div class="char-intro">
+      <div class="glyph">ʌ</div>
+      <div>
+        <h4>ʌ — stressed schwa</h4>
+        <p>The vowel of "cup". Same family as <span class="nay">ə</span>,
+        marked to show it's the loud, stressed version.</p>
+        <p class="examples">cup, love, sun, but, money</p>
+      </div>
+    </div>
+
+    <h3>Try it</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>English</th><th>naYana</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">cup</td>     <td class="nay">kʌp</td>      <td class="note">stressed ʌ</td></tr>
+        <tr><td class="eng">love</td>    <td class="nay">lʌv</td>      <td class="note">stressed ʌ; silent <em>e</em> dropped</td></tr>
+        <tr><td class="eng">sun</td>     <td class="nay">sʌn</td>      <td class="note">stressed ʌ</td></tr>
+        <tr><td class="eng">about</td>   <td class="nay">əbaut</td>    <td class="note">unstressed ə (lesson 4)</td></tr>
+        <tr><td class="eng">money</td>   <td class="nay">mʌniː</td>    <td class="note">stressed ʌ + long i</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      Notice how "about" (with quiet ə) and "cup" (with stressed ʌ) feel
+      similar in your mouth but different in your voice. That's the
+      distinction these two characters carry.
+    </p>
+
+    <div class="lesson-nav">
+      <a class="btn" href="#l5">← Lesson 5</a>
+      <a class="btn btn-primary" href="#l7">Lesson 7: TH sounds →</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Lesson 7 — TH sounds
+       ============================================================ -->
+  <section class="lesson" id="l7">
+
+    <span class="tag">Lesson 7</span>
+    <h2>The two TH sounds (θ and ð)</h2>
+
+    <p class="lead">
+      English writes "th" for two genuinely different sounds. naYana gives
+      each one its own letter — and they're shapes you may already
+      recognise.
+    </p>
+
+    <div class="why">
+      <h4>Why?</h4>
+      <p>Say "thin" and then say "this". Your tongue goes to the same
+      place — between your teeth — but in "thin" your throat is silent
+      (a hiss), and in "this" it's buzzing (a hum). They're as different
+      as <em>p</em> and <em>b</em>, or <em>s</em> and <em>z</em>.</p>
+      <p>English writes them with the same letter pair, "th", because the
+      Latin alphabet didn't have a single letter for either sound when
+      English was first written down. Old English used a runic letter
+      (þ, "thorn") for one of them — but it didn't survive printing.</p>
+      <p>The IPA uses Greek <span class="nay">θ</span> (theta) for the
+      voiceless one — the hiss — and <span class="nay">ð</span> (called
+      "eth", a crossed <em>d</em>) for the voiced one — the hum. naYana
+      keeps these.</p>
+    </div>
+
+    <h3>Two new characters</h3>
+
+    <div class="char-intro">
+      <div class="glyph">θ</div>
+      <div>
+        <h4>θ — voiceless th (the hiss)</h4>
+        <p>The "th" of "thin", "think", "math", "throw". Greek theta —
+        a circle with a horizontal bar.</p>
+        <p class="examples">thin, think, math, three, breath</p>
+      </div>
+    </div>
+
+    <div class="char-intro">
+      <div class="glyph">ð</div>
+      <div>
+        <h4>ð — voiced th (the hum)</h4>
+        <p>The "th" of "this", "that", "the", "father", "breathe". A
+        crossed <em>d</em>; called "eth".</p>
+        <p class="examples">this, that, the, father, breathe</p>
+      </div>
+    </div>
+
+    <h3>Try it</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>English</th><th>naYana</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">thin</td>      <td class="nay">θɪn</td>     <td class="note">voiceless θ</td></tr>
+        <tr><td class="eng">think</td>     <td class="nay">θɪŋk</td>    <td class="note">voiceless θ; ŋ in lesson 8</td></tr>
+        <tr><td class="eng">this</td>      <td class="nay">ðɪs</td>     <td class="note">voiced ð</td></tr>
+        <tr><td class="eng">that</td>      <td class="nay">ðæt</td>     <td class="note">voiced ð</td></tr>
+        <tr><td class="eng">father</td>    <td class="nay">fɑːðɚ</td>   <td class="note">voiced ð in the middle (ɚ in lesson 9)</td></tr>
+        <tr><td class="eng">breath / breathe</td><td><span class="nay">brɛθ</span> / <span class="nay">briːð</span></td><td class="note">same spelling in English; θ vs ð in naYana</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      A nice exercise: read the sentence "this thing's the third thin
+      thread that breathes." It will look and sound very different in
+      naYana — and the difference between the two sounds becomes
+      visible: <span class="nay">ðɪs θɪŋ'z ðə θɝd θɪn θrɛd ðæt
+      briːðz</span>.
+    </p>
+
+    <div class="lesson-nav">
+      <a class="btn" href="#l6">← Lesson 6</a>
+      <a class="btn btn-primary" href="#l8">Lesson 8: Sh, zh, ng →</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Lesson 8 — Sh, zh, ng
+       ============================================================ -->
+  <section class="lesson" id="l8">
+
+    <span class="tag">Lesson 8</span>
+    <h2>Sh, zh, and ng (ʃ ʒ ŋ)</h2>
+
+    <p class="lead">
+      Three single sounds that English writes as digraphs because it ran
+      out of Latin letters. naYana gives each one a letter.
+    </p>
+
+    <div class="why">
+      <h4>Why?</h4>
+      <p>"Ship" starts with one sound, not two. "Vision" has one sound in
+      the middle, not three. "Sing" ends with one sound, not two. Your
+      tongue makes a single, continuous gesture for each. The English
+      spelling — sh, si, ng — is two letters because there were no spare
+      Latin letters to use, not because the sound is two parts.</p>
+      <p>The IPA assigns one symbol per sound, and naYana follows.
+      <span class="nay">ʃ</span> for the "sh" sound,
+      <span class="nay">ʒ</span> for the "zh" sound (the buzz in "vision"
+      or "measure"), and <span class="nay">ŋ</span> for the "ng" sound at
+      the end of "sing".</p>
+    </div>
+
+    <h3>Three new characters</h3>
+
+    <div class="char-intro">
+      <div class="glyph">ʃ</div>
+      <div>
+        <h4>ʃ — the "sh" sound</h4>
+        <p>An <em>s</em> with an acute accent — the accent is naYana's
+        way of saying "this consonant is the hushy version".</p>
+        <p class="examples">ship, fish, action, sure</p>
+      </div>
+    </div>
+
+    <div class="char-intro">
+      <div class="glyph">ʒ</div>
+      <div>
+        <h4>ʒ — the "zh" sound</h4>
+        <p>A <em>j</em>-shape with the same acute accent. The voiced
+        cousin of <span class="nay">ʃ</span>: same tongue position,
+        with throat-buzz added.</p>
+        <p class="examples">vision, measure, beige, casual</p>
+      </div>
+    </div>
+
+    <div class="char-intro">
+      <div class="glyph">ŋ</div>
+      <div>
+        <h4>ŋ — the "ng" sound</h4>
+        <p>An <em>n</em> with a downward hook at the bottom — a single
+        nasal sound at the back of the mouth, like the end of "sing".</p>
+        <p class="examples">sing, ring, English, long</p>
+      </div>
+    </div>
+
+    <h3>Try it</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>English</th><th>naYana</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">ship</td>     <td class="nay">ʃɪp</td>      <td class="note">sh → ʃ</td></tr>
+        <tr><td class="eng">fish</td>     <td class="nay">fɪʃ</td>      <td class="note">sh → ʃ</td></tr>
+        <tr><td class="eng">action</td>   <td class="nay">ækʃən</td>    <td class="note">"-tion" is /ʃən/</td></tr>
+        <tr><td class="eng">vision</td>   <td class="nay">vɪʒən</td>    <td class="note">si → ʒ</td></tr>
+        <tr><td class="eng">measure</td>  <td class="nay">mɛʒɚ</td>     <td class="note">su → ʒ; ɚ in lesson 9</td></tr>
+        <tr><td class="eng">sing</td>     <td class="nay">sɪŋ</td>      <td class="note">ng → ŋ</td></tr>
+        <tr><td class="eng">English</td>  <td class="nay">ɪŋlɪʃ</td>    <td class="note">both ŋ and ʃ in one word</td></tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-nav">
+      <a class="btn" href="#l7">← Lesson 7</a>
+      <a class="btn btn-primary" href="#l9">Lesson 9: Affricates and r-vowels →</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Lesson 9 — Affricates and r-coloured vowels
+       ============================================================ -->
+  <section class="lesson" id="l9">
+
+    <span class="tag">Lesson 9</span>
+    <h2>Affricates and the r-coloured vowels</h2>
+
+    <p class="lead">
+      The last lesson. Two pairs of new characters, and a small visual
+      surprise: the affricates look like single letters but are actually
+      two characters under the hood.
+    </p>
+
+    <div class="why">
+      <h4>Why affricates?</h4>
+      <p>"Chip" starts with a <em>t</em> followed immediately by an
+      <em>ʃ</em>, said so close together they sound like a single
+      explosive sound. That combination is called an
+      <strong>affricate</strong>. Same for "judge", which is <em>d</em>
+      followed by <em>ʒ</em>.</p>
+      <p>Phoneticians write them as two characters
+      (<span class="nay">tʃ</span> and <span class="nay">dʒ</span>) to
+      show what's actually happening in the mouth. naYana keeps the
+      two-character text — but the font draws them ligated into a single
+      visible glyph: a <em>c</em>-shape for tʃ and a dotless-<em>j</em>
+      shape for dʒ. So you read one shape; the underlying text is the
+      proper IPA pair, copy-pastable to any tool that knows IPA.</p>
+    </div>
+
+    <div class="why">
+      <h4>Why r-coloured vowels?</h4>
+      <p>In American English (and Scottish, and Indian English), the
+      vowel before an <em>r</em> changes its quality — the <em>r</em>
+      bleeds backwards into the vowel and colours it. The IPA gives this
+      r-coloured vowel its own symbols: <span class="nay">ɝ</span> for
+      stressed (as in "bird") and <span class="nay">ɚ</span> for
+      unstressed (as in the second syllable of "teacher").</p>
+      <p>Other English varieties — RP, Australian, much of England —
+      drop the <em>r</em> in these positions and keep the plain vowel.
+      Their naYana spellings will be different. This v1 follows General
+      American, so we mark them.</p>
+    </div>
+
+    <h3>Four new characters</h3>
+
+    <div class="char-intro">
+      <div class="glyph">c</div>
+      <div>
+        <h4>tʃ — the "ch" sound (renders as a c-shape)</h4>
+        <p>Underlying text: two characters, <span class="nay">tʃ</span>.
+        The font draws them as a single ligature shaped like a Latin
+        <em>c</em> — borrowed from Sanskrit IAST, where <em>c</em>
+        already means this sound.</p>
+        <p class="examples">chip, much, teacher, watch</p>
+      </div>
+    </div>
+
+    <div class="char-intro">
+      <div class="glyph">j</div>
+      <div>
+        <h4>dʒ — the "j" sound (renders as a dotless-j)</h4>
+        <p>Underlying text: <span class="nay">dʒ</span>. Ligated to a
+        single dotless-<em>j</em> shape — same Sanskrit-IAST precedent.
+        Note that bare Latin <em>j</em> never appears in naYana spelling;
+        the visible <em>j</em> always means /dʒ/.</p>
+        <p class="examples">judge, gym, bridge, age</p>
+      </div>
+    </div>
+
+    <div class="char-intro">
+      <div class="glyph">ɝ</div>
+      <div>
+        <h4>ɝ — stressed r-vowel</h4>
+        <p>The vowel of "bird", "her", "earn", "third". One sound, not a
+        vowel-plus-r combo.</p>
+        <p class="examples">bird, her, earn, third</p>
+      </div>
+    </div>
+
+    <div class="char-intro">
+      <div class="glyph">ɚ</div>
+      <div>
+        <h4>ɚ — unstressed r-vowel</h4>
+        <p>The vowel at the end of "teacher", "father", "doctor". Same
+        family as <span class="nay">ɝ</span> but quieter — it's to
+        <span class="nay">ɝ</span> what <span class="nay">ə</span> is
+        to <span class="nay">ʌ</span>.</p>
+        <p class="examples">teacher, father, doctor, water</p>
+      </div>
+    </div>
+
+    <h3>Try it</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>English</th><th>naYana</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="eng">chip</td>     <td class="nay">tʃɪp</td>     <td class="note">tʃ ligates to c-shape</td></tr>
+        <tr><td class="eng">judge</td>    <td class="nay">dʒʌdʒ</td>    <td class="note">dʒ ligates to j-shape — twice</td></tr>
+        <tr><td class="eng">bird</td>     <td class="nay">bɝd</td>      <td class="note">stressed r-vowel</td></tr>
+        <tr><td class="eng">teacher</td>  <td class="nay">tiːtʃɚ</td>   <td class="note">long iː + tʃ + unstressed ɚ</td></tr>
+        <tr><td class="eng">church</td>   <td class="nay">tʃɝtʃ</td>    <td class="note">tʃ at both ends; ɝ in the middle</td></tr>
+        <tr><td class="eng">judge each</td><td class="nay">dʒʌdʒ iːtʃ</td><td class="note">three affricates in three short words</td></tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-nav">
+      <a class="btn" href="#l8">← Lesson 8</a>
+      <a class="btn btn-primary" href="#wrap">Putting it together →</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Wrap-up
+       ============================================================ -->
+  <section class="wrap-up" id="wrap">
+
+    <h3>Putting it together</h3>
+
+    <p>
+      Nine lessons, around 18 new characters, and you can now read any
+      English text rendered in naYana. Here's a paragraph from the
+      manifesto, using everything you've learned:
+    </p>
+
+    <p class="sample">
+      riːdɪŋ ɪz ðə moust kɑːnsəntreitəd fɔːrm əv ətɛnʃən hyuːmənz
+      rɛgyələrliː pɚfɔːrm. ɪt ɪz ɔːlsou ðə æktɪvətiː aur raitɪŋ sɪstəm
+      meiks hɑːrdəst.
+    </p>
+
+    <p>
+      That's the opening of <a href="/manifesto/">the naYana manifesto</a>
+      — "Reading is the most concentrated form of attention humans
+      regularly perform. It is also the activity our writing system
+      makes hardest." Every character you see here was introduced in
+      one of the lessons.
+    </p>
+
+    <p>
+      <strong>What's next:</strong>
+    </p>
+
+    <ul>
+      <li><a href="/read">Read a passage</a> — curated English texts in two-column English/naYana view.</li>
+      <li><a href="/type">Type naYana</a> — practice composing IPA text with the on-site keyboard.</li>
+      <li><a href="/download">Download the font</a> — install Nayana English on your machine and use it anywhere.</li>
+      <li><a href="/manifesto/">Read the manifesto</a> — the project's full motivation.</li>
+    </ul>
   </section>
 
 </main>
 
+<script type="module">
+  import { attachPlayButtons } from './tts.js';
+  // Per-word audio. For Try-it rows, prefer the row's English cell so
+  // Piper produces a natural voice; the IPA stays as the visible label.
+  // The wrap-up sample is pure naYana — espeak-ng handles it.
+  attachPlayButtons(document, '.compare-table .nay', (el) => {
+    const englishCell = el.closest('tr')?.querySelector('td.eng');
+    return englishCell?.textContent.trim();
+  });
+  attachPlayButtons(document, '.wrap-up .sample');
+</script>
 <script src="site.js"></script>
 </body>
 </html>

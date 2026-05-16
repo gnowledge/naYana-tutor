@@ -207,6 +207,32 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
   font-feature-settings: "ss01" on, "liga" on;
 }
 
+/* ---- TTS play button (small inline 🔊) ------------------------------- */
+.tts-btn {
+  display: inline-block;
+  background: transparent;
+  border: 0;
+  padding: 0 4px;
+  margin-left: 6px;
+  cursor: pointer;
+  font-size: 0.65em;
+  opacity: 0.45;
+  vertical-align: middle;
+  line-height: 1;
+  transition: opacity 0.15s, transform 0.1s;
+  user-select: none;
+}
+.tts-btn:hover  { opacity: 1; }
+.tts-btn:active { transform: scale(0.92); }
+.tts-btn.tts-playing {
+  opacity: 1;
+  animation: tts-pulse 0.7s ease-in-out infinite;
+}
+@keyframes tts-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.18); }
+}
+
 /* ---- Skip-link for keyboard navigation ------------------------------- */
 .skip-link {
   position: absolute;

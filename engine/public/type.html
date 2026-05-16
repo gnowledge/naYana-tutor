@@ -4,41 +4,144 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Type — naYana</title>
-<meta name="description" content="Practice typing the International Phonetic Alphabet via English-style shortcuts. Free, browser-based, no install. Output is canonical IPA Unicode you can copy anywhere.">
+<meta name="description" content="Type or paste English and watch it become naYana, word by word. Power users can also type IPA directly using English-style keyboard shortcuts.">
 <link rel="stylesheet" href="site.css">
 <style>
-  /* Composer */
-  .composer textarea {
+  /* ---------- Mode card ---------- */
+  .mode {
+    margin: var(--space-6) 0;
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .mode.primary { border-color: var(--accent); }
+  .mode-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .mode-header h2 { margin: 0; font-size: 20px; }
+  .mode-header .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .mode > .lead { font-size: 15px; margin-bottom: var(--space-3); }
+
+  /* ---------- Dual pane (English ↔ naYana) ---------- */
+  .dual-pane {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    margin: var(--space-3) 0;
+  }
+  @media (max-width: 720px) {
+    .dual-pane { grid-template-columns: 1fr; }
+  }
+  .pane label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    margin-bottom: var(--space-1);
+  }
+  .pane textarea, .pane .preview {
     width: 100%;
-    min-height: 160px;
+    min-height: 180px;
+    box-sizing: border-box;
+    padding: var(--space-3) var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: #fcfdfc;
+    color: var(--text);
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+  }
+  .pane textarea {
+    font-family: var(--font-sans);
+    resize: vertical;
+  }
+  .pane textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .pane .preview {
     font-family: var(--font-nayana);
     font-feature-settings: "ss01" on, "liga" on;
-    font-size: 26px;
+    font-size: 22px;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+  .pane .preview .placeholder { color: var(--text-faint); font-style: italic; font-size: 17px; }
+  .pane .preview .pending { opacity: 0.45; }
+  .pane .preview .unknown {
+    border-bottom: 1px dashed #c47a4a;
+    cursor: help;
+  }
+  /* Words with multiple pronunciations get a small marker so the
+     reader knows the dictionary listed alternates (e.g. "read" can
+     be /riːd/ or /rɛd/). The full picker UI lives on /harness. */
+  .pane .preview .nayana-has-alternates {
+    border-bottom: 1px dotted var(--accent);
+    cursor: help;
+  }
+  .pane .preview .nayana-has-alternates::after {
+    content: "▾";
+    font-size: 0.7em;
+    color: var(--accent);
+    margin-left: 1px;
+    vertical-align: super;
+  }
+  /* Backtick-escaped verbatim segments — no visual marker by default;
+     the hover title is enough. */
+  .pane .preview .nayana-verbatim { /* no styling */ }
+
+  /* ---------- IPA composer (mode 2) ---------- */
+  .composer textarea {
+    width: 100%;
+    min-height: 120px;
+    box-sizing: border-box;
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 24px;
     line-height: 1.5;
-    padding: var(--space-4) var(--space-4);
-    border: 2px solid var(--accent);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     background: #fcfdfc;
     color: var(--text);
     resize: vertical;
   }
-  .composer textarea:focus { outline: none; }
-  .composer-controls {
+  .composer textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+  /* Controls strip */
+  .controls {
     display: flex;
-    gap: var(--space-3);
+    gap: var(--space-2);
     align-items: center;
     margin-top: var(--space-3);
     flex-wrap: wrap;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-muted);
   }
+  .controls .btn { font-size: 13px; padding: 6px 12px; }
+  .controls .status { margin-left: auto; }
 
-  /* Shortcuts grid (cheatsheet) */
+  /* ---------- Cheatsheet (under IPA composer) ---------- */
   .shortcuts {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: var(--space-2);
-    margin: var(--space-4) 0;
+    margin: var(--space-3) 0 0;
   }
   .shortcut {
     display: flex;
@@ -47,14 +150,14 @@
     padding: var(--space-2) var(--space-3);
     border: 1px solid var(--border-faint);
     border-radius: 4px;
-    background: var(--surface);
-    font-size: 14px;
+    background: var(--bg-alt);
+    font-size: 13px;
   }
   .shortcut kbd {
     display: inline-block;
     min-width: 24px;
     padding: 2px 6px;
-    background: var(--bg-alt);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-bottom-width: 2px;
     border-radius: 3px;
@@ -69,46 +172,6 @@
     font-size: 18px;
     color: var(--accent);
   }
-  .shortcut .note { color: var(--text-faint); font-size: 11px; margin-left: auto; }
-
-  /* Practice card */
-  .practice {
-    margin-top: var(--space-7);
-    padding: var(--space-5);
-    background: var(--bg-alt);
-    border-radius: var(--radius);
-    border: 1px dashed var(--border);
-  }
-  .practice h2 { margin-top: 0; }
-  .practice-item {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: var(--space-3);
-    padding: var(--space-3);
-    border-bottom: 1px solid var(--border-faint);
-    align-items: center;
-  }
-  .practice-item:last-child { border-bottom: none; }
-  .practice-item .english { font-size: 18px; font-weight: 500; }
-  .practice-item .expected {
-    font-family: var(--font-nayana);
-    font-feature-settings: "ss01" on, "liga" on;
-    font-size: 20px;
-    color: var(--text-faint);
-  }
-  .practice-item .input {
-    font-family: var(--font-nayana);
-    font-feature-settings: "ss01" on, "liga" on;
-    font-size: 18px;
-    padding: 4px 8px;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    background: var(--surface);
-    min-width: 120px;
-  }
-  @media (max-width: 600px) {
-    .practice-item { grid-template-columns: 1fr; }
-  }
 </style>
 </head>
 <body>
@@ -118,115 +181,264 @@
 
   <h1>Type naYana</h1>
   <p class="lead">
-    Type English-style shortcuts; they become canonical IPA characters as
-    you type. Underlying text is real Unicode IPA — copy it into any
-    application that supports IPA and it'll just work.
+    Two ways to write naYana. The first is for everyone — type English the
+    way you always do and watch it become naYana, word by word. The second
+    is for when you want to compose phonetic text directly with IPA
+    shortcuts. You don't need to learn the second one to use the first.
   </p>
-
-  <div class="notice notice-warn">
-    <strong>Sketch.</strong> The composer below is functional today (same engine
-    as the <a href="/ipa-keyboard.html">IPA keyboard reference</a>). The
-    practice section + audio feedback is the v0.2 plan — sketch only here.
-  </div>
-
-  <h2>Composer</h2>
-  <div class="composer">
-    <textarea id="ipa-input" placeholder='Type "DIs Iz a test" — becomes ðɪs ɪz ə test as you type. Try "naYana", "TInk", "judj", "bard".'></textarea>
-    <div class="composer-controls">
-      <button class="btn" id="copy-btn">Copy</button>
-      <button class="btn" id="clear-btn">Clear</button>
-      <span id="status">Ready — IPA shortcuts active</span>
-    </div>
-  </div>
-
-  <h2>Shortcut cheatsheet</h2>
-  <p class="lead" style="font-size: 15px;">
-    The most useful entries; full table on the
-    <a href="/ipa-keyboard.html">keyboard reference page</a>.
-  </p>
-
-  <div class="shortcuts" id="cheatsheet">
-    <!-- Populated by JS from IPA_SUBSTITUTIONS so this is a single source of truth -->
-  </div>
 
   <!-- ============================================================
-       Practice section — sketch of the v0.2 exercise mode
+       Mode 1 — Type English, see naYana
        ============================================================ -->
-  <section class="practice">
+  <section class="mode primary">
 
-    <h2>Practice — sketch</h2>
-    <p>
-      In v0.2 this section will give you a queue of English words and a place
-      to type each one's naYana spelling. The page checks your answer character
-      by character, shows a green tick for correct, and (with audio) plays the
-      pronunciation back so you can compare what you typed against what you'd say.
+    <div class="mode-header">
+      <h2>Type or paste English</h2>
+      <span class="badge">Start here</span>
+    </div>
+    <p class="lead">
+      Type into the left pane. After each word, the right pane updates
+      with the naYana spelling. You don't need to know the script to use
+      this — being able to <em>read</em> what comes back is already a
+      real win.
     </p>
 
-    <div>
-
-      <div class="practice-item">
-        <div class="english">bird</div>
-        <div class="expected">expected: bɝd</div>
-        <input class="input" type="text" placeholder="type here" disabled>
+    <div class="dual-pane">
+      <div class="pane">
+        <label for="english-input">You type — English</label>
+        <textarea id="english-input"
+                  placeholder="Try: The quick brown fox jumps over the lazy dog. — or [[Nehru]] visited London"
+                  autocomplete="off"
+                  spellcheck="false"></textarea>
       </div>
-
-      <div class="practice-item">
-        <div class="english">English</div>
-        <div class="expected">expected: ɪŋlɪʃ</div>
-        <input class="input" type="text" placeholder="type here" disabled>
+      <div class="pane">
+        <label style="display: flex; align-items: center; justify-content: space-between;">
+          <span>Reads as — naYana</span>
+          <button class="btn" id="play-preview" type="button"
+                  style="font-size: 12px; padding: 4px 10px;"
+                  aria-label="Play the naYana preview">▶ Play</button>
+        </label>
+        <div id="naYana-preview" class="preview" aria-live="polite">
+          <span class="placeholder">naYana spelling will appear here as you type…</span>
+        </div>
       </div>
-
-      <div class="practice-item">
-        <div class="english">judge</div>
-        <div class="expected">expected: dʒʌdʒ</div>
-        <input class="input" type="text" placeholder="type here" disabled>
-      </div>
-
-      <div class="practice-item">
-        <div class="english">philosophy</div>
-        <div class="expected">expected: fɪlɑːsəfiː</div>
-        <input class="input" type="text" placeholder="type here" disabled>
-      </div>
-
     </div>
 
-    <p style="margin-top: var(--space-4); color: var(--text-muted); font-size: 14px;">
-      Scoring, randomised queue, difficulty levels, and audio playback all land
-      together in v0.2.
+    <div class="controls">
+      <button class="btn" id="copy-naYana">Copy naYana</button>
+      <button class="btn" id="clear-english">Clear</button>
+      <span class="status" id="status-1"></span>
+    </div>
+
+    <details style="margin-top: var(--space-3); font-size: 13px; color: var(--text-muted);">
+      <summary style="cursor: pointer; color: var(--accent);">Tips &amp; markers</summary>
+      <ul style="margin: var(--space-2) 0 0; padding-left: var(--space-5); line-height: 1.7;">
+        <li><strong>Dashed orange underline</strong> — word isn't in the dictionary
+            (proper nouns, rare loanwords). Kept as English.</li>
+        <li><strong>Dotted underline with <span style="color: var(--accent);">▾</span></strong> — the dictionary lists more than
+            one pronunciation. The first one is shown; hover for alternates.
+            Use <a href="/harness">the harness</a> to pick a different one
+            for a given word.</li>
+        <li><strong>Verbatim escape</strong> — wrap text in
+            <code>`backticks`</code> or <code>[[double brackets]]</code> to
+            keep it as-typed. Useful when the engine gets a name wrong:
+            <code>[[Nehru]] visited</code> renders <em>Nehru</em> as
+            written instead of transcribing it. Both syntaxes work
+            identically — use brackets if your keyboard treats backtick as
+            a dead-key (US-International, many EU layouts).</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ============================================================
+       Mode 2 — Type naYana directly with IPA shortcuts
+       ============================================================ -->
+  <section class="mode">
+
+    <div class="mode-header">
+      <h2>Type naYana directly</h2>
+      <span class="badge" style="background: var(--bg-alt); color: var(--text-muted);">For power users</span>
+    </div>
+    <p class="lead">
+      For people who already know the IPA characters and want to compose
+      phonetic text. Type English-style shortcuts; they become canonical
+      IPA Unicode as you type. Useful for transcribing pronunciations,
+      taking notes, or composing naYana text directly.
     </p>
 
+    <div class="composer">
+      <textarea id="ipa-input"
+                placeholder='Try: "DIs Iz a test" → ðɪs ɪz ə test. Or: "naYana", "judj", "TInk".'></textarea>
+      <div class="controls">
+        <button class="btn" id="copy-ipa">Copy</button>
+        <button class="btn" id="clear-ipa">Clear</button>
+        <a class="btn" href="/ipa-keyboard.html">Full shortcut reference →</a>
+        <span class="status" id="status-2">IPA shortcuts active</span>
+      </div>
+    </div>
+
+    <h3 style="font-size: 14px; margin-top: var(--space-4); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+      Shortcut cheatsheet
+    </h3>
+    <div class="shortcuts" id="cheatsheet"></div>
   </section>
 
 </main>
 
 <script type="module">
   import { attachIpaKeyboard, IPA_SUBSTITUTIONS } from './ipa-keyboard.js';
+  import { play } from './tts.js';
 
-  // Wire the composer
-  const input = document.getElementById('ipa-input');
-  attachIpaKeyboard(input);
-  input.focus();
+  /* ============================================================
+     Mode 1 — English input → naYana preview (live, word-grained)
+     ============================================================ */
+  const englishInput = document.getElementById('english-input');
+  const preview      = document.getElementById('naYana-preview');
+  const status1      = document.getElementById('status-1');
+
+  // Debounced/word-triggered transform.
+  let pauseTimer = null;
+  let inflight   = null; // AbortController for the latest request
+
+  // Detects whether the input value ends with a word boundary character.
+  // We trigger immediately on these so the user feels the per-word transform.
+  const WORD_BOUNDARY = /[\s.,!?;:'")\]}\-—]$/;
+
+  englishInput.addEventListener('input', () => {
+    const text = englishInput.value;
+    if (text.trim() === '') {
+      preview.innerHTML = '<span class="placeholder">naYana spelling will appear here as you type…</span>';
+      status1.textContent = '';
+      return;
+    }
+    if (WORD_BOUNDARY.test(text)) {
+      // End of a word — transform now.
+      clearTimeout(pauseTimer);
+      transform(text);
+    } else {
+      // Mid-word — wait briefly, transform if user pauses.
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(() => transform(text), 700);
+    }
+  });
+
+  englishInput.addEventListener('blur', () => {
+    if (englishInput.value.trim() !== '') transform(englishInput.value);
+  });
+
+  async function transform(text) {
+    // Cancel any in-flight request — the latest input wins.
+    if (inflight) inflight.abort();
+    inflight = new AbortController();
+
+    status1.textContent = '…';
+    try {
+      const res = await fetch('/api/process', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, phase: 18 }),
+        signal: inflight.signal,
+      });
+      if (!res.ok) throw new Error('Server returned ' + res.status);
+      const data = await res.json();
+
+      // Known words come back wrapped in
+      //   <span class="nayana-rewritten" data-original="..." title="...">...</span>
+      // Unknown words (proper nouns, rare loanwords, anything not in the
+      // dictionary) come back as bare text. Wrap those client-side so we
+      // can flag them visually.
+      preview.innerHTML = data.html || '';
+      markUnknownWords(preview);
+      status1.textContent = '';
+    } catch (err) {
+      if (err.name === 'AbortError') return; // superseded by a newer request
+      status1.textContent = 'transform failed';
+    }
+  }
+
+  // Walk the preview's direct text-node children and wrap any
+  // Latin-letter runs in <span class="unknown"> so we can underline them.
+  // Spans (rewritten words) are left untouched.
+  function markUnknownWords(container) {
+    const para = container.querySelector('p') || container;
+    for (const node of Array.from(para.childNodes)) {
+      if (node.nodeType !== Node.TEXT_NODE) continue;
+      if (!/[A-Za-z]/.test(node.nodeValue)) continue;
+      const frag = document.createDocumentFragment();
+      const parts = node.nodeValue.split(/([A-Za-z][A-Za-z'\-]*)/);
+      for (const part of parts) {
+        if (!part) continue;
+        if (/^[A-Za-z]/.test(part)) {
+          const span = document.createElement('span');
+          span.className = 'unknown';
+          span.textContent = part;
+          span.title = `not in dictionary — kept as English`;
+          frag.appendChild(span);
+        } else {
+          frag.appendChild(document.createTextNode(part));
+        }
+      }
+      para.replaceChild(frag, node);
+    }
+  }
+
+  document.getElementById('copy-naYana').addEventListener('click', async () => {
+    const text = preview.innerText.trim();
+    if (!text) return;
+    await navigator.clipboard.writeText(text);
+    status1.textContent = `Copied ${[...text].length} characters`;
+    setTimeout(() => { status1.textContent = ''; }, 1800);
+  });
+  document.getElementById('clear-english').addEventListener('click', () => {
+    englishInput.value = '';
+    preview.innerHTML = '<span class="placeholder">naYana spelling will appear here as you type…</span>';
+    englishInput.focus();
+  });
+
+  // Play whole preview as one utterance.
+  // Prefer the user's English input (Piper, natural voice) over the IPA
+  // preview (espeak, robotic). The two encode the same pronunciation;
+  // English text gets prosody and intonation that IPA-via-espeak can't.
+  const playBtn = document.getElementById('play-preview');
+  playBtn.addEventListener('click', () => {
+    const englishText = englishInput.value.trim();
+    const previewText = preview.innerText.trim();
+    if (!englishText && (!previewText || preview.querySelector('.placeholder'))) {
+      status1.textContent = 'nothing to play yet';
+      setTimeout(() => { status1.textContent = ''; }, 1500);
+      return;
+    }
+    play(englishText || previewText, playBtn);
+  });
+
+  /* ============================================================
+     Mode 2 — IPA composer (English-style shortcuts → IPA)
+     ============================================================ */
+  const ipaInput = document.getElementById('ipa-input');
+  attachIpaKeyboard(ipaInput);
 
   // Build cheatsheet
   const cheat = document.getElementById('cheatsheet');
-  for (const [src, dst, note] of IPA_SUBSTITUTIONS) {
+  for (const [src, dst] of IPA_SUBSTITUTIONS) {
     const div = document.createElement('div');
     div.className = 'shortcut';
     div.innerHTML = `<kbd>${src.replace(/</g, '&lt;')}</kbd> <span class="out">${dst}</span>`;
     cheat.appendChild(div);
   }
 
-  // Copy/clear
-  document.getElementById('copy-btn').addEventListener('click', async () => {
-    if (!input.value) return;
-    await navigator.clipboard.writeText(input.value);
-    const s = document.getElementById('status');
-    s.textContent = `Copied ${[...input.value].length} character(s)`;
-    setTimeout(() => { s.textContent = 'Ready — IPA shortcuts active'; }, 2000);
+  document.getElementById('copy-ipa').addEventListener('click', async () => {
+    if (!ipaInput.value) return;
+    await navigator.clipboard.writeText(ipaInput.value);
+    const s = document.getElementById('status-2');
+    s.textContent = `Copied ${[...ipaInput.value].length} characters`;
+    setTimeout(() => { s.textContent = 'IPA shortcuts active'; }, 1800);
   });
-  document.getElementById('clear-btn').addEventListener('click', () => {
-    input.value = ''; input.focus();
+  document.getElementById('clear-ipa').addEventListener('click', () => {
+    ipaInput.value = ''; ipaInput.focus();
   });
+
+  // Default focus on Mode 1 (the welcoming one)
+  englishInput.focus();
 </script>
 <script src="site.js"></script>
 </body>

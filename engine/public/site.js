@@ -30,6 +30,7 @@ const FOOTER_TOOL_LINKS = [
 const FOOTER_ABOUT_LINKS = [
   { href: 'https://www.gnowledge.org/projects/naYana', label: 'About the gnowledge lab', external: true },
   { href: 'https://github.com/gnowledge/naYana-tutor', label: 'Source on GitHub', external: true },
+  { href: 'https://github.com/gnowledge/naYana-tutor/issues/new', label: 'Report a bug / suggest a feature', external: true },
   { href: '/manifesto/', label: 'Read the manifesto' },
 ];
 
