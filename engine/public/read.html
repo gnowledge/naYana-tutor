@@ -145,30 +145,6 @@
     background-color: #fde68a;
   }
 
-  /* "Coming soon" placeholder cards — non-interactive, visibly
-     distinct from the real, clickable passage card. */
-  .passage-card.placeholder {
-    cursor: default;
-    opacity: 0.6;
-    border-style: dashed;
-  }
-  .passage-card.placeholder:hover {
-    border-color: var(--border);
-    transform: none;
-  }
-  .passage-card .coming-soon {
-    display: inline-block;
-    margin-left: var(--space-2);
-    padding: 2px 8px;
-    background: var(--bg-alt);
-    color: var(--text-faint);
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 3px;
-    vertical-align: middle;
-  }
 </style>
 </head>
 <body>
@@ -191,10 +167,11 @@
     use this when you're learning to recognise the script.
   </div>
 
-  <div class="notice notice-warn" style="margin-top: var(--space-3);">
-    <strong>Sketch.</strong> One example passage is shown below. v0.1 will
-    ship 5–8 curated passages (Why-naYana? excerpt, Aesop fables, a Lincoln
-    speech, recipe, news article). All pre-rendered at build time.
+  <div class="passage-controls" style="margin: var(--space-5) 0 var(--space-3);">
+    <span>View all passages as:</span>
+    <button class="active" data-view="both">Both columns</button>
+    <button data-view="naYana">naYana only</button>
+    <button data-view="english">English only</button>
   </div>
 
   <h2>Passages</h2>
@@ -208,41 +185,41 @@
     <p class="preview">riːdɪŋ ɪz ðə moust kɑːnsəntreitəd fɔːrm əv ətɛnʃən hyuːmənz rɛgyələrliː pɚfɔːrm…</p>
   </a>
 
-  <div class="passage-card placeholder">
-    <h3>Aesop — The North Wind and the Sun <span class="coming-soon">Coming soon</span></h3>
+  <a class="passage-card" href="#aesop-north-wind">
+    <h3>Aesop — The North Wind and the Sun</h3>
     <div class="meta">
       <span>Fable · 3 paragraphs · 2 min read</span>
-      <span>Classic phonetics sample — used as a reference passage in IPA studies</span>
+      <span>Classic phonetics reference passage</span>
     </div>
-    <p class="preview">ðə nɔːrθ wɪnd ən ðə sʌn wɝ dɪspyuːtɪŋ wɪtʃ wəz ðə stroŋgɝ…</p>
-  </div>
+    <p class="preview">ðə nɔːrθ waind ənd ðə sʌn wɝ dɪspyuːtɪŋ wɪtʃ wɑːz ðə strɔːŋɚ…</p>
+  </a>
 
-  <div class="passage-card placeholder">
-    <h3>Lincoln — Gettysburg Address (extract) <span class="coming-soon">Coming soon</span></h3>
+  <a class="passage-card" href="#lincoln-gettysburg">
+    <h3>Lincoln — Gettysburg Address (opening)</h3>
     <div class="meta">
-      <span>Speech · 1 paragraph · 1 min read</span>
+      <span>Speech · 2 paragraphs · 1 min read</span>
       <span>Familiar text — easy first read with all-known content</span>
     </div>
-    <p class="preview">fɔːr skɔːr ən sɛvən yɪrz əgou aur fɑːðɚz brɔːt fɔːrθ on ðɪs kɑːntənənt…</p>
-  </div>
+    <p class="preview">fɔːr skɔːr ənd sɛvən yɪrz əgou aur fɑːðɚz brɔːt fɔːrθ ɑːn ðɪs kɑːntənənt…</p>
+  </a>
 
-  <div class="passage-card placeholder">
-    <h3>BBC headline — sample news <span class="coming-soon">Coming soon</span></h3>
+  <a class="passage-card" href="#twinkle-star">
+    <h3>Twinkle, twinkle, little star</h3>
     <div class="meta">
-      <span>Headline + lede · 2 paragraphs · 1 min read</span>
-      <span>Mixed register — proper nouns, numbers</span>
+      <span>Nursery rhyme · 2 stanzas · 30 sec read</span>
+      <span>Short and familiar — good first try</span>
     </div>
-    <p class="preview">[placeholder — short modern English news extract]</p>
-  </div>
+    <p class="preview">twɪŋkl, twɪŋkl, lɪttl stɑːr, hau ai wʌndɚ wat yuː ɑːr…</p>
+  </a>
 
-  <div class="passage-card placeholder">
-    <h3>Recipe — simple bread <span class="coming-soon">Coming soon</span></h3>
+  <a class="passage-card" href="#simple-bread">
+    <h3>Simple bread recipe</h3>
     <div class="meta">
-      <span>Instructional · 1 paragraph · 1 min read</span>
+      <span>Instructional · 2 paragraphs · 1 min read</span>
       <span>Imperative voice, everyday vocabulary</span>
     </div>
-    <p class="preview">[placeholder — bread recipe in naYana]</p>
-  </div>
+    <p class="preview">mɪks tuː kʌps ʌv flaur wɪð ʌn tiːspuːn ʌv sɔːlt…</p>
+  </a>
 
   <!-- ============================================================
        Example passage — sketches the two-column reading view
@@ -250,13 +227,6 @@
   <section class="passage-view" id="example-passage">
 
     <h2>Returning Time to the Reader — opening</h2>
-
-    <div class="passage-controls">
-      <span>View:</span>
-      <button class="active" data-view="both">Both</button>
-      <button data-view="naYana">naYana only</button>
-      <button data-view="english">English only</button>
-    </div>
 
     <div class="paragraph-pair">
       <div>
@@ -277,6 +247,144 @@
       <div>
         <div class="label">naYana</div>
         <p class="nayana">ə tʃaild huː ɪz "lɝnɪŋ tə riːd" ɪz, ɔːlmoust ɛntairliː, lɝnɪŋ tə diːkoud ðə ɔːrθəgræfɪk æmbɪgyuːətiːz əv ɪŋlɪʃ. ðə kɑːgnətɪv loud əv ðæt wɝk ɪz hyuːdʒ, ən ɪt ɪz kɑːnsəntreitəd ɪn ðə yɪrz wɛn ðə brein ɪz moust plæstɪk — ən moust iːzəliː dɪskɝɪdʒd.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       Aesop — The North Wind and the Sun
+       Classic IPA reference passage. Public domain.
+       ============================================================ -->
+  <section class="passage-view" id="aesop-north-wind">
+
+    <h2>Aesop — The North Wind and the Sun</h2>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">The North Wind and the Sun were disputing which was the stronger, when a traveler came along wrapped in a warm cloak. They agreed that the one who first succeeded in making the traveler take his cloak off should be considered stronger than the other.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">ðə nɔːrθ waind ənd ðə sʌn wɝ dɪspyuːtɪŋ wɪtʃ wɑːz ðə strɔːŋɚ, wɛn ə trævəlɚ keim əlɔːŋ ræpt ɪn ə wɔːrm klouk. ðei əgriːd ðæt ðə ʌn huː fɝst səksiːdɪd ɪn meikɪŋ ðə trævəlɚ teik hɪz klouk ɔːf ʃʊd biː kənsɪdɚd strɔːŋɚ ðæn ðə ʌðɚ.</p>
+      </div>
+    </div>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">Then the North Wind blew as hard as he could, but the more he blew the more closely did the traveler fold his cloak around him; and at last the North Wind gave up the attempt.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">ðɛn ðə nɔːrθ waind bluː æz hɑːrd æz hiː kʊd, bʌt ðə mɔːr hiː bluː ðə mɔːr klousliː dɪd ðə trævəlɚ fould hɪz klouk ɚaund hɪm; ənd æt læst ðə nɔːrθ waind geiv ʌp ðə ətɛmpt.</p>
+      </div>
+    </div>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">Then the Sun shone out warmly, and immediately the traveler took off his cloak. And so the North Wind was obliged to confess that the Sun was the stronger of the two.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">ðɛn ðə sʌn ʃoun aut wɔːrmliː, ənd ɪmiːdiːətliː ðə trævəlɚ tʊk ɔːf hɪz klouk. ənd sou ðə nɔːrθ waind wɑːz əblaidʒd tuː kənfɛs ðæt ðə sʌn wɑːz ðə strɔːŋɚ ʌv ðə tuː.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       Lincoln — Gettysburg Address (opening)
+       Public domain.
+       ============================================================ -->
+  <section class="passage-view" id="lincoln-gettysburg">
+
+    <h2>Lincoln — Gettysburg Address (opening)</h2>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">fɔːr skɔːr ənd sɛvən yɪrz əgou aur fɑːðɚz brɔːt fɔːrθ ɑːn ðɪs kɑːntənənt, ə nuː neiʃən, kənsiːvd ɪn lɪbɚtiː, ənd dɛdəkeitəd tuː ðə prɑːpəzɪʃən ðæt ɔːl mɛn ɑːr kriːeitəd iːkwəl.</p>
+      </div>
+    </div>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">nau wiː ɑːr ɛngeidʒd ɪn ə greit sɪvəl wɔːr, tɛstɪŋ wɛðɚ ðæt neiʃən, ɔːr ɛniː neiʃən sou kənsiːvd ənd sou dɛdəkeitəd, kæn lɔːŋ ɛndʊr.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       Twinkle, twinkle, little star
+       Traditional nursery rhyme (Jane Taylor, 1806). Public domain.
+       ============================================================ -->
+  <section class="passage-view" id="twinkle-star">
+
+    <h2>Twinkle, twinkle, little star</h2>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">Twinkle, twinkle, little star, how I wonder what you are. Up above the world so high, like a diamond in the sky.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">twɪŋkl, twɪŋkl, lɪttl stɑːr, hau ai wʌndɚ wat yuː ɑːr. ʌp əbʌv ðə wɝld sou hai, laik ə daimənd ɪn ðə skai.</p>
+      </div>
+    </div>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">Twinkle, twinkle, little star, how I wonder what you are.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">twɪŋkl, twɪŋkl, lɪttl stɑːr, hau ai wʌndɚ wat yuː ɑːr.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       Simple bread recipe — original
+       ============================================================ -->
+  <section class="passage-view" id="simple-bread">
+
+    <h2>Simple bread recipe</h2>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">Mix two cups of flour with one teaspoon of salt. Add one cup of warm water and stir until smooth. Cover and let it rest for an hour.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">mɪks tuː kʌps ʌv flaur wɪð ʌn tiːspuːn ʌv sɔːlt. æd ʌn kʌp ʌv wɔːrm wɔːtɚ ənd stɝ əntɪl smuːð. kʌvɚ ənd lɛt ɪt rɛst fɔːr æn aur.</p>
+      </div>
+    </div>
+
+    <div class="paragraph-pair">
+      <div>
+        <div class="label">English</div>
+        <p class="english">Knead the dough lightly on a floured surface. Shape it into a loaf and place in a pan. Bake at four hundred degrees for thirty minutes.</p>
+      </div>
+      <div>
+        <div class="label">naYana</div>
+        <p class="nayana">niːd ðə dou laitliː ɑːn ə floured sɝfəs. ʃeip ɪt ɪntuː ə louf ənd pleis ɪn ə pæn. beik æt fɔːr hʌndrəd dɪgriːz fɔːr θɝtiː mɪnəts.</p>
       </div>
     </div>
 
