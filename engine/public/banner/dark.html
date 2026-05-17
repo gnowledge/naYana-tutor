@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>naYana — banner (dark)</title>
+<style>
+  @font-face {
+    font-family: 'Nayana';
+    src: url('/why/Nayana-Regular.otf') format('opentype');
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'Comic Neue';
+    src: url('/why/ComicNeue-Regular.otf') format('opentype');
+    font-display: block;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    background: #16161a;
+    color: #f0eee6;
+    font-family: 'Comic Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+
+    background:
+      radial-gradient(ellipse at top, rgba(75, 188, 130, 0.10) 0%, transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(216, 145, 96, 0.08) 0%, transparent 60%),
+      #16161a;
+  }
+
+  .brand {
+    position: absolute;
+    top: 56px;
+    left: 80px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #4bbc82;
+    letter-spacing: 0.02em;
+  }
+  .brand .scope {
+    font-weight: 400;
+    color: #999;
+    margin-left: 8px;
+  }
+
+  .tagline {
+    position: absolute;
+    top: 56px;
+    right: 80px;
+    font-size: 18px;
+    color: #999;
+    font-style: italic;
+  }
+
+  .stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .transform-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 24px;
+  }
+
+  .word {
+    font-size: 180px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .word.english {
+    color: #6e6e68;
+    font-weight: 400;
+  }
+  .word.nayana {
+    font-family: 'Nayana', 'Comic Neue', sans-serif;
+    font-feature-settings: "ss01" on, "liga" on;
+    color: #f0eee6;
+  }
+
+  .arrow {
+    font-size: 100px;
+    color: #4bbc82;
+    font-weight: 300;
+    line-height: 1;
+    position: relative;
+    top: -10px;
+  }
+
+  .labels {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    color: #999;
+    font-size: 22px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .labels .l {
+    min-width: 480px;
+    text-align: center;
+  }
+
+  .subtitle {
+    position: absolute;
+    bottom: 220px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 38px;
+    font-style: italic;
+    color: #c5c2b8;
+    font-family: 'Comic Neue', serif;
+  }
+
+  .bottom {
+    position: absolute;
+    bottom: 56px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #999;
+    font-size: 20px;
+  }
+  .bottom .left {
+    max-width: 60%;
+  }
+  .bottom .right {
+    color: #4bbc82;
+    font-weight: 500;
+  }
+
+  .rule {
+    position: absolute;
+    top: 50%;
+    left: 80px;
+    right: 80px;
+    height: 1px;
+    background: linear-gradient(to right,
+      transparent 0%,
+      rgba(75, 188, 130, 0.22) 30%,
+      rgba(75, 188, 130, 0.22) 70%,
+      transparent 100%);
+    z-index: -1;
+  }
+</style>
+</head>
+<body>
+
+<div class="brand">naYana<span class="scope">for English</span></div>
+<div class="tagline">a phased phonetic reform</div>
+
+<div class="rule"></div>
+
+<div class="stage">
+  <div class="transform-row">
+    <span class="word english">philosophy</span>
+    <span class="arrow">→</span>
+    <span class="word nayana">filosəfiː</span>
+  </div>
+  <div class="labels">
+    <span class="l">English</span>
+    <span class="l">naYana</span>
+  </div>
+</div>
+
+<div class="subtitle">Returning time to the reader.</div>
+
+<div class="bottom">
+  <div class="left">An IPA-compliant script that lets you read phonetic English without years of phonetics training.</div>
+  <div class="right">nayana.gnowledge.org</div>
+</div>
+
+</body>
+</html>

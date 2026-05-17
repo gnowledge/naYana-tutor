@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>naYana — IPA shapes inventory</title>
+<style>
+  /* ========================================================================
+     TWEAK ZONE — adjust these values, then screenshot the page.
+     Increase any size that's hard to read on the rendered image.
+     ======================================================================== */
+  :root {
+    --bg:           #fbfbf7;
+    --ink:          #1d1d1b;
+    --accent:       #2a6f4a;
+    --muted:        #555;
+    --faint:        #888;
+    --border:       #e0e0d9;
+
+    --page-width:   1600px;   /* outer width; height auto-sized to fit */
+    --page-pad:     72px;
+    --grid-cols:    4;         /* try 4 or 5 */
+    --grid-gap:     28px;
+
+    --glyph-size:   124px;     /* the big Nayana character in each cell */
+    --name-size:    32px;      /* "schwa", "voiceless th", etc. */
+    --example-size: 32px;      /* "about → əbaut" */
+
+    --h1-size:      60px;
+    --deck-size:    24px;
+    --eyebrow-size: 17px;
+    --footer-size:  22px;
+  }
+
+  /* ======================================================================== */
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; }
+
+  body {
+    width: var(--page-width);
+    margin: 0 auto;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    padding: var(--page-pad);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  @font-face {
+    font-family: 'Nayana';
+    src: url('/why/Nayana-Regular.otf') format('opentype');
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'Comic Neue';
+    src: url('/why/ComicNeue-Regular.otf') format('opentype');
+    font-display: block;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  header .eyebrow {
+    font-size: var(--eyebrow-size);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-size: var(--h1-size);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+  header p {
+    font-size: var(--deck-size);
+    color: var(--muted);
+    max-width: 1000px;
+    margin: 0 auto;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols), 1fr);
+    gap: var(--grid-gap);
+    margin-bottom: 48px;
+  }
+
+  .cell {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 22px 28px;
+    text-align: center;
+  }
+  .cell.accent {
+    border-color: var(--accent);
+    border-left-width: 4px;
+  }
+
+  .glyph {
+    font-family: 'Nayana', sans-serif;
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: var(--glyph-size);
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .name {
+    font-size: var(--name-size);
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .example {
+    font-size: var(--example-size);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .example .arrow {
+    color: var(--faint);
+    margin: 0 6px;
+    font-weight: 400;
+  }
+  .example .nay {
+    font-family: 'Nayana', sans-serif;
+    font-feature-settings: "ss01" on, "liga" on;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: var(--footer-size);
+    line-height: 1.6;
+  }
+  footer strong { color: var(--accent); font-weight: 600; }
+  footer .url   { color: var(--accent); font-weight: 600; }
+  footer .legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 18px;
+    padding: 14px 24px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: calc(var(--footer-size) - 3px);
+    color: var(--faint);
+  }
+  footer .legend .swatch {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: #fff;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  footer .legend .swatch.accent {
+    border-color: var(--accent);
+    border-left-width: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">naYana for English</div>
+  <h1>The shapes naYana introduces</h1>
+  <p>The underlying Unicode is standard IPA. Only the glyph design changes — each shape chosen for learnability, not phonetic precision.</p>
+</header>
+
+<div class="grid">
+
+  <!-- Row 1 — short vowels (familiar territory: Latin-like) -->
+  <div class="cell"><span class="glyph">ə</span>
+    <div class="name">schwa</div>
+    <div class="example">about <span class="arrow">→</span> <span class="nay">əbaut</span></div>
+  </div>
+
+  <div class="cell"><span class="glyph">ʌ</span>
+    <div class="name">stressed schwa</div>
+    <div class="example">cup <span class="arrow">→</span> <span class="nay">kʌp</span></div>
+  </div>
+
+  <div class="cell"><span class="glyph">ɪ</span>
+    <div class="name">short i</div>
+    <div class="example">sit <span class="arrow">→</span> <span class="nay">sɪt</span></div>
+  </div>
+
+  <div class="cell"><span class="glyph">ʊ</span>
+    <div class="name">short u</div>
+    <div class="example">book <span class="arrow">→</span> <span class="nay">bʊk</span></div>
+  </div>
+
+  <!-- Row 2 — more vowels -->
+  <div class="cell"><span class="glyph">ɛ</span>
+    <div class="name">short e</div>
+    <div class="example">bed <span class="arrow">→</span> <span class="nay">bɛd</span></div>
+  </div>
+
+  <div class="cell"><span class="glyph">æ</span>
+    <div class="name">cat-vowel</div>
+    <div class="example">cat <span class="arrow">→</span> <span class="nay">kæt</span></div>
+  </div>
+
+  <div class="cell"><span class="glyph">ɔ</span>
+    <div class="name">open o</div>
+    <div class="example">call <span class="arrow">→</span> <span class="nay">kɔːl</span></div>
+  </div>
+
+  <div class="cell"><span class="glyph">ɑ</span>
+    <div class="name">cardinal a</div>
+    <div class="example">hot <span class="arrow">→</span> <span class="nay">hɑːt</span></div>
+  </div>
+
+  <!-- Row 3 — fricatives (visually striking new shapes) -->
+  <div class="cell accent"><span class="glyph">θ</span>
+    <div class="name">voiceless th</div>
+    <div class="example">thin <span class="arrow">→</span> <span class="nay">θɪn</span></div>
+  </div>
+
+  <div class="cell accent"><span class="glyph">ð</span>
+    <div class="name">voiced th</div>
+    <div class="example">this <span class="arrow">→</span> <span class="nay">ðɪs</span></div>
+  </div>
+
+  <div class="cell accent"><span class="glyph">ʃ</span>
+    <div class="name">sh sound</div>
+    <div class="example">ship <span class="arrow">→</span> <span class="nay">ʃɪp</span></div>
+  </div>
+
+  <div class="cell accent"><span class="glyph">ʒ</span>
+    <div class="name">zh sound</div>
+    <div class="example">vision <span class="arrow">→</span> <span class="nay">vɪʒən</span></div>
+  </div>
+
+  <!-- Row 4 — nasal + r-coloured + length marker -->
+  <div class="cell accent"><span class="glyph">ŋ</span>
+    <div class="name">ng sound</div>
+    <div class="example">sing <span class="arrow">→</span> <span class="nay">sɪŋ</span></div>
+  </div>
+
+  <div class="cell accent"><span class="glyph">ɝ</span>
+    <div class="name">stressed r-vowel</div>
+    <div class="example">bird <span class="arrow">→</span> <span class="nay">bɝd</span></div>
+  </div>
+
+  <div class="cell accent"><span class="glyph">ɚ</span>
+    <div class="name">unstressed r-vowel</div>
+    <div class="example">teacher <span class="arrow">→</span> <span class="nay">tiːtʃɚ</span></div>
+  </div>
+
+  <div class="cell accent"><span class="glyph">ː</span>
+    <div class="name">length marker</div>
+    <div class="example">meet <span class="arrow">→</span> <span class="nay">miːt</span></div>
+  </div>
+
+</div>
+
+<footer>
+  <strong>16 characters</strong> — every English sound that needs a non-Latin shape, redrawn for the reader.<br>
+  Underlying text is standards-compliant IPA Unicode · <span class="url">nayana.gnowledge.org</span>
+
+  <div class="legend">
+    <span><span class="swatch"></span>Familiar vowel sounds</span>
+    <span><span class="swatch accent"></span>Genuinely new shapes</span>
+  </div>
+</footer>
+
+</body>
+</html>

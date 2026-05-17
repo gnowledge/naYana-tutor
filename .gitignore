@@ -27,3 +27,6 @@ venv/
 
 # Piper TTS binary + voice model (downloaded via 'make piper')
 vendor/
+
+# Working dir for headless-chromium banner renders
+/banners/
