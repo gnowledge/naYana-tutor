@@ -55,8 +55,10 @@ RUN npm run build && \
 
 # ---- Stage 2b: Piper neural TTS (binary + voice model) ----
 # Piper provides natural-sounding neural TTS, used by /api/tts for
-# English text. About 90 MB total (binary ~50 MB + lessac voice ~63 MB
-# packed into ~26 MB tarball + 63 MB model).
+# English text. About 160 MB total (binary ~50 MB + lessac-high voice
+# ~110 MB). We use the "high" Lessac variant rather than "medium"
+# because the medium model mispronounces rare phonemes like /ʒ/
+# (measure, pleasure, vision); the high model handles them cleanly.
 FROM debian:bookworm-slim AS piper-fetcher
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates curl \
@@ -68,10 +70,10 @@ RUN curl -sL -o piper.tgz \
     && rm piper.tgz \
     && ls piper/
 RUN mkdir -p voices && \
-    curl -sL -o voices/en_US-lessac-medium.onnx \
-      https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx && \
-    curl -sL -o voices/en_US-lessac-medium.onnx.json \
-      https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json && \
+    curl -sL -o voices/en_US-lessac-high.onnx \
+      https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/high/en_US-lessac-high.onnx && \
+    curl -sL -o voices/en_US-lessac-high.onnx.json \
+      https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/high/en_US-lessac-high.onnx.json && \
     ls -lh voices/
 
 # ---- Stage 3: runtime ----
@@ -114,7 +116,7 @@ USER nayana
 ENV PORT=8080 \
     NODE_ENV=production \
     NAYANA_PIPER_BIN=/opt/piper/piper \
-    NAYANA_PIPER_VOICE=/opt/piper-voices/en_US-lessac-medium.onnx
+    NAYANA_PIPER_VOICE=/opt/piper-voices/en_US-lessac-high.onnx
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \

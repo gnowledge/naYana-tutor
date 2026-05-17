@@ -298,7 +298,7 @@ Persistent nav + footer injected by `site.js`; cache-control set to
 ### TTS (espeak-ng + Piper)
 - `POST /api/tts` returns `audio/wav`. Auto-routes by content: plain
   English → Piper (neural, ~150 ms cold, ~13 ms cached); IPA → espeak-ng.
-- Piper binary + voice model (`en_US-lessac-medium`) live in `vendor/`
+- Piper binary + voice model (`en_US-lessac-high`) live in `vendor/`
   (gitignored). `make piper` downloads them locally. Dockerfile pulls
   them at image build time via the dedicated `piper-fetcher` stage.
 - Override the voice via `NAYANA_PIPER_VOICE=/path/to/other.onnx`.
@@ -378,7 +378,7 @@ fallback still works for IPA-only requests).
 ## Deployment
 
 ### Resource expectations
-- Container size: ~440 MB (font + engine + Piper + voice model)
+- Container size: ~490 MB (font + engine + Piper + lessac-high voice model)
 - Bare-metal disk: ~150 MB code + 90 MB Piper artefacts
 - RAM: ~250 MB at idle (CMUdict 130k words loaded into JS heap;
   doesn't grow under load)
@@ -446,7 +446,7 @@ WorkingDirectory=/opt/nayana/engine
 Environment=PORT=8080
 Environment=NODE_ENV=production
 Environment=NAYANA_PIPER_BIN=/opt/nayana/vendor/piper/piper
-Environment=NAYANA_PIPER_VOICE=/opt/nayana/vendor/piper-voices/en_US-lessac-medium.onnx
+Environment=NAYANA_PIPER_VOICE=/opt/nayana/vendor/piper-voices/en_US-lessac-high.onnx
 ExecStart=/usr/bin/node src/server.js
 Restart=always
 RestartSec=5

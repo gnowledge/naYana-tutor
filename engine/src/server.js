@@ -97,7 +97,7 @@ const REPO_ROOT = path.join(ROOT, '..');
 const PIPER_BIN   = process.env.NAYANA_PIPER_BIN
   || path.join(REPO_ROOT, 'vendor', 'piper', 'piper');
 const PIPER_VOICE = process.env.NAYANA_PIPER_VOICE
-  || path.join(REPO_ROOT, 'vendor', 'piper-voices', 'en_US-lessac-medium.onnx');
+  || path.join(REPO_ROOT, 'vendor', 'piper-voices', 'en_US-lessac-high.onnx');
 
 app.post('/api/tts', (req, res) => {
   const { text, engine: engineOverride, voice, speed = 130 } = req.body || {};

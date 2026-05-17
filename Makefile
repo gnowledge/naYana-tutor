@@ -42,15 +42,17 @@ $(COMIC_NEUE_SRC):
 	@curl -L -o $(COMIC_NEUE_SRC) $(COMIC_NEUE_URL)
 	@echo "Downloaded to $(COMIC_NEUE_SRC)"
 
-# Download Piper neural TTS binary + the en_US-lessac-medium voice model.
-# Used by /api/tts for natural-voice English synthesis. ~90 MB on disk.
+# Download Piper neural TTS binary + the en_US-lessac-high voice model.
+# Used by /api/tts for natural-voice English synthesis. ~160 MB on disk.
 # Run once after cloning the repo if you want audio playback to work
 # during local dev (Docker fetches these itself, see Dockerfile).
+# We use the "high" Lessac variant rather than "medium" because the
+# medium model mispronounces rare phonemes like /ʒ/.
 PIPER_BIN_URL   := https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_x86_64.tar.gz
-PIPER_VOICE_URL := https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx
-PIPER_VOICE_CFG := https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
+PIPER_VOICE_URL := https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/high/en_US-lessac-high.onnx
+PIPER_VOICE_CFG := https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/lessac/high/en_US-lessac-high.onnx.json
 
-piper: vendor/piper/piper vendor/piper-voices/en_US-lessac-medium.onnx
+piper: vendor/piper/piper vendor/piper-voices/en_US-lessac-high.onnx
 
 vendor/piper/piper:
 	@mkdir -p vendor
@@ -61,11 +63,11 @@ vendor/piper/piper:
 	@chmod +x vendor/piper/piper vendor/piper/espeak-ng
 	@echo "Installed Piper at vendor/piper/"
 
-vendor/piper-voices/en_US-lessac-medium.onnx:
+vendor/piper-voices/en_US-lessac-high.onnx:
 	@mkdir -p vendor/piper-voices
-	@echo "Downloading Piper voice model (en_US-lessac-medium, ~63 MB)..."
-	@curl -sL -o vendor/piper-voices/en_US-lessac-medium.onnx      $(PIPER_VOICE_URL)
-	@curl -sL -o vendor/piper-voices/en_US-lessac-medium.onnx.json $(PIPER_VOICE_CFG)
+	@echo "Downloading Piper voice model (en_US-lessac-high, ~110 MB)..."
+	@curl -sL -o vendor/piper-voices/en_US-lessac-high.onnx      $(PIPER_VOICE_URL)
+	@curl -sL -o vendor/piper-voices/en_US-lessac-high.onnx.json $(PIPER_VOICE_CFG)
 	@echo "Installed voice at vendor/piper-voices/"
 
 list-phases:
