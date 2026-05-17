@@ -102,6 +102,73 @@
   body.read-naYana-only .paragraph-pair .english { display: none; }
   body.read-english-only .paragraph-pair { grid-template-columns: 1fr; }
   body.read-english-only .paragraph-pair .nayana { display: none; }
+
+  /* Per-paragraph audio controls — a slim bar above each pair */
+  .paragraph-audio {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    padding: 0 0 var(--space-2);
+    font-size: 13px;
+    color: var(--text-faint);
+  }
+  .paragraph-audio button {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px 10px;
+    font: inherit;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .paragraph-audio button:hover { border-color: var(--accent); color: var(--accent); }
+  .paragraph-audio button.tts-playing {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .paragraph-audio .hint { margin-left: auto; font-size: 11px; color: var(--text-faint); }
+
+  /* Word-by-word highlight during "Follow along" playback. Each
+     paragraph's text is auto-wrapped into <span class="word">…</span>
+     spans on load; the .active class glides across them as the
+     browser fires word-boundary events. */
+  .word {
+    transition: background-color 0.15s ease;
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+  .word.active {
+    background-color: #fde68a;
+  }
+
+  /* "Coming soon" placeholder cards — non-interactive, visibly
+     distinct from the real, clickable passage card. */
+  .passage-card.placeholder {
+    cursor: default;
+    opacity: 0.6;
+    border-style: dashed;
+  }
+  .passage-card.placeholder:hover {
+    border-color: var(--border);
+    transform: none;
+  }
+  .passage-card .coming-soon {
+    display: inline-block;
+    margin-left: var(--space-2);
+    padding: 2px 8px;
+    background: var(--bg-alt);
+    color: var(--text-faint);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 3px;
+    vertical-align: middle;
+  }
 </style>
 </head>
 <body>
@@ -116,11 +183,18 @@
     keep both side-by-side as a reading trainer.
   </p>
 
-  <div class="notice notice-warn">
-    <strong>Sketch.</strong> One example passage is shown below to demonstrate the
-    layout. v0.1 will ship 5–8 curated passages (Why-naYana? excerpt, Aesop fables,
-    a Lincoln speech, recipe, news article). All pre-rendered at build time —
-    no engine call when reading.
+  <div class="notice">
+    <strong>Reading practice.</strong> Each paragraph has two audio modes:
+    <em>▶ Listen</em> reads the passage in a natural neural voice (Piper),
+    no highlight. <em>▶ Follow along</em> reads it slowly via your browser's
+    built-in voice, highlighting each word in both columns as it's spoken —
+    use this when you're learning to recognise the script.
+  </div>
+
+  <div class="notice notice-warn" style="margin-top: var(--space-3);">
+    <strong>Sketch.</strong> One example passage is shown below. v0.1 will
+    ship 5–8 curated passages (Why-naYana? excerpt, Aesop fables, a Lincoln
+    speech, recipe, news article). All pre-rendered at build time.
   </div>
 
   <h2>Passages</h2>
@@ -134,41 +208,41 @@
     <p class="preview">riːdɪŋ ɪz ðə moust kɑːnsəntreitəd fɔːrm əv ətɛnʃən hyuːmənz rɛgyələrliː pɚfɔːrm…</p>
   </a>
 
-  <a class="passage-card" href="#">
-    <h3>Aesop — The North Wind and the Sun</h3>
+  <div class="passage-card placeholder">
+    <h3>Aesop — The North Wind and the Sun <span class="coming-soon">Coming soon</span></h3>
     <div class="meta">
       <span>Fable · 3 paragraphs · 2 min read</span>
       <span>Classic phonetics sample — used as a reference passage in IPA studies</span>
     </div>
     <p class="preview">ðə nɔːrθ wɪnd ən ðə sʌn wɝ dɪspyuːtɪŋ wɪtʃ wəz ðə stroŋgɝ…</p>
-  </a>
+  </div>
 
-  <a class="passage-card" href="#">
-    <h3>Lincoln — Gettysburg Address (extract)</h3>
+  <div class="passage-card placeholder">
+    <h3>Lincoln — Gettysburg Address (extract) <span class="coming-soon">Coming soon</span></h3>
     <div class="meta">
       <span>Speech · 1 paragraph · 1 min read</span>
       <span>Familiar text — easy first read with all-known content</span>
     </div>
     <p class="preview">fɔːr skɔːr ən sɛvən yɪrz əgou aur fɑːðɚz brɔːt fɔːrθ on ðɪs kɑːntənənt…</p>
-  </a>
+  </div>
 
-  <a class="passage-card" href="#">
-    <h3>BBC headline — sample news</h3>
+  <div class="passage-card placeholder">
+    <h3>BBC headline — sample news <span class="coming-soon">Coming soon</span></h3>
     <div class="meta">
       <span>Headline + lede · 2 paragraphs · 1 min read</span>
       <span>Mixed register — proper nouns, numbers</span>
     </div>
     <p class="preview">[placeholder — short modern English news extract]</p>
-  </a>
+  </div>
 
-  <a class="passage-card" href="#">
-    <h3>Recipe — simple bread</h3>
+  <div class="passage-card placeholder">
+    <h3>Recipe — simple bread <span class="coming-soon">Coming soon</span></h3>
     <div class="meta">
       <span>Instructional · 1 paragraph · 1 min read</span>
       <span>Imperative voice, everyday vocabulary</span>
     </div>
     <p class="preview">[placeholder — bread recipe in naYana]</p>
-  </a>
+  </div>
 
   <!-- ============================================================
        Example passage — sketches the two-column reading view
@@ -182,7 +256,6 @@
       <button class="active" data-view="both">Both</button>
       <button data-view="naYana">naYana only</button>
       <button data-view="english">English only</button>
-      <span style="margin-left: auto;">— Sketch; toggle works on this page</span>
     </div>
 
     <div class="paragraph-pair">
@@ -211,19 +284,119 @@
 
 </main>
 
-<script>
-  // Toggle view modes on the example passage
-  const buttons = document.querySelectorAll('.passage-controls button[data-view]');
-  buttons.forEach((btn) => {
+<script type="module">
+  import { play, playFollowAlong } from './tts.js';
+
+  // ---------- View-mode toggle (both / naYana only / english only) -----
+  const viewBtns = document.querySelectorAll('.passage-controls button[data-view]');
+  viewBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
-      buttons.forEach((b) => b.classList.remove('active'));
+      viewBtns.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       const v = btn.getAttribute('data-view');
       document.body.classList.remove('read-naYana-only', 'read-english-only');
-      if (v === 'naYana') document.body.classList.add('read-naYana-only');
+      if (v === 'naYana')  document.body.classList.add('read-naYana-only');
       if (v === 'english') document.body.classList.add('read-english-only');
     });
   });
+
+  // ---------- Word-wrap + per-paragraph audio controls -----------------
+  //
+  // For each .paragraph-pair, split the English and naYana text into
+  // word-spans (so we can highlight word-by-word during Follow-along
+  // playback). Then insert two play buttons:
+  //   - "▶ Listen"       — Piper at natural pace, no highlight
+  //   - "▶ Follow along" — Web Speech API at 0.75× speed, words highlight
+  //                         in both columns as they're spoken.
+
+  function wrapWords(el) {
+    const text = el.textContent;
+    el.innerHTML = '';
+    let wordIdx = 0;
+    for (const part of text.split(/(\s+)/)) {
+      if (!part) continue;
+      if (/\S/.test(part)) {
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.dataset.idx = wordIdx++;
+        span.textContent = part;
+        el.appendChild(span);
+      } else {
+        el.appendChild(document.createTextNode(part));
+      }
+    }
+    return wordIdx; // total word count
+  }
+
+  function highlightWord(pair, idx) {
+    pair.querySelectorAll('.word.active').forEach((el) => el.classList.remove('active'));
+    pair.querySelectorAll(`.word[data-idx="${idx}"]`).forEach((el) => el.classList.add('active'));
+  }
+  function clearHighlights(pair) {
+    pair.querySelectorAll('.word.active').forEach((el) => el.classList.remove('active'));
+  }
+
+  const supportsSynth = typeof speechSynthesis !== 'undefined';
+
+  for (const pair of document.querySelectorAll('.paragraph-pair')) {
+    const engP = pair.querySelector('.english');
+    const nayP = pair.querySelector('.nayana');
+    if (!engP || !nayP) continue;
+
+    const englishText = engP.textContent.trim();
+    wrapWords(engP);
+    wrapWords(nayP);
+
+    // Build the controls bar (sits above the two columns via
+    // grid-column: 1 / -1 in CSS).
+    const bar = document.createElement('div');
+    bar.className = 'paragraph-audio';
+
+    const listenBtn = document.createElement('button');
+    listenBtn.type = 'button';
+    listenBtn.textContent = '▶ Listen';
+    listenBtn.title = 'Natural-voice read-through (Piper)';
+    listenBtn.addEventListener('click', () => play(englishText, listenBtn));
+
+    const followBtn = document.createElement('button');
+    followBtn.type = 'button';
+    followBtn.textContent = '▶ Follow along';
+    followBtn.title = 'Slow read-through with word-by-word highlight';
+    if (!supportsSynth) {
+      followBtn.disabled = true;
+      followBtn.title = 'Browser does not support speech synthesis';
+    }
+    followBtn.addEventListener('click', () => {
+      clearHighlights(pair);
+      const started = playFollowAlong(englishText, {
+        rate: 0.75,
+        onWord: (idx) => highlightWord(pair, idx),
+        onEnd:  () => clearHighlights(pair),
+        onError: (reason) => {
+          hint.style.color = '#c47a4a';
+          if (reason === 'no-voices') {
+            hint.textContent = 'Your browser has no installed speech voices. Try Firefox/Safari/Edge, or use ▶ Listen instead.';
+          } else {
+            hint.textContent = 'Browser does not support speech synthesis. Use ▶ Listen instead.';
+          }
+          followBtn.classList.remove('tts-playing');
+        },
+      }, followBtn);
+      if (!started) followBtn.classList.remove('tts-playing');
+    });
+
+    bar.appendChild(listenBtn);
+    bar.appendChild(followBtn);
+    const hint = document.createElement('span');
+    hint.className = 'hint';
+    hint.textContent = supportsSynth
+      ? '"Follow along" uses your browser\'s built-in voice; quality varies by OS.'
+      : 'Word highlighting needs a browser with speechSynthesis support.';
+    bar.appendChild(hint);
+
+    // Insert the bar as the first child of the .paragraph-pair grid
+    pair.insertBefore(bar, pair.firstChild);
+  }
 </script>
 <script src="site.js"></script>
 </body>
