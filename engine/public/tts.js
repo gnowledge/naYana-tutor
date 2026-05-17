@@ -63,16 +63,25 @@ export async function play(text, btn) {
  * textContent at the moment of attachment (so subsequent edits to the
  * element don't drift).
  *
- * Optional `getPlayableText(el) => string` chooses what to play for
- * each element. Default: the element's textContent. Use this to prefer
- * a sibling cell's English text (so Piper gives a natural voice) over
- * the IPA text shown.
+ * Optional `getPlayableText(el) => string | null` chooses what to play
+ * for each element:
+ *   - return a string  → play that string (e.g. a sibling cell's
+ *                        English so Piper gives a natural voice)
+ *   - return null/''   → skip — no button attached for this element
+ *   - omit the callback → fall back to the element's own textContent
  */
 export function attachPlayButtons(container, selector, getPlayableText) {
   for (const el of container.querySelectorAll(selector)) {
     if (el.dataset.ttsAttached) continue;
-    const displayText  = el.textContent.trim();
-    const playableText = (getPlayableText && getPlayableText(el)) || displayText;
+    const displayText = el.textContent.trim();
+    let playableText;
+    if (getPlayableText) {
+      // Explicit skip: callback chose not to attach a button here.
+      playableText = getPlayableText(el);
+      if (!playableText) continue;
+    } else {
+      playableText = displayText;
+    }
     if (!playableText) continue;
     el.dataset.ttsAttached = '1';
     const btn = document.createElement('button');

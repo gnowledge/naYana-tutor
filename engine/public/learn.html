@@ -688,9 +688,9 @@
         <tr><th>English</th><th>naYana</th><th></th></tr>
       </thead>
       <tbody>
-        <tr><td class="eng">sit / seat</td>    <td><span class="nay">sɪt</span> / <span class="nay">siːt</span></td>  <td class="note">short ɪ vs long iː</td></tr>
-        <tr><td class="eng">full / fool</td>   <td><span class="nay">fʊl</span> / <span class="nay">fuːl</span></td>  <td class="note">short ʊ vs long uː</td></tr>
-        <tr><td class="eng">bed / bead</td>    <td><span class="nay">bɛd</span> / <span class="nay">biːd</span></td>  <td class="note">short ɛ vs long iː</td></tr>
+        <tr><td class="eng">sit / seat</td>    <td><span class="nay" data-audio="sit">sɪt</span> / <span class="nay" data-audio="seat">siːt</span></td>  <td class="note">short ɪ vs long iː</td></tr>
+        <tr><td class="eng">full / fool</td>   <td><span class="nay" data-audio="full">fʊl</span> / <span class="nay" data-audio="fool">fuːl</span></td>  <td class="note">short ʊ vs long uː</td></tr>
+        <tr><td class="eng">bed / bead</td>    <td><span class="nay" data-audio="bed">bɛd</span> / <span class="nay" data-audio="bead">biːd</span></td>  <td class="note">short ɛ vs long iː</td></tr>
         <tr><td class="eng">cat</td>           <td class="nay">kæt</td>     <td class="note">æ for the bright open <em>a</em></td></tr>
         <tr><td class="eng">English</td>       <td class="nay">ɪŋlɪʃ</td>   <td class="note">two ɪ's; ŋ and ʃ in lesson 8</td></tr>
       </tbody>
@@ -831,7 +831,7 @@
         <tr><td class="eng">this</td>      <td class="nay">ðɪs</td>     <td class="note">voiced ð</td></tr>
         <tr><td class="eng">that</td>      <td class="nay">ðæt</td>     <td class="note">voiced ð</td></tr>
         <tr><td class="eng">father</td>    <td class="nay">fɑːðɚ</td>   <td class="note">voiced ð in the middle (ɚ in lesson 9)</td></tr>
-        <tr><td class="eng">breath / breathe</td><td><span class="nay">brɛθ</span> / <span class="nay">briːð</span></td><td class="note">same spelling in English; θ vs ð in naYana</td></tr>
+        <tr><td class="eng">breath / breathe</td><td><span class="nay" data-audio="breath">brɛθ</span> / <span class="nay" data-audio="breathe">briːð</span></td><td class="note">same spelling in English; θ vs ð in naYana</td></tr>
       </tbody>
     </table>
 
@@ -1089,12 +1089,49 @@
 
 <script type="module">
   import { attachPlayButtons } from './tts.js';
-  // Per-word audio. For Try-it rows, prefer the row's English cell so
-  // Piper produces a natural voice; the IPA stays as the visible label.
-  // The wrap-up sample is pure naYana — espeak-ng handles it.
+  // Per-word audio. The selector matches every .nay element inside a
+  // .compare-table, but each call site needs a different "what to play"
+  // rule:
+  //   1. Sibling .eng in the same parent cell → use it. This is the
+  //      Lesson 2 "Example" column where each cell reads
+  //      "phone → fon" (.eng span + .nay span side by side). The
+  //      audio should play "phone", not the row's rule name.
+  //   2. The .nay element is itself a <td class="nay"> → row-level
+  //      lookup of <td class="eng"> in the same row. This is the
+  //      standard Try-it table format.
+  //   3. Anything else (a single-letter Becomes column, an inline
+  //      .nay snippet inside a note cell with no English partner) →
+  //      return null so no play button gets attached. There's no
+  //      useful audio for an isolated character.
   attachPlayButtons(document, '.compare-table .nay', (el) => {
-    const englishCell = el.closest('tr')?.querySelector('td.eng');
-    return englishCell?.textContent.trim();
+    // 1. Explicit override via data-audio attribute. Used in cells
+    //    that pack multiple .nay spans without an inline .eng partner
+    //    for each — author can pair each .nay precisely with its own
+    //    English word (e.g. Lesson 5's "sɪt / siːt" row, where the
+    //    row's td.eng is the combined "sit / seat" but each .nay
+    //    deserves its own audio: sɪt → "sit", siːt → "seat").
+    if (el.dataset.audio) return el.dataset.audio;
+    // 2. Walk backwards through previous element siblings to find the
+    //    CLOSEST preceding .eng. Handles three table layouts uniformly
+    //    and — critically — pairs each .nay with its own local .eng
+    //    rather than the first .eng in the cell:
+    //      - Standard Try-it row: td.eng before td.nay
+    //      - Lesson 2 single-pair cell: <span eng>phone</span> → <span nay>fon</span>
+    //      - Lesson 3 multi-pair cell with eng+nay pairs inline
+    let prev = el.previousElementSibling;
+    while (prev) {
+      if (prev.classList?.contains('eng')) return prev.textContent.trim();
+      prev = prev.previousElementSibling;
+    }
+    // 3. Fallback: row-level td.eng. Catches cells where multiple .nay
+    //    spans share a single row-level English label (combined like
+    //    "sit / seat"). Less precise than per-word data-audio but
+    //    better than no audio at all.
+    const rowEng = el.closest('tr')?.querySelector('td.eng');
+    if (rowEng) return rowEng.textContent.trim();
+    // 4. Skip — no usable English context (isolated .nay in a note cell,
+    //    Lesson 2's single-letter "Becomes" column).
+    return null;
   });
   attachPlayButtons(document, '.wrap-up .sample');
 </script>
