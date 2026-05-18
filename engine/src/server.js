@@ -56,7 +56,7 @@ app.use(express.static(path.join(ROOT, 'public'), {
 // Clean URLs for top-level tutor pages — each maps /<slug> to public/<slug>.html
 // so users see /learn instead of /learn.html. Express.static still serves the
 // .html paths too (and assets, fonts), so links remain flexible.
-const TUTOR_PAGES = ['learn', 'type', 'read', 'download', 'faq', 'developer', 'harness'];
+const TUTOR_PAGES = ['learn', 'type', 'read', 'convert', 'download', 'faq', 'developer', 'harness'];
 for (const slug of TUTOR_PAGES) {
   app.get(`/${slug}`, (req, res) => {
     res.set('Cache-Control', 'no-cache');
@@ -161,10 +161,22 @@ app.post('/api/tts', (req, res) => {
   res.send(r.stdout);
 });
 
+// Hard cap on /api/process input length. The /type live-transform sends
+// short snippets so this never trips; /convert pastes can be longer but
+// 100K chars covers any reasonable single-document use. Defence in depth
+// alongside the express.json 5 MB body limit.
+const MAX_PROCESS_LEN = 100_000;
+
 app.post('/api/process', (req, res) => {
   const { text, html, phase = 1, prefs = {} } = req.body;
   if (text === undefined && html === undefined) {
     return res.status(400).json({ error: 'Provide either text or html' });
+  }
+  const inputLen = (text ?? html).length;
+  if (inputLen > MAX_PROCESS_LEN) {
+    return res.status(413).json({
+      error: `text too long (${inputLen} chars; max ${MAX_PROCESS_LEN})`,
+    });
   }
 
   const rules = rulesForPhase(catalogue, Number(phase));
@@ -194,7 +206,25 @@ app.post('/api/fetch', async (req, res) => {
     if (!response.ok) {
       return res.status(502).json({ error: `Upstream HTTP ${response.status}` });
     }
-    const html = await response.text();
+    // Cap the fetched body so we can't be forced to download huge files.
+    // Read up to ~500 KB; abort beyond that.
+    const MAX_FETCH_BYTES = 500_000;
+    const reader = response.body.getReader();
+    const chunks = [];
+    let total = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.length;
+      if (total > MAX_FETCH_BYTES) {
+        reader.cancel();
+        return res.status(413).json({
+          error: `upstream too large (>${MAX_FETCH_BYTES} bytes). Try copying the article text and using the Paste tab instead.`,
+        });
+      }
+      chunks.push(value);
+    }
+    const html = Buffer.concat(chunks).toString('utf-8');
 
     // Extract main content. Many sites have noisy headers/footers/nav.
     // Try <article>, then <main>, then body — and strip common chrome

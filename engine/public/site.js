@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { href: '/learn',            label: 'Learn' },
   { href: '/type',             label: 'Type' },
   { href: '/read',             label: 'Read' },
+  { href: '/convert',          label: 'Convert' },
   { href: '/why/',             label: 'Why naYana?' },
   { href: '/download',         label: 'Download' },
   { href: '/developer',        label: 'Developer' },

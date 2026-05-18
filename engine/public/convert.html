@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convert — naYana</title>
+<meta name="description" content="Paste any English text or give a URL — read it in naYana. Until the browser extension ships, this is how you apply what you've learned.">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* Tab strip */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    margin: var(--space-5) 0 var(--space-4);
+  }
+  .tab {
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    padding: var(--space-2) var(--space-4);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: var(--radius) var(--radius) 0 0;
+    margin-bottom: -1px;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--accent);
+  }
+
+  /* Tab panes */
+  .pane { display: none; }
+  .pane.active { display: block; }
+
+  /* Paste area */
+  .pane textarea {
+    width: 100%;
+    min-height: 180px;
+    box-sizing: border-box;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: #fcfdfc;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.55;
+    resize: vertical;
+  }
+  .pane textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+  .pane input[type="url"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: #fcfdfc;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+  }
+  .pane input[type="url"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+  /* Action row */
+  .actions {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin-top: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .actions .counter {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--text-faint);
+  }
+  .actions .counter.warn  { color: #c47a4a; }
+  .actions .counter.over  { color: #c44a4a; font-weight: 500; }
+  .actions .status { font-size: 13px; color: var(--text-muted); }
+
+  /* URL-pane help block */
+  .url-help {
+    margin-top: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-alt);
+    border-radius: var(--radius);
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .url-help .yes::before { content: "✓"; color: var(--accent); margin-right: 6px; }
+  .url-help .no::before  { content: "✗"; color: #c44a4a; margin-right: 6px; }
+
+  /* Output */
+  #output {
+    margin-top: var(--space-7);
+    min-height: 200px;
+  }
+  #output:empty { display: none; }
+
+  .output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .output-header h2 { margin: 0; font-size: 20px; }
+  .output-header .src {
+    font-size: 13px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    word-break: break-all;
+  }
+  .output-actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+  .nayana-output {
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text);
+    padding: var(--space-4) var(--space-5);
+    background: #fcfdfc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .nayana-output p { margin: 0 0 var(--space-3); }
+  .nayana-output p:last-child { margin-bottom: 0; }
+  .nayana-output h1, .nayana-output h2, .nayana-output h3 {
+    margin: var(--space-4) 0 var(--space-2);
+    font-family: var(--font-nayana);
+    font-feature-settings: "ss01" on, "liga" on;
+  }
+  .nayana-output a { color: var(--accent); text-decoration: underline; }
+  .nayana-output .nayana-rewritten {
+    /* Hover for original — title attr is set by the engine */
+    cursor: help;
+  }
+  .nayana-output .nayana-rewritten:hover {
+    background: #fdf3c4;
+  }
+
+  /* Error / status banner */
+  .banner {
+    margin: var(--space-4) 0;
+    padding: var(--space-3) var(--space-4);
+    border-left: 3px solid var(--accent);
+    background: var(--bg-alt);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .banner.error { border-left-color: #c44a4a; color: #803030; background: #fef0f0; }
+  .banner.loading { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="container-narrow" style="padding-top: var(--space-6);">
+
+  <h1>Convert anything into naYana</h1>
+  <p class="lead">
+    You've learned the script. Now use it on whatever you want to read.
+    Paste any English text, or give a URL to a public webpage, and see
+    it rendered in naYana. Hover any word to confirm the original.
+  </p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="paste" role="tab">Paste text</button>
+    <button class="tab" data-tab="url" role="tab">Fetch a URL</button>
+  </div>
+
+  <!-- Paste tab -->
+  <div class="pane active" id="pane-paste">
+    <textarea id="paste-input"
+              placeholder="Paste any English — a paragraph, an article, a chapter..."
+              autocomplete="off"
+              spellcheck="false"></textarea>
+    <div class="actions">
+      <button class="btn btn-primary" id="paste-convert">Convert</button>
+      <button class="btn" id="paste-clear">Clear</button>
+      <span class="status" id="paste-status"></span>
+      <span class="counter" id="paste-counter">0 / 50,000 characters</span>
+    </div>
+  </div>
+
+  <!-- URL tab -->
+  <div class="pane" id="pane-url">
+    <input type="url" id="url-input"
+           placeholder="https://en.wikipedia.org/wiki/Phonetic_transcription"
+           autocomplete="off">
+    <div class="actions">
+      <button class="btn btn-primary" id="url-fetch">Fetch &amp; convert</button>
+      <button class="btn" id="url-clear">Clear</button>
+      <span class="status" id="url-status"></span>
+    </div>
+    <div class="url-help">
+      <div class="yes">Works well on Wikipedia, blog posts, news articles, public docs.</div>
+      <div class="no">Won't work on paywalled pages, login-gated content, or pure
+        JavaScript apps (X/Twitter, Reddit threads). Copy the text and use the Paste tab.</div>
+    </div>
+  </div>
+
+  <!-- Output area — populated by JS -->
+  <div id="output"></div>
+
+</main>
+
+<script type="module">
+  import { play, attachPlayButtons } from './tts.js';
+
+  // ---------- Tab switching ---------------------------------------------
+  const tabs  = document.querySelectorAll('.tab');
+  const panes = document.querySelectorAll('.pane');
+  for (const tab of tabs) {
+    tab.addEventListener('click', () => {
+      tabs.forEach((t)  => t.classList.toggle('active', t === tab));
+      panes.forEach((p) => p.classList.toggle('active', p.id === `pane-${tab.dataset.tab}`));
+    });
+  }
+
+  // ---------- Character counter (paste tab) -----------------------------
+  // Soft warn at 10k, hard cap at 50k client-side. The server caps at
+  // 100k as a separate safety net.
+  const SOFT_LIMIT = 10_000;
+  const HARD_LIMIT = 50_000;
+
+  const pasteInput   = document.getElementById('paste-input');
+  const pasteCounter = document.getElementById('paste-counter');
+  pasteInput.addEventListener('input', () => {
+    // Truncate at hard cap rather than rejecting silently.
+    if (pasteInput.value.length > HARD_LIMIT) {
+      pasteInput.value = pasteInput.value.slice(0, HARD_LIMIT);
+    }
+    const n = pasteInput.value.length;
+    pasteCounter.textContent = `${n.toLocaleString()} / ${HARD_LIMIT.toLocaleString()} characters`;
+    pasteCounter.classList.toggle('warn', n >= SOFT_LIMIT && n < HARD_LIMIT);
+    pasteCounter.classList.toggle('over', n >= HARD_LIMIT);
+  });
+
+  // ---------- Output rendering ------------------------------------------
+  const output = document.getElementById('output');
+
+  function showBanner(text, cls = '') {
+    output.innerHTML = `<div class="banner ${cls}">${text}</div>`;
+  }
+  function clearOutput() { output.innerHTML = ''; }
+
+  function renderResult({ html, sourceLabel, sourceHref }) {
+    output.innerHTML = '';
+
+    const header = document.createElement('div');
+    header.className = 'output-header';
+    header.innerHTML = `
+      <div>
+        <h2>In naYana</h2>
+        <div class="src">${
+          sourceHref
+            ? `from <a href="${sourceHref}" target="_blank" rel="noopener noreferrer">${sourceLabel}</a>`
+            : sourceLabel
+        }</div>
+      </div>
+      <div class="output-actions">
+        <button class="btn" id="copy-nayana">Copy naYana</button>
+        <button class="btn" id="play-all">▶ Read aloud</button>
+      </div>
+    `;
+    output.appendChild(header);
+
+    const body = document.createElement('div');
+    body.className = 'nayana-output';
+    body.innerHTML = html;
+    output.appendChild(body);
+
+    // Per-paragraph play buttons. We send the ORIGINAL English (not the
+    // displayed naYana) so /api/tts routes to Piper for natural voice;
+    // sending IPA would auto-route to espeak. The engine preserves the
+    // original on every rewritten span via data-original; verbatim and
+    // unknown words come through as plain text. Walk both.
+    function extractEnglish(el) {
+      let out = '';
+      for (const node of el.childNodes) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          out += node.nodeValue;
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          if (node.dataset && node.dataset.original) {
+            out += node.dataset.original;
+          } else {
+            // Recurse so nested elements (links, em, etc.) contribute
+            // their own data-originals before falling back to text.
+            out += extractEnglish(node);
+          }
+        }
+      }
+      return out;
+    }
+    attachPlayButtons(body, 'p', (p) => extractEnglish(p).trim());
+
+    // Top-level "Read aloud" plays the whole text. TTS caps at ~800 chars
+    // server-side; trim there.
+    document.getElementById('play-all').addEventListener('click', () => {
+      const text = extractEnglish(body).trim().slice(0, 800);
+      if (text) play(text, document.getElementById('play-all'));
+    });
+
+    // Copy naYana — uses innerText (substituted spellings, not English).
+    document.getElementById('copy-nayana').addEventListener('click', async () => {
+      const text = body.innerText.trim();
+      if (!text) return;
+      await navigator.clipboard.writeText(text);
+      const btn = document.getElementById('copy-nayana');
+      const orig = btn.textContent;
+      btn.textContent = `Copied ${text.length.toLocaleString()} chars`;
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  }
+
+  // ---------- Paste → Convert -------------------------------------------
+  const pasteStatus  = document.getElementById('paste-status');
+  document.getElementById('paste-convert').addEventListener('click', async () => {
+    const text = pasteInput.value.trim();
+    if (!text) { pasteStatus.textContent = 'Paste some text first.'; return; }
+    pasteStatus.textContent = '';
+    showBanner('Converting…', 'loading');
+    try {
+      const res = await fetch('/api/process', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, phase: 18 }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showBanner(`Couldn't convert: ${data.error || 'server error'}`, 'error');
+        return;
+      }
+      renderResult({
+        html: data.html,
+        sourceLabel: `Pasted text · ${text.length.toLocaleString()} chars`,
+      });
+    } catch (e) {
+      showBanner(`Network error: ${e.message}`, 'error');
+    }
+  });
+  document.getElementById('paste-clear').addEventListener('click', () => {
+    pasteInput.value = '';
+    pasteInput.dispatchEvent(new Event('input'));
+    clearOutput();
+    pasteInput.focus();
+  });
+
+  // ---------- URL → Fetch + Convert -------------------------------------
+  const urlInput  = document.getElementById('url-input');
+  const urlStatus = document.getElementById('url-status');
+  document.getElementById('url-fetch').addEventListener('click', async () => {
+    const url = urlInput.value.trim();
+    if (!url) { urlStatus.textContent = 'Enter a URL first.'; return; }
+    try { new URL(url); } catch {
+      urlStatus.textContent = "That doesn't look like a URL.";
+      return;
+    }
+    urlStatus.textContent = '';
+    showBanner(`Fetching ${url}…`, 'loading');
+    try {
+      const res = await fetch('/api/fetch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, phase: 18 }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showBanner(
+          `Couldn't fetch this URL: ${data.error || 'server error'}. ` +
+          `Try copying the page text and using the <strong>Paste</strong> tab instead.`,
+          'error'
+        );
+        return;
+      }
+      renderResult({
+        html: data.html,
+        sourceLabel: url,
+        sourceHref:  url,
+      });
+    } catch (e) {
+      showBanner(
+        `Network error: ${e.message}. Try copying the text and using ` +
+        `the <strong>Paste</strong> tab.`,
+        'error'
+      );
+    }
+  });
+  urlInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('url-fetch').click();
+  });
+  document.getElementById('url-clear').addEventListener('click', () => {
+    urlInput.value = '';
+    clearOutput();
+    urlInput.focus();
+  });
+
+  pasteInput.focus();
+</script>
+<script src="site.js"></script>
+</body>
+</html>
